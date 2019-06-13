@@ -1,0 +1,16 @@
+<resources>
+	<string name="app_name">MonetizrBuySdk</string>
+
+	<string name="title_activity_product">ProductActivity</string>
+	<string name="variant_not_found">Sorry, chosen product variant is not available in store!</string>
+	<string name="error_while_checkout">Sorry, product checkout was not successful</string>
+	<string name="checkout_button_title">Checkout</string>
+	<string name="product_image">Product image holder</string>
+	<string name="product_tag">Product tag</string>
+	<string name="api_key">API key</string>
+	<string name="example_api_key">4D2E54389EB489966658DDD83E2D1</string>
+	<string name="sample_t_shirt">monetizr-sample-t-shirt</string>
+	<string name="show_product">Show product</string>
+	<string name="close_btn">X</string>
+	<string name="larger_than">></string>
+</resources>
