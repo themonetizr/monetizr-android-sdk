@@ -1,0 +1,26 @@
+[
+    {
+        "merged": "/home/martins/MonetizrSDK/monetizrsdk/build/intermediates/res/merged/release/drawable-v21/abc_dialog_material_background.xml",
+        "source": "/home/martins/.gradle/caches/transforms-2/files-2.1/07c3b181ebb62c02be63410ce5e56a61/res/drawable-v21/abc_dialog_material_background.xml"
+    },
+    {
+        "merged": "/home/martins/MonetizrSDK/monetizrsdk/build/intermediates/res/merged/release/drawable-v21/notification_action_background.xml",
+        "source": "/home/martins/.gradle/caches/transforms-2/files-2.1/5ae2764f8b2b2b87fd4a26226e486f9e/res/drawable-v21/notification_action_background.xml"
+    },
+    {
+        "merged": "/home/martins/MonetizrSDK/monetizrsdk/build/intermediates/res/merged/release/drawable-v21/abc_action_bar_item_background_material.xml",
+        "source": "/home/martins/.gradle/caches/transforms-2/files-2.1/07c3b181ebb62c02be63410ce5e56a61/res/drawable-v21/abc_action_bar_item_background_material.xml"
+    },
+    {
+        "merged": "/home/martins/MonetizrSDK/monetizrsdk/build/intermediates/res/merged/release/drawable-v21/abc_btn_colored_material.xml",
+        "source": "/home/martins/.gradle/caches/transforms-2/files-2.1/07c3b181ebb62c02be63410ce5e56a61/res/drawable-v21/abc_btn_colored_material.xml"
+    },
+    {
+        "merged": "/home/martins/MonetizrSDK/monetizrsdk/build/intermediates/res/merged/release/drawable-v21/abc_edit_text_material.xml",
+        "source": "/home/martins/.gradle/caches/transforms-2/files-2.1/07c3b181ebb62c02be63410ce5e56a61/res/drawable-v21/abc_edit_text_material.xml"
+    },
+    {
+        "merged": "/home/martins/MonetizrSDK/monetizrsdk/build/intermediates/res/merged/release/drawable-v21/abc_list_divider_material.xml",
+        "source": "/home/martins/.gradle/caches/transforms-2/files-2.1/07c3b181ebb62c02be63410ce5e56a61/res/drawable-v21/abc_list_divider_material.xml"
+    }
+]

@@ -1,0 +1,10 @@
+[
+    {
+        "merged": "/home/martins/MonetizrSDK/monetizrsdk/build/intermediates/res/merged/release/layout-watch-v20/abc_alert_dialog_title_material.xml",
+        "source": "/home/martins/.gradle/caches/transforms-2/files-2.1/07c3b181ebb62c02be63410ce5e56a61/res/layout-watch-v20/abc_alert_dialog_title_material.xml"
+    },
+    {
+        "merged": "/home/martins/MonetizrSDK/monetizrsdk/build/intermediates/res/merged/release/layout-watch-v20/abc_alert_dialog_button_bar_material.xml",
+        "source": "/home/martins/.gradle/caches/transforms-2/files-2.1/07c3b181ebb62c02be63410ce5e56a61/res/layout-watch-v20/abc_alert_dialog_button_bar_material.xml"
+    }
+]

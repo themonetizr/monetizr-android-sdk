@@ -1,0 +1,18 @@
+[
+    {
+        "merged": "/home/martins/MonetizrSDK/monetizrsdk/build/intermediates/res/merged/release/layout-v21/notification_template_custom_big.xml",
+        "source": "/home/martins/.gradle/caches/transforms-2/files-2.1/5ae2764f8b2b2b87fd4a26226e486f9e/res/layout-v21/notification_template_custom_big.xml"
+    },
+    {
+        "merged": "/home/martins/MonetizrSDK/monetizrsdk/build/intermediates/res/merged/release/layout-v21/notification_template_icon_group.xml",
+        "source": "/home/martins/.gradle/caches/transforms-2/files-2.1/5ae2764f8b2b2b87fd4a26226e486f9e/res/layout-v21/notification_template_icon_group.xml"
+    },
+    {
+        "merged": "/home/martins/MonetizrSDK/monetizrsdk/build/intermediates/res/merged/release/layout-v21/notification_action_tombstone.xml",
+        "source": "/home/martins/.gradle/caches/transforms-2/files-2.1/5ae2764f8b2b2b87fd4a26226e486f9e/res/layout-v21/notification_action_tombstone.xml"
+    },
+    {
+        "merged": "/home/martins/MonetizrSDK/monetizrsdk/build/intermediates/res/merged/release/layout-v21/notification_action.xml",
+        "source": "/home/martins/.gradle/caches/transforms-2/files-2.1/5ae2764f8b2b2b87fd4a26226e486f9e/res/layout-v21/notification_action.xml"
+    }
+]
