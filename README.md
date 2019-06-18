@@ -29,42 +29,42 @@ Library can be added to your project in couple of ways.
  
 1. Method 1
 
-..* Open your project in Android Studio
+ * Open your project in Android Studio
 
-..* Download the library (using Git, or a zip archive to unzip)
+ * Download the library (using Git, or a zip archive to unzip)
    
-..* Go to File > Import Module and import the library as a module
+ * Go to File > Import Module and import the library as a module
 
-..* Right-click your app in project view and select "Open Module Settings"
+ * Right-click your app in project view and select "Open Module Settings"
 
-..* Click the "Dependencies" tab and then the '+' button
+ * Click the "Dependencies" tab and then the '+' button
 
-..* Select "Module Dependency"
+ * Select "Module Dependency"
 
-..* Select "Library Project"
+ * Select "Library Project"
 
-..* Modify the library if you want to
+ * Modify the library if you want to
 
 
 2. Method 2
 
-..* Open your project in Android Studio
+ * Open your project in Android Studio
 
-..* Download the library (using Git, or a zip archive to unzip)
+ * Download the library (using Git, or a zip archive to unzip)
 
-..* Create a folder "subProject" in your project
+ * Create a folder "subProject" in your project
 
-..* Copy and paste the library folder to your subProject folder
+ * Copy and paste the library folder to your subProject folder
 
-..* On the root of your project directory create/modify the settings.gradle file. It should contain something like the following:
+ * On the root of your project directory create/modify the settings.gradle file. It should contain something like the following:
 
 ```grade
 include 'MyApp', ':monetizrsdk'
 
 ```
-..* gradle clean & build/close the project and reopen/re-import it.
+ * gradle clean & build/close the project and reopen/re-import it.
 
-..* Edit your project's build.gradle to add this in the "dependencies" section:
+ * Edit your project's build.gradle to add this in the "dependencies" section:
 
 ```gradle
 dependencies {
@@ -74,7 +74,7 @@ dependencies {
 ```
 
 
-3. Method 3
+3. Method 3, Preferred for most cases
 
 Use Gradle:
 
@@ -85,7 +85,7 @@ repositories {
 }
 
 dependencies {
-  compile 'io.monetizr.monetizrsdk:MonetizrSDK:0.1.0'
+  implementation 'io.monetizr.monetizrsdk:MonetizrSDK:1.0.0'
 }
 ```
 
@@ -95,13 +95,16 @@ Or Maven:
 <dependency>
 	<groupId>io.monetizr.monetizrsdk</groupId>
 	<artifactId>MonetizrSDK</artifactId>
-	<version>0.1.0</version>
+	<version>1.0.0</version>
 	<type>pom</type>
 </dependency>
 ```
 
 
-### Calling a product from application is as simple as
+### Using library inside application
+
+Application does need its itial settings: API key provided by Monetizr team
+
 
 ```kotlin
 MonetizrSdk.showProductForTag("monetizr-sample-t-shirt")
