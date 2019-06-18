@@ -54,7 +54,7 @@ publish {
 
     def groupProjectID = 'io.monetizr.monetizrsdk'
     def artifactProjectID = 'MonetizrSDK'
-    def publishVersionID = '0.1.0'
+    def publishVersionID = '1.0.0'
 
     userOrg = 'martins-jansevskis'
     repoName = 'monetizr-android-sdk'

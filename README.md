@@ -137,7 +137,21 @@ They are added for each API key, for example, for default api key Monetizr provi
 
 
 * To invoke reward window, call Monetizr static method from within you application by providing available reward tag
+One call will invoke one reward window. Whenever you are ready to show reward window inside your application, you can invoke Monetizr sdk to show reward window
+
 
 ```kotlin
 MonetizrSdk.showProductForTag("monetizr-sample-t-shirt")
+
+MonetizrSdk.showProductForTag("30-credits")
+
+MonetizrSdk.showProductForTag("product_1")
+
+MonetizrSdk.showProductForTag("product_2")
+
+MonetizrSdk.showProductForTag("product_3")
+
+MonetizrSdk.showProductForTag("1-credit")
+
 ```
+
