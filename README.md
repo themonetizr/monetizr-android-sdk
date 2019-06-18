@@ -129,17 +129,17 @@ MonetizrSdk.debuggable = true
 * You will need to have your own reward tags, contact Monetizr team to acquire them. 
 They are added for each API key, for example, for default api key Monetizr provides
 
- ⋅⋅* monetizr-sample-t-shirt
+  * monetizr-sample-t-shirt
  
- ⋅⋅* 30-credits
+  * 30-credits
  
- ⋅⋅* product_1
+  * product_1
  
- ⋅⋅* product_2
+  * product_2
  
- ⋅⋅* product_3
+  * product_3
  
- ⋅⋅* 1-credit
+  * 1-credit
 
 
 * To invoke reward window, call Monetizr static method from within you application by providing available reward tag
