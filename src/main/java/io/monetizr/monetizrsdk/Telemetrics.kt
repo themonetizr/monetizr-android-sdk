@@ -37,9 +37,11 @@ class Telemetrics {
                     // Successful response, Do nothing
                 },
                 Response.ErrorListener { error ->
-                    // Die silently, so it does not provide any bad experience
-                    Log.i("MonetizrSDK", "Received API error $error")
-                    error.printStackTrace()
+                    if (MonetizrSdk.debuggable) {
+                        // Die silently, so it does not provide any bad experience
+                        Log.i("MonetizrSDK", "Received API error $error")
+                        error.printStackTrace()
+                    }
                 }) {
 
                 // Override headers to pass authorization
@@ -71,9 +73,11 @@ class Telemetrics {
                     // Successful response, Do Nothing
                 },
                 Response.ErrorListener { error ->
-                    // Die silently, so it does not provide any bad experience
-                    Log.i("MonetizrSDK", "Received API error $error")
-                    error.printStackTrace()
+                    if (MonetizrSdk.debuggable) {
+                        // Die silently, so it does not provide any bad experience
+                        Log.i("MonetizrSDK", "Received API error $error")
+                        error.printStackTrace()
+                    }
                 }) {
 
                 // Override headers to pass authorization

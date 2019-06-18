@@ -234,8 +234,10 @@ class ProductActivity : AppCompatActivity() {
                 }
             }
         } catch (e: Exception) {
-            Log.i("MonetizrSDK", "Product information was not received")
-            e.printStackTrace()
+            if (MonetizrSdk.debuggable) {
+                Log.i("MonetizrSDK", "Product information was not received")
+                e.printStackTrace()
+            }
         }
 
         close_button.setOnClickListener{
@@ -324,9 +326,11 @@ class ProductActivity : AppCompatActivity() {
                     showProductView(response)
                 },
                 Response.ErrorListener { error ->
-                    // Die silently, so it does not provide any bad experience
-                    Log.i("MonetizrSDK", "Received API error $error")
-                    error.printStackTrace()
+                    if (MonetizrSdk.debuggable) {
+                        // Die silently, so it does not provide any bad experience
+                        Log.i("MonetizrSDK", "Received API error $error")
+                        error.printStackTrace()
+                    }
                 }) {
 
                 // Override headers to pass authorization

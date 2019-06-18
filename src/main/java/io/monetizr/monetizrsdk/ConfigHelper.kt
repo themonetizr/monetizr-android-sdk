@@ -28,9 +28,13 @@ object ConfigHelper {
             properties.load(rawResource)
             return properties.getProperty(name)
         } catch (e: Resources.NotFoundException) {
-            Log.e(TAG, "Unable to find the config file: " + e.message)
+            if (MonetizrSdk.debuggable) {
+                Log.e(TAG, "Unable to find the config file: " + e.message)
+            }
         } catch (e: IOException) {
-            Log.e(TAG, "Failed to open config file.")
+            if (MonetizrSdk.debuggable) {
+                Log.e(TAG, "Failed to open config file.")
+            }
         }
 
         return ""

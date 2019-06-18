@@ -24,14 +24,14 @@ import java.util.*
 class MonetizrSdk {
 
     /**
-     * Settings are being provided in /res/raw/config.properties and
+     * Settings are being provided in config.properties and
      * Invoked from Application provider on host application launch
      */
     init {
         // Get access to application context and grab application settings
         val app = ApplicationProvider.application as Context
-        apikey = ConfigHelper.getConfigValue(app, "api_key")
-        apiAddress = ConfigHelper.getConfigValue(app, "api_url")
+        apikey = ConfigHelper.getConfigValue(app, "monetizr_api_key")
+        apiAddress = ConfigHelper.getConfigValue(app, "monetizr_api_url")
 
         // Fallback for apikey and for api url to default values if no config was found
         if (apikey == "") {
@@ -55,6 +55,9 @@ class MonetizrSdk {
         // Api host address, does come from settings, but can be changed
         var apiAddress: String = ""
 
+        // Debuggable library for development purposes, printing out logs
+        var debuggable: Boolean = false
+
         // Variables are being used to track if application is launched for the first time
         // as well as if some events does happen for the first time
         private var initialLaunch: Boolean = true
@@ -67,7 +70,6 @@ class MonetizrSdk {
          * @param  productTag  {String}  Tag that user want to show. Tags are being provided by monetizr team
          */
         fun showProductForTag(productTag: String) {
-            Log.i("MonetizrSDK", "showProductForTag: $productTag")
 
             // Die silently to not interfere with application if something goes wrong
             try {
@@ -117,10 +119,14 @@ class MonetizrSdk {
                         edit.apply()
                     }
                 } else {
-                    Log.i("MonetizrSDK", "Did not have internet access")
+                    if (debuggable) {
+                        Log.i("MonetizrSDK", "Did not have internet access")
+                    }
                 }
             } catch (e: Exception) {
-                Log.i("MonetizrSDK", "Did not have access to application context")
+                if (debuggable) {
+                    Log.i("MonetizrSDK", "Did not have access to application context")
+                }
             }
         }
 
@@ -179,9 +185,11 @@ class MonetizrSdk {
                     Telemetrics.clickreward(productTag)
                 },
                 Response.ErrorListener { error ->
-                    // Die silently, so it does not provide any bad experience
-                    Log.i("MonetizrSDK", "Received api error $error")
-                    error.printStackTrace()
+                    if (debuggable) {
+                        // Die silently, so it does not provide any bad experience
+                        Log.i("MonetizrSDK", "Received api error $error")
+                        error.printStackTrace()
+                    }
                 }) {
 
                 // Override headers to pass authorization

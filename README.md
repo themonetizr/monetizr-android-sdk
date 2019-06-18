@@ -103,8 +103,40 @@ Or Maven:
 
 ### Using library inside application
 
-Application does need its itial settings: API key provided by Monetizr team
+Application does have need to have initial settings:
 
+ * API key provided by Monetizr team. Adding the API key: this should be called once, before invoking Monetizr Library for the first time
+
+```kotlin
+MonetizrSdk.apikey = "API key provided from Monetizr team"
+```
+
+ **Default API key: "4D2E54389EB489966658DDD83E2D1"**
+
+ * Optional. API debugging. Necessary if you wish to see Logging information, by default it is false
+ 
+```kotlin
+MonetizrSdk.apikey = true
+```
+
+ * Library defines two permissions, access to internet and necessity to check for internet connection
+
+```xml
+<uses-permission android:name="android.permission.INTERNET"/>
+<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+```
+
+* You will need to have your own reward tags, contact Monetizr team to acquire them. 
+They are added for each API key, for example, for default api key Monetizr provides 
+⋅⋅* monetizr-sample-t-shirt
+⋅⋅* 30-credits
+⋅⋅* product_1
+⋅⋅* product_2
+⋅⋅* product_3
+⋅⋅* 1-credit
+
+
+* To invoke reward window, call Monetizr static method from within you application by providing available reward tag
 
 ```kotlin
 MonetizrSdk.showProductForTag("monetizr-sample-t-shirt")
