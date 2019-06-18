@@ -27,7 +27,7 @@ API settings are being provided in-application.
 
 Library can be added to your project in couple of ways.
  
-1. Method 1
+1. First approach
 
  * Open your project in Android Studio
 
@@ -46,7 +46,7 @@ Library can be added to your project in couple of ways.
  * Modify the library if you want to
 
 
-2. Method 2
+2. Second approach
 
  * Open your project in Android Studio
 
@@ -74,7 +74,7 @@ dependencies {
 ```
 
 
-3. Method 3, Preferred for most cases
+3. Third approach
 
 Use Gradle:
 
@@ -116,7 +116,7 @@ MonetizrSdk.apikey = "API key provided from Monetizr team"
  * Optional. API debugging. Necessary if you wish to see Logging information, by default it is false
  
 ```kotlin
-MonetizrSdk.apikey = true
+MonetizrSdk.debuggable = true
 ```
 
  * Library defines two permissions, access to internet and necessity to check for internet connection
@@ -127,13 +127,19 @@ MonetizrSdk.apikey = true
 ```
 
 * You will need to have your own reward tags, contact Monetizr team to acquire them. 
-They are added for each API key, for example, for default api key Monetizr provides 
-⋅⋅* monetizr-sample-t-shirt
-⋅⋅* 30-credits
-⋅⋅* product_1
-⋅⋅* product_2
-⋅⋅* product_3
-⋅⋅* 1-credit
+They are added for each API key, for example, for default api key Monetizr provides
+
+ ⋅⋅* monetizr-sample-t-shirt
+ 
+ ⋅⋅* 30-credits
+ 
+ ⋅⋅* product_1
+ 
+ ⋅⋅* product_2
+ 
+ ⋅⋅* product_3
+ 
+ ⋅⋅* 1-credit
 
 
 * To invoke reward window, call Monetizr static method from within you application by providing available reward tag

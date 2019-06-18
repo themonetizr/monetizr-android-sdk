@@ -176,7 +176,7 @@ document.getElementById(id).style.display = 'none';
       <span class="mdl-layout-title">Lint Report: 5 warnings</span>
       <div class="mdl-layout-spacer"></div>
       <nav class="mdl-navigation mdl-layout--large-screen-only">
-Check performed at Mon Jun 17 17:47:30 EEST 2019      </nav>
+Check performed at Tue Jun 18 17:46:28 EEST 2019      </nav>
     </div>
   </header>
   <div class="mdl-layout__drawer">
@@ -219,54 +219,54 @@ Dismiss</button>            </div>
               <div class="mdl-card__supporting-text">
 <div class="issue">
 <div class="warningslist">
-<span class="location"><a href="../../src/main/java/io/monetizr/monetizrsdk/Telemetrics.kt">../../src/main/java/io/monetizr/monetizrsdk/Telemetrics.kt</a>:285</span>: <span class="message">Using <code>getString</code> to get device identifiers is not recommended.</span><br /><pre class="errorlines">
-<span class="lineno"> 282 </span>            <span class="keyword">val</span> jsonBody = JSONObject()
-<span class="lineno"> 283 </span>
-<span class="lineno"> 284 </span>            <span class="keyword">val</span> application = ApplicationProvider.application <span class="keyword">as</span> Context
-<span class="caretline"><span class="lineno"> 285 </span>            <span class="keyword">val</span> androidId = <span class="warning">Settings.Secure.getString(</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-<span class="lineno"> 286 </span>                application.contentResolver,
-<span class="lineno"> 287 </span>                Settings.Secure.ANDROID_ID
-<span class="lineno"> 288 </span>            )
+<span class="location"><a href="../../src/main/java/io/monetizr/monetizrsdk/Telemetrics.kt">../../src/main/java/io/monetizr/monetizrsdk/Telemetrics.kt</a>:289</span>: <span class="message">Using <code>getString</code> to get device identifiers is not recommended.</span><br /><pre class="errorlines">
+<span class="lineno"> 286 </span>            <span class="keyword">val</span> jsonBody = JSONObject()
+<span class="lineno"> 287 </span>
+<span class="lineno"> 288 </span>            <span class="keyword">val</span> application = ApplicationProvider.application <span class="keyword">as</span> Context
+<span class="caretline"><span class="lineno"> 289 </span>            <span class="keyword">val</span> androidId = <span class="warning">Settings.Secure.getString(</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno"> 290 </span>                application.contentResolver,
+<span class="lineno"> 291 </span>                Settings.Secure.ANDROID_ID
+<span class="lineno"> 292 </span>            )
 </pre>
 
-<span class="location"><a href="../../src/main/java/io/monetizr/monetizrsdk/Telemetrics.kt">../../src/main/java/io/monetizr/monetizrsdk/Telemetrics.kt</a>:309</span>: <span class="message">Using <code>getString</code> to get device identifiers is not recommended.</span><br /><pre class="errorlines">
-<span class="lineno"> 306 </span>            <span class="keyword">val</span> jsonBody = JSONObject()
-<span class="lineno"> 307 </span>
-<span class="lineno"> 308 </span>            <span class="keyword">val</span> application = ApplicationProvider.application <span class="keyword">as</span> Context
-<span class="caretline"><span class="lineno"> 309 </span>            <span class="keyword">val</span> androidId = <span class="warning">Settings.Secure.getString(</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-<span class="lineno"> 310 </span>                application.contentResolver,
-<span class="lineno"> 311 </span>                Settings.Secure.ANDROID_ID
-<span class="lineno"> 312 </span>            )
+<span class="location"><a href="../../src/main/java/io/monetizr/monetizrsdk/Telemetrics.kt">../../src/main/java/io/monetizr/monetizrsdk/Telemetrics.kt</a>:313</span>: <span class="message">Using <code>getString</code> to get device identifiers is not recommended.</span><br /><pre class="errorlines">
+<span class="lineno"> 310 </span>            <span class="keyword">val</span> jsonBody = JSONObject()
+<span class="lineno"> 311 </span>
+<span class="lineno"> 312 </span>            <span class="keyword">val</span> application = ApplicationProvider.application <span class="keyword">as</span> Context
+<span class="caretline"><span class="lineno"> 313 </span>            <span class="keyword">val</span> androidId = <span class="warning">Settings.Secure.getString(</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno"> 314 </span>                application.contentResolver,
+<span class="lineno"> 315 </span>                Settings.Secure.ANDROID_ID
+<span class="lineno"> 316 </span>            )
 </pre>
 
-<span class="location"><a href="../../src/main/java/io/monetizr/monetizrsdk/Telemetrics.kt">../../src/main/java/io/monetizr/monetizrsdk/Telemetrics.kt</a>:341</span>: <span class="message">Using <code>getString</code> to get device identifiers is not recommended.</span><br /><pre class="errorlines">
-<span class="lineno"> 338 </span>            <span class="keyword">val</span> jsonBody = JSONObject()
-<span class="lineno"> 339 </span>
-<span class="lineno"> 340 </span>            <span class="keyword">val</span> application = ApplicationProvider.application <span class="keyword">as</span> Context
-<span class="caretline"><span class="lineno"> 341 </span>            <span class="keyword">val</span> androidId = <span class="warning">Settings.Secure.getString(</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-<span class="lineno"> 342 </span>                application.contentResolver,
-<span class="lineno"> 343 </span>                Settings.Secure.ANDROID_ID
-<span class="lineno"> 344 </span>            )
+<span class="location"><a href="../../src/main/java/io/monetizr/monetizrsdk/Telemetrics.kt">../../src/main/java/io/monetizr/monetizrsdk/Telemetrics.kt</a>:345</span>: <span class="message">Using <code>getString</code> to get device identifiers is not recommended.</span><br /><pre class="errorlines">
+<span class="lineno"> 342 </span>            <span class="keyword">val</span> jsonBody = JSONObject()
+<span class="lineno"> 343 </span>
+<span class="lineno"> 344 </span>            <span class="keyword">val</span> application = ApplicationProvider.application <span class="keyword">as</span> Context
+<span class="caretline"><span class="lineno"> 345 </span>            <span class="keyword">val</span> androidId = <span class="warning">Settings.Secure.getString(</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno"> 346 </span>                application.contentResolver,
+<span class="lineno"> 347 </span>                Settings.Secure.ANDROID_ID
+<span class="lineno"> 348 </span>            )
 </pre>
 
-<span class="location"><a href="../../src/main/java/io/monetizr/monetizrsdk/Telemetrics.kt">../../src/main/java/io/monetizr/monetizrsdk/Telemetrics.kt</a>:359</span>: <span class="message">Using <code>getString</code> to get device identifiers is not recommended.</span><br /><pre class="errorlines">
-<span class="lineno"> 356 </span>            <span class="keyword">val</span> jsonBody = JSONObject()
-<span class="lineno"> 357 </span>
-<span class="lineno"> 358 </span>            <span class="keyword">val</span> application = ApplicationProvider.application <span class="keyword">as</span> Context
-<span class="caretline"><span class="lineno"> 359 </span>            <span class="keyword">val</span> androidId = <span class="warning">Settings.Secure.getString(</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-<span class="lineno"> 360 </span>                application.contentResolver,
-<span class="lineno"> 361 </span>                Settings.Secure.ANDROID_ID
-<span class="lineno"> 362 </span>            )
+<span class="location"><a href="../../src/main/java/io/monetizr/monetizrsdk/Telemetrics.kt">../../src/main/java/io/monetizr/monetizrsdk/Telemetrics.kt</a>:363</span>: <span class="message">Using <code>getString</code> to get device identifiers is not recommended.</span><br /><pre class="errorlines">
+<span class="lineno"> 360 </span>            <span class="keyword">val</span> jsonBody = JSONObject()
+<span class="lineno"> 361 </span>
+<span class="lineno"> 362 </span>            <span class="keyword">val</span> application = ApplicationProvider.application <span class="keyword">as</span> Context
+<span class="caretline"><span class="lineno"> 363 </span>            <span class="keyword">val</span> androidId = <span class="warning">Settings.Secure.getString(</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno"> 364 </span>                application.contentResolver,
+<span class="lineno"> 365 </span>                Settings.Secure.ANDROID_ID
+<span class="lineno"> 366 </span>            )
 </pre>
 
-<span class="location"><a href="../../src/main/java/io/monetizr/monetizrsdk/Telemetrics.kt">../../src/main/java/io/monetizr/monetizrsdk/Telemetrics.kt</a>:382</span>: <span class="message">Using <code>getString</code> to get device identifiers is not recommended.</span><br /><pre class="errorlines">
-<span class="lineno"> 379 </span>            <span class="keyword">val</span> jsonBody = JSONObject()
-<span class="lineno"> 380 </span>
-<span class="lineno"> 381 </span>            <span class="keyword">val</span> application = ApplicationProvider.application <span class="keyword">as</span> Context
-<span class="caretline"><span class="lineno"> 382 </span>            <span class="keyword">val</span> androidId = <span class="warning">Settings.Secure.getString(</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-<span class="lineno"> 383 </span>                application.contentResolver,
-<span class="lineno"> 384 </span>                Settings.Secure.ANDROID_ID
-<span class="lineno"> 385 </span>            )
+<span class="location"><a href="../../src/main/java/io/monetizr/monetizrsdk/Telemetrics.kt">../../src/main/java/io/monetizr/monetizrsdk/Telemetrics.kt</a>:386</span>: <span class="message">Using <code>getString</code> to get device identifiers is not recommended.</span><br /><pre class="errorlines">
+<span class="lineno"> 383 </span>            <span class="keyword">val</span> jsonBody = JSONObject()
+<span class="lineno"> 384 </span>
+<span class="lineno"> 385 </span>            <span class="keyword">val</span> application = ApplicationProvider.application <span class="keyword">as</span> Context
+<span class="caretline"><span class="lineno"> 386 </span>            <span class="keyword">val</span> androidId = <span class="warning">Settings.Secure.getString(</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno"> 387 </span>                application.contentResolver,
+<span class="lineno"> 388 </span>                Settings.Secure.ANDROID_ID
+<span class="lineno"> 389 </span>            )
 </pre>
 
 </div>

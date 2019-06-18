@@ -15,7 +15,7 @@
         errorLine2="                            ^">
         <location
             file="/home/martins/MonetizrSDK/monetizrsdk/src/main/java/io/monetizr/monetizrsdk/Telemetrics.kt"
-            line="285"
+            line="289"
             column="29"/>
     </issue>
 
@@ -33,7 +33,7 @@
         errorLine2="                            ^">
         <location
             file="/home/martins/MonetizrSDK/monetizrsdk/src/main/java/io/monetizr/monetizrsdk/Telemetrics.kt"
-            line="309"
+            line="313"
             column="29"/>
     </issue>
 
@@ -51,7 +51,7 @@
         errorLine2="                            ^">
         <location
             file="/home/martins/MonetizrSDK/monetizrsdk/src/main/java/io/monetizr/monetizrsdk/Telemetrics.kt"
-            line="341"
+            line="345"
             column="29"/>
     </issue>
 
@@ -69,7 +69,7 @@
         errorLine2="                            ^">
         <location
             file="/home/martins/MonetizrSDK/monetizrsdk/src/main/java/io/monetizr/monetizrsdk/Telemetrics.kt"
-            line="359"
+            line="363"
             column="29"/>
     </issue>
 
@@ -87,7 +87,7 @@
         errorLine2="                            ^">
         <location
             file="/home/martins/MonetizrSDK/monetizrsdk/src/main/java/io/monetizr/monetizrsdk/Telemetrics.kt"
-            line="382"
+            line="386"
             column="29"/>
     </issue>
 
