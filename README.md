@@ -14,6 +14,7 @@ Monetizr Android SDK is a library project built upon Monetizr RESTful API to all
 
 Monetizr SDK is written using singleton pattern (or anti-pattern). The choice was obvious, it allows easier integration and does not require hardcore set-up.
 
+You can find instructions on building the project in [README.md][1] and in integration documentation [Docs][2].
 
 ### Setting up
 
@@ -122,8 +123,8 @@ MonetizrSdk.debuggable = true
  * Library defines two permissions, access to internet and necessity to check for internet connection
 
 ```xml
-<uses-permission android:name="android.permission.INTERNET"/>
-<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+ <uses-permission android:name="android.permission.INTERNET"/>
+ <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 ```
 
 * You will need to have your own reward tags, contact Monetizr team to acquire them. 
@@ -161,3 +162,32 @@ MonetizrSdk.showProductForTag("1-credit")
 
 ```
 
+### Additional available public methods, to make better in-game analysis
+
+Common functionality: methods are calling RESTful API and safely storing provided bits of the data using queued HTTPS requests.
+If something fails, methods will not make the host application stop and will not print out logs to console.
+If **debuggable** parameter is **true** then output to logging will be provided.
+
+ * Gathers some basic information about device: android version and name and language settings.
+  Method is being called once, when sdk is being triggered onCreate. If you wish, you can call it from anywhere in application
+
+```kotlin
+    Telemetrics.deviceData()
+```
+
+ * Store information about encounter that was used to invoke interaction.
+ As this is not automatically possible, manual input is necessary from user
+ Please refer to documentation[2] about data types
+ 
+```kotlin
+    Telemetrics.encounter("trigger_tag", "completionStatus", "triggerTag","levelName", "difficultyLevelName", "difficultyEstimation")
+```
+
+ * Player behaviour event. Allows to store analytical data about in-game behaviour, for example, when the reward window is being shown store information about additional data
+
+```kotlin
+    Telemetrics.playerbehaviour(gameProgress: Int, sessionTime: Int)
+```
+
+[1]: https://github.com/themonetizr/monetizr-android-sdk
+[2]: https://docs.themonetizr.com/android/
