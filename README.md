@@ -26,7 +26,33 @@ API settings are being provided in-application.
 
 Library can be added to your project in couple of ways.
  
-**1. First approach**
+**1. First approach (suggested)**
+
+Use Gradle:
+
+```gradle
+repositories {
+  mavenCentral()
+  google()
+}
+
+dependencies {
+  implementation 'io.monetizr.monetizrsdk:MonetizrSDK:1.0.0'
+}
+```
+
+Or Maven:
+
+```xml
+<dependency>
+	<groupId>io.monetizr.monetizrsdk</groupId>
+	<artifactId>MonetizrSDK</artifactId>
+	<version>1.0.0</version>
+	<type>pom</type>
+</dependency>
+```
+ 
+**2. Second approach**
 
  * Open your project in Android Studio
 
@@ -45,7 +71,7 @@ Library can be added to your project in couple of ways.
  * Modify the library if you want to
 
 
-**2. Second approach**
+**3. Third approach**
 
  * Open your project in Android Studio
 
@@ -70,33 +96,6 @@ dependencies {
 //...
     implementation project(':monetizrsdk')
 }
-```
-
-
-**3. Third approach (suggested)**
-
-Use Gradle:
-
-```gradle
-repositories {
-  mavenCentral()
-  google()
-}
-
-dependencies {
-  implementation 'io.monetizr.monetizrsdk:MonetizrSDK:1.0.0'
-}
-```
-
-Or Maven:
-
-```xml
-<dependency>
-	<groupId>io.monetizr.monetizrsdk</groupId>
-	<artifactId>MonetizrSDK</artifactId>
-	<version>1.0.0</version>
-	<type>pom</type>
-</dependency>
 ```
 
 
