@@ -20,15 +20,13 @@ You can find instructions on building the project in [README.md][1] and in integ
 
 Monetizr SDK is published using jCenter. You can, of course download/clone repozitory and add it as a module dependecy to your project.
 
-At this point I am going through publishing process with jCenter and will provide complete instructions for integration using it
-
 Monetizr is providing a per-client based API key`s. We are using oAuth 2 authentication and simplifying that for our client SDKs.
 API is a public two-way, that does not expose any useful information, but still be aware of this limitation.
 API settings are being provided in-application.
 
 Library can be added to your project in couple of ways.
  
-1. First approach
+**1. First approach**
 
  * Open your project in Android Studio
 
@@ -47,7 +45,7 @@ Library can be added to your project in couple of ways.
  * Modify the library if you want to
 
 
-2. Second approach
+**2. Second approach**
 
  * Open your project in Android Studio
 
@@ -75,7 +73,7 @@ dependencies {
 ```
 
 
-3. Third approach
+**3. Third approach (suggested)**
 
 Use Gradle:
 
