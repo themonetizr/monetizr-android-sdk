@@ -101,7 +101,7 @@ dependencies {
 
 ### Using library inside application
 
-Application does have need to have initial settings:
+Application needs to have initial settings:
 
  * API key provided by Monetizr team. Adding the API key: this should be called once, before invoking Monetizr Library for the first time
 
@@ -159,13 +159,13 @@ MonetizrSdk.showProductForTag("1-credit")
 
 ```
 
-### Additional available public methods, to make better in-game analysis
+### Additional available methods, for helping to improve monetization process and in-game analysis
 
 Common functionality: methods are calling RESTful API and safely storing provided bits of the data using queued HTTPS requests.
 If something fails, methods will not make the host application stop and will not print out logs to console.
 If **debuggable** parameter is **true** then output to logging will be provided.
 
- * Gathers some basic information about device: android version and name and language settings.
+ * Gather some basic information about device: android version and name and language settings.
   Method is being called once, when sdk is being triggered onCreate. If you wish, you can call it from anywhere in application
 
 ```kotlin
@@ -178,12 +178,6 @@ If **debuggable** parameter is **true** then output to logging will be provided.
  
 ```kotlin
     Telemetrics.encounter("trigger_tag", "completionStatus", "triggerTag","levelName", "difficultyLevelName", "difficultyEstimation")
-```
-
- * Player behaviour event. Allows to store analytical data about in-game behaviour, for example, when the reward window is being shown store information about additional data
-
-```kotlin
-    Telemetrics.playerbehaviour(gameProgress: Int, sessionTime: Int)
 ```
 
 [1]: https://github.com/themonetizr/monetizr-android-sdk
