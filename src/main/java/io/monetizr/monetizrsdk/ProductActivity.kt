@@ -1,7 +1,7 @@
 package io.monetizr.monetizrsdk
 
-
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
@@ -25,8 +25,11 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade
 import com.bumptech.glide.request.transition.DrawableCrossFadeFactory
 import com.google.android.flexbox.FlexboxLayout
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.wallet.*
 import kotlinx.android.synthetic.main.activity_product.*
 import org.json.JSONArray
+import org.json.JSONException
 import org.json.JSONObject
 import java.util.*
 import kotlin.collections.ArrayList
@@ -67,6 +70,15 @@ class ProductActivity : AppCompatActivity() {
     // Milliseconds when activity has been started
     private var activityLaunched: Long = 0
 
+    // Checkout id returned from request for payment
+    private var checkoutId: String = ""
+
+    private lateinit var mPaymentsClient: PaymentsClient
+    /** A constant integer you define to track a request for payment data activity  */
+    private val LOAD_PAYMENT_DATA_REQUEST_CODE = 991
+
+    private lateinit var button_google_pay: View
+
     @SuppressLint("InflateParams")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -83,6 +95,15 @@ class ProductActivity : AppCompatActivity() {
 
         // Parse product information, die silently if some errors do happen
         try {
+            // Check for Google Pay
+            button_google_pay = findViewById<View>(R.id.button_google_pay)
+
+            // Initialize a Google Pay API client for an environment suitable for testing.
+            // It's recommended to create the PaymentsClient object inside of the onCreate method.
+            mPaymentsClient = PaymentsUtil.createPaymentsClient(this)
+
+            possiblyShowGooglePayButton()
+
             productTag = intent.getStringExtra("product_tag")
             val data = JSONObject(intent.getStringExtra("product"))
             val product = data.getJSONObject("data").getJSONObject("productByHandle")
@@ -244,8 +265,18 @@ class ProductActivity : AppCompatActivity() {
             this.finish()
         }
 
+        /**
+         * Checkout button
+         */
         checkout_button.setOnClickListener{
             checkout()
+        }
+
+        /**
+         * Google Pay checkout button, if payment available
+         */
+        button_google_pay.setOnClickListener{
+            checkoutWithPaymentTokenButtonClick()
         }
     }
 
@@ -288,13 +319,17 @@ class ProductActivity : AppCompatActivity() {
     }
 
     // Send a checkout request to backend and show shop on return
-    private fun checkout() {
+    private fun checkout(continueWithPayment: Boolean = false) {
         userMadeInteraction = true
         var variantForCheckout: JSONObject?
 
         // User just pushes checkout button, it means that initial
         // variant has to be chosen to finish buying
         variantForCheckout = initialVariant
+
+        // Show modal bottom sheet for shipping address input
+//        val modalBottomSheet = BottomModal()
+//        modalBottomSheet.show(supportFragmentManager, BottomModal.TAG)
 
         // If this value is true, then user has completed selection and
         // selected variant can be found by selected options from variants array
@@ -322,8 +357,15 @@ class ProductActivity : AppCompatActivity() {
             val jsonObjectRequest = object : JsonObjectRequest(
                 Method.POST, url, jsonBody,
                 Response.Listener { response ->
-                    // Successful response, now show shops window
-                    showProductView(response)
+                    if (continueWithPayment == true) {
+                        checkoutId = response.getJSONObject("data").getJSONObject("checkoutCreate").getJSONObject("checkout").getString("id")
+
+                        continueWithPaymentToken(checkoutId)
+                        Log.i("MonetizrSDK", "checkout id: " + checkoutId)
+                    } else {
+                        // Successful response, now show shops window
+                        showProductView(response)
+                    }
                 },
                 Response.ErrorListener { error ->
                     if (MonetizrSdk.debuggable) {
@@ -351,7 +393,28 @@ class ProductActivity : AppCompatActivity() {
     }
 
     /**
-     * Show product backet in browser to allow to accomplish purchase action
+     * Make a checkout with payment token available
+     */
+    private fun checkoutWithPaymentTokenButtonClick() {
+        Log.i("MonetizrSDK", "Payment with token")
+        Toast.makeText(this, "Googlep pay", Toast.LENGTH_LONG).show()
+
+        // Request for checkout token
+        checkout(true)
+    }
+
+    private fun continueWithPaymentToken(checkoutId: String) {
+        Log.i("MonetizrSDK", "Callback from checkout id, will still need to have billing address " + checkoutId)
+        requestPayment()
+
+        //    .idempotencyKey(paymentToken)
+//            .type("google_pay")
+//            .paymentData(paymentToken)
+//            .identifier(paymentToken)
+    }
+
+    /**
+     * Show product in browser to allow to accomplish purchase action
      */
     private fun showProductView(checkoutInfo: JSONObject) {
         val checkoutErrors = checkoutInfo.getJSONObject("data").getJSONObject("checkoutCreate").getJSONArray("checkoutUserErrors")
@@ -492,5 +555,163 @@ class ProductActivity : AppCompatActivity() {
                 if (position != RecyclerView.NO_POSITION) {}
             }
         }
+    }
+
+    fun possiblyShowGooglePayButton() {
+        val isReadyToPayJson = PaymentsUtil.isReadyToPayRequest() ?: return
+        val request = IsReadyToPayRequest.fromJson(isReadyToPayJson.toString()) ?: return
+
+//         The call to isReadyToPay is asynchronous and returns a Task. We need to provide an
+//         OnCompleteListener to be triggered when the result of the call is known.
+        val task = mPaymentsClient.isReadyToPay(request)
+        task.addOnCompleteListener { completedTask ->
+            try {
+                completedTask.getResult(ApiException::class.java)?.let(::setGooglePayAvailable)
+            } catch (exception: ApiException) {
+                // Process error
+                Log.i("MonetizrSDK", "this is the stuff" + exception.toString())
+            }
+        }
+    }
+
+    /**
+     * If isReadyToPay returned `true`, show the button and hide the "checking" text. Otherwise,
+     * notify the user that Google Pay is not available. Please adjust to fit in with your current
+     * user flow. You are not required to explicitly let the user know if isReadyToPay returns `false`.
+     *
+     * @param available isReadyToPay API response.
+     */
+    private fun setGooglePayAvailable(available: Boolean) {
+        if (available) {
+            button_google_pay.visibility = View.VISIBLE
+        } else {
+
+            Toast.makeText(this, "Pay not available", Toast.LENGTH_LONG).show()
+        }
+    }
+
+    private fun requestPayment() {
+
+        // Disables the button to prevent multiple clicks.
+        button_google_pay.isClickable = false
+
+        // The price provided to the API should include taxes and shipping.
+        // This price is not displayed to the user.
+        val garmentPriceMicros = 0.01
+        //(selectedGarment.getDouble("price") * 1000000).roundToLong()
+        val price = "0.01"
+
+        val paymentDataRequestJson = PaymentsUtil.getPaymentDataRequest(price)
+        if (paymentDataRequestJson == null) {
+            Log.e("RequestPayment", "Can't fetch payment data request")
+            return
+        }
+        val request = PaymentDataRequest.fromJson(paymentDataRequestJson.toString())
+
+        // Since loadPaymentData may show the UI asking the user to select a payment method, we use
+        // AutoResolveHelper to wait for the user interacting with it. Once completed,
+        // onActivityResult will be called with the result.
+        if (request != null) {
+            AutoResolveHelper.resolveTask(
+                mPaymentsClient.loadPaymentData(request), this, LOAD_PAYMENT_DATA_REQUEST_CODE)
+        }
+    }
+
+    /**
+     * Handle a resolved activity from the Google Pay payment sheet.
+     *
+     * @param requestCode Request code originally supplied to AutoResolveHelper in requestPayment().
+     * @param resultCode Result code returned by the Google Pay API.
+     * @param data Intent from the Google Pay API containing payment or error data.
+     * @see [Getting a result
+     * from an Activity](https://developer.android.com/training/basics/intents/result)
+     */
+    public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        when (requestCode) {
+            // value passed in AutoResolveHelper
+            LOAD_PAYMENT_DATA_REQUEST_CODE -> {
+                when (resultCode) {
+                    Activity.RESULT_OK ->
+                        data?.let { intent ->
+                            PaymentData.getFromIntent(intent)?.let(::handlePaymentSuccess)
+                        }
+                    Activity.RESULT_CANCELED -> {
+                        // Nothing to do here normally - the user simply cancelled without selecting a
+                        // payment method.
+                    }
+
+                    AutoResolveHelper.RESULT_ERROR -> {
+                        AutoResolveHelper.getStatusFromIntent(data)?.let {
+                            handleError(it.statusCode)
+                        }
+                    }
+                }
+                // Re-enables the Google Pay payment button.
+                button_google_pay.isClickable = true
+            }
+        }
+    }
+
+    /**
+     * PaymentData response object contains the payment information, as well as any additional
+     * requested information, such as billing and shipping address.
+     *
+     * @param paymentData A response object returned by Google after a payer approves payment.
+     * @see [Payment
+     * Data](https://developers.google.com/pay/api/android/reference/object.PaymentData)
+     */
+    private fun handlePaymentSuccess(paymentData: PaymentData) {
+        val paymentInformation = paymentData.toJson() ?: return
+
+        try {
+            // Token will be null if PaymentDataRequest was not constructed using fromJson(String).
+            val paymentMethodData = JSONObject(paymentInformation).getJSONObject("paymentMethodData")
+            Log.i("MonetizrSDK", paymentMethodData.toString())
+
+            // If the gateway is set to "example", no payment information is returned - instead, the
+            // token will only consist of "examplePaymentMethodToken".
+            if (paymentMethodData
+                    .getJSONObject("tokenizationData")
+                    .getString("type") == "PAYMENT_GATEWAY" && paymentMethodData
+                    .getJSONObject("tokenizationData")
+                    .getString("token") == "examplePaymentMethodToken") {
+
+                AlertDialog.Builder(this)
+                    .setTitle("Warning")
+                    .setMessage("Gateway name set to \"example\" - please modify " +
+                            "Constants.java and replace it with your own gateway.")
+                    .setPositiveButton("OK", null)
+                    .create()
+                    .show()
+            }
+
+            val billingName = paymentMethodData.getJSONObject("info")
+                .getJSONObject("billingAddress").getString("name")
+            Log.i("MonetizrSDK", billingName)
+
+            Toast.makeText(this, "This is some kind of text here", Toast.LENGTH_LONG).show()
+
+            // Logging token string.
+            Log.i("MonetizrSDK", "this is what somes out: " + paymentMethodData
+                .getJSONObject("tokenizationData")
+                .getString("token"))
+
+        } catch (e: JSONException) {
+            Log.e("handlePaymentSuccess", "Error: " + e.toString())
+        }
+
+    }
+
+    /**
+     * At this stage, the user has already seen a popup informing them an error occurred. Normally,
+     * only logging is required.
+     *
+     * @param statusCode will hold the value of any constant from CommonStatusCode or one of the
+     * WalletConstants.ERROR_CODE_* constants.
+     * @see [
+     * Wallet Constants Library](https://developers.google.com/android/reference/com/google/android/gms/wallet/WalletConstants.constant-summary)
+     */
+    private fun handleError(statusCode: Int) {
+        Log.w("loadPaymentData failed", String.format("Error code: %d", statusCode))
     }
 }

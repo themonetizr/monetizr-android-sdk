@@ -36,6 +36,7 @@ class MonetizrSdk {
         // Fallback for apikey and for api url to default values if no config was found
         if (apikey == "") {
             Log.i("MonetizrSDK", "Api key was not provided from config file")
+
             apikey = "4D2E54389EB489966658DDD83E2D1"
         }
 

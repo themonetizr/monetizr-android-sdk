@@ -140,19 +140,29 @@
 		</LinearLayout>
 	</LinearLayout>
 
-	<Button
-		android:id="@+id/checkout_button"
-		android:text="@string/checkout_button_title"
-		android:textColor="@color/colorWhite"
+	<LinearLayout
+		android:orientation="horizontal"
 		android:layout_width="match_parent"
-		android:layout_alignParentBottom="true"
-		android:background="@drawable/button_blue"
 		android:layout_marginLeft="5dp"
 		android:layout_marginRight="5dp"
 		android:layout_marginBottom="5dp"
-		android:layout_height="40dp"/>
-
+		android:layout_alignParentBottom="true"
+		android:layout_height="40dp">
+		<Button
+			android:id="@+id/checkout_button"
+			android:text="@string/checkout_button_title"
+			android:textColor="@color/colorWhite"
+			android:layout_width="0dp"
+			android:layout_weight="1"
+			android:background="@drawable/button_blue"
+			android:layout_height="match_parent"/>
+		<include layout="@layout/googlepay_button"
+	         android:id="@+id/button_google_pay"
+	         android:visibility="gone"
+             android:layout_width="0dp"
+             android:layout_weight="1"
+             android:layout_height="match_parent"/>
+	</LinearLayout>
 	</RelativeLayout>
-
 
 </com.google.android.flexbox.FlexboxLayout>

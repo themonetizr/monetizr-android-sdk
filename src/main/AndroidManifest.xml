@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          xmlns:tools="http://schemas.android.com/tools" package="io.monetizr.monetizrsdk">
+          xmlns:tools="http://schemas.android.com/tools" package="io.monetizr.monetizrsdk" >
 
 	<uses-permission android:name="android.permission.INTERNET"/>
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
@@ -8,6 +8,13 @@
 	<application>
 		<meta-data android:name="android.max_aspect" android:value="2.1" />
 		<meta-data android:name="android.notch_support" android:value="true"/>
+
+		<meta-data
+				android:name="com.google.android.gms.wallet.api.enabled"
+				android:value="true"/>
+		<meta-data
+				android:name="com.google.android.gms.version"
+				android:value="@integer/google_play_services_version"/>
 		<service android:name="io.monetizr.monetizrsdk.ClearedService" android:stopWithTask="false" />
 		<provider
 				android:name=".AppContextProvider"
