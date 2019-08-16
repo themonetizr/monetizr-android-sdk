@@ -7,9 +7,9 @@ import android.net.ConnectivityManager
 import android.net.NetworkInfo
 import android.os.Bundle
 import android.preference.PreferenceManager
-import android.support.v4.content.ContextCompat.startActivity
 import android.util.DisplayMetrics
 import android.util.Log
+import androidx.core.content.ContextCompat.startActivity
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import org.json.JSONObject

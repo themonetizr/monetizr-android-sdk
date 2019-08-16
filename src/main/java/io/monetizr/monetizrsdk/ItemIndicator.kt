@@ -4,14 +4,14 @@ import android.content.res.Resources
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import android.view.animation.AccelerateDecelerateInterpolator
 
 /**
  * Recycler view item indicator. Adds round indicators at the bottom of recycler view
  */
-class ItemIndicator : RecyclerView.ItemDecoration() {
+class ItemIndicator : androidx.recyclerview.widget.RecyclerView.ItemDecoration() {
 
     /**
      * Active and inactive indicator colors
@@ -55,7 +55,7 @@ class ItemIndicator : RecyclerView.ItemDecoration() {
         mPaint.isAntiAlias = true
     }
 
-    override fun onDrawOver(c: Canvas, parent: RecyclerView, state: RecyclerView.State) {
+    override fun onDrawOver(c: Canvas, parent: androidx.recyclerview.widget.RecyclerView, state: androidx.recyclerview.widget.RecyclerView.State) {
         super.onDrawOver(c, parent, state)
 
         val itemCount = parent.adapter!!.itemCount
@@ -72,9 +72,9 @@ class ItemIndicator : RecyclerView.ItemDecoration() {
         drawInactiveIndicators(c, indicatorStartX, indicatorPosY, itemCount)
 
         // find active page (which should be highlighted)
-        val layoutManager = parent.layoutManager as LinearLayoutManager?
+        val layoutManager = parent.layoutManager as androidx.recyclerview.widget.LinearLayoutManager?
         val activePosition = layoutManager!!.findFirstVisibleItemPosition()
-        if (activePosition == RecyclerView.NO_POSITION) {
+        if (activePosition == androidx.recyclerview.widget.RecyclerView.NO_POSITION) {
             return
         }
 

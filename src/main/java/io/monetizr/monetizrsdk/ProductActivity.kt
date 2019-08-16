@@ -7,11 +7,6 @@ import android.content.Intent
 import android.content.res.Configuration
 import android.net.Uri
 import android.os.Bundle
-import android.support.v4.widget.CircularProgressDrawable
-import android.support.v7.app.AlertDialog
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.util.DisplayMetrics
 import android.util.Log
 import android.view.LayoutInflater
@@ -19,6 +14,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.*
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.bumptech.glide.Glide
@@ -41,7 +40,7 @@ import kotlin.collections.ArrayList
 class ProductActivity : AppCompatActivity() {
 
     // Recycler view - view that draws images
-    private lateinit var recyclerView: RecyclerView
+    private lateinit var recyclerView: androidx.recyclerview.widget.RecyclerView
 
     // Adapter that takes care of images inside recycler view
     private lateinit var imageGalleryAdapter: ImageGalleryAdapter
@@ -144,7 +143,11 @@ class ProductActivity : AppCompatActivity() {
             }
 
             // Create recycler view for images and add additional dot indicator and swipe lock
-            val layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+            val layoutManager = androidx.recyclerview.widget.LinearLayoutManager(
+                this,
+                androidx.recyclerview.widget.LinearLayoutManager.HORIZONTAL,
+                false
+            )
             recyclerView = findViewById(R.id.product_images)
             recyclerView.setHasFixedSize(true)
             recyclerView.layoutManager = layoutManager
@@ -328,8 +331,8 @@ class ProductActivity : AppCompatActivity() {
         variantForCheckout = initialVariant
 
         // Show modal bottom sheet for shipping address input
-//        val modalBottomSheet = BottomModal()
-//        modalBottomSheet.show(supportFragmentManager, BottomModal.TAG)
+        val modalBottomSheet = BottomModal()
+        modalBottomSheet.show(supportFragmentManager, BottomModal.TAG)
 
         // If this value is true, then user has completed selection and
         // selected variant can be found by selected options from variants array
@@ -509,7 +512,7 @@ class ProductActivity : AppCompatActivity() {
      * Custom image adapter for recycler view
      */
     private inner class ImageGalleryAdapter(val context: Context, val productPhotos: ArrayList<ProductPhoto>)
-        : RecyclerView.Adapter<ImageGalleryAdapter.MyViewHolder>() {
+        : androidx.recyclerview.widget.RecyclerView.Adapter<ImageGalleryAdapter.MyViewHolder>() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
             val context = parent.context
@@ -524,7 +527,7 @@ class ProductActivity : AppCompatActivity() {
 
             val factory = DrawableCrossFadeFactory.Builder().setCrossFadeEnabled(true).build()
 
-            val circularProgressDrawable = CircularProgressDrawable(context)
+            val circularProgressDrawable = androidx.swiperefreshlayout.widget.CircularProgressDrawable(context)
             circularProgressDrawable.strokeWidth = 5f
             circularProgressDrawable.centerRadius = 30f
             circularProgressDrawable.start()
@@ -542,7 +545,7 @@ class ProductActivity : AppCompatActivity() {
             return productPhotos.size
         }
 
-        inner class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
+        inner class MyViewHolder(itemView: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(itemView), View.OnClickListener {
 
             var photoImageView: ImageView = itemView.findViewById(R.id.iv_photo)
 
@@ -552,7 +555,7 @@ class ProductActivity : AppCompatActivity() {
 
             override fun onClick(view: View) {
                 val position = adapterPosition
-                if (position != RecyclerView.NO_POSITION) {}
+                if (position != androidx.recyclerview.widget.RecyclerView.NO_POSITION) {}
             }
         }
     }
