@@ -13,4 +13,12 @@
 	<string name="show_product">Show product</string>
 	<string name="close_btn">X</string>
 	<string name="larger_than">></string>
+	<string name="first_name">First name</string>
+	<string name="last_name">Last name</string>
+	<string name="address_1">Address</string>
+	<string name="address_2">Apartment, suite, etc. (optional)</string>
+	<string name="city">City</string>
+	<string name="country">Country/Region</string>
+	<string name="zip_code">Postal code</string>
+	<string name="phone">Phone (optional)</string>
 </resources>
