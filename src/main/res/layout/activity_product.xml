@@ -18,12 +18,11 @@
 		android:layout_height="10dp"
 		android:background="@android:color/white"
 	>
-		<Button
+		<com.google.android.material.button.MaterialButton
 			android:id="@+id/close_button"
 			android:text="@string/close_btn"
-			android:textColor="@color/black_overlay"
+			style="@style/Widget.MaterialComponents.Button.TextButton"
 			android:layout_width="wrap_content"
-			android:background="@android:color/transparent"
 			app:autoSizeTextType="uniform"
 			app:autoSizeMinTextSize="12sp"
 			app:autoSizeMaxTextSize="100sp"
@@ -148,7 +147,7 @@
 		android:layout_marginBottom="5dp"
 		android:layout_alignParentBottom="true"
 		android:layout_height="40dp">
-		<Button
+		<com.google.android.material.button.MaterialButton
 			android:id="@+id/checkout_button"
 			android:text="@string/checkout_button_title"
 			android:textColor="@color/colorWhite"

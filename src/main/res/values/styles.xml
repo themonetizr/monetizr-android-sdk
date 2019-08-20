@@ -1,7 +1,7 @@
 <resources>
-	<style name="AppTheme" parent="Theme.AppCompat.Light"/>
+	<style name="MonetizrTheme" parent="Theme.MaterialComponents.Light"/>
 
-	<style name="FullscreenTheme" parent="AppTheme">
+	<style name="FullscreenTheme" parent="MonetizrTheme">
 		<item name="android:actionBarStyle">@style/FullscreenActionBarStyle</item>
 		<item name="android:windowActionBarOverlay">false</item>
 		<item name="android:windowBackground">@null</item>

@@ -16,8 +16,8 @@ import android.view.WindowManager
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import com.android.volley.Response
+import com.android.volley.toolbox.JsonObjectRequest
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade
 import com.bumptech.glide.request.transition.DrawableCrossFadeFactory
@@ -28,6 +28,8 @@ import kotlinx.android.synthetic.main.activity_product.*
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 /**
@@ -69,6 +71,7 @@ class ProductActivity : AppCompatActivity() {
     private var checkoutId: String = ""
 
     private lateinit var mPaymentsClient: PaymentsClient
+
     /** A constant integer you define to track a request for payment data activity  */
     private val LOAD_PAYMENT_DATA_REQUEST_CODE = 991
 
@@ -320,77 +323,81 @@ class ProductActivity : AppCompatActivity() {
     // Send a checkout request to backend and show shop on return
     private fun checkout(continueWithPayment: Boolean = false) {
 
-
         // Show modal bottom sheet for shipping address input
         val modalBottomSheet = BottomModal()
+        modalBottomSheet.isCancelable = false
         modalBottomSheet.show(supportFragmentManager, BottomModal.TAG)
+        supportFragmentManager.executePendingTransactions()
 
-//        userMadeInteraction = true
-//        var variantForCheckout: JSONObject?
-//
-//        // User just pushes checkout button, it means that initial
-//        // variant has to be chosen to finish buying
-//        variantForCheckout = initialVariant
-//
-//        // If this value is true, then user has completed selection and
-//        // selected variant can be found by selected options from variants array
-//        if (selectionAccomplished) {
-//            variantForCheckout = searchSelectedVariant()
-//        }
-//
-//        // Make a checkout request
-//        if (variantForCheckout != null) {
-//            val language = Locale.getDefault().displayLanguage
-//            val jsonBody = JSONObject()
-//            val variantId = variantForCheckout.getString("id")
-//
-//            jsonBody.put("product_handle", productTag)
-//            jsonBody.put("variantId", variantId)
-//            jsonBody.put("language", language)
-//            jsonBody.put("quantity", 1)
-//            val url = MonetizrSdk.apiAddress + "products/checkout"
-//
-//            if (MonetizrSdk.firstCheckout) {
-//                Telemetrics.firstimpressioncheckout()
-//                MonetizrSdk.firstCheckout = false
-//            }
-//
-//            val jsonObjectRequest = object : JsonObjectRequest(
-//                Method.POST, url, jsonBody,
-//                Response.Listener { response ->
-//                    if (continueWithPayment == true) {
-//                        checkoutId = response.getJSONObject("data").getJSONObject("checkoutCreate").getJSONObject("checkout").getString("id")
-//
-//                        continueWithPaymentToken(checkoutId)
-//                        Log.i("MonetizrSDK", "checkout id: " + checkoutId)
-//                    } else {
-//                        // Successful response, now show shops window
-//                        showProductView(response)
-//                    }
-//                },
-//                Response.ErrorListener { error ->
-//                    if (MonetizrSdk.debuggable) {
-//                        // Die silently, so it does not provide any bad experience
-//                        Log.i("MonetizrSDK", "Received API error $error")
-//                        error.printStackTrace()
-//                    }
-//                }) {
-//
-//                // Override headers to pass authorization
-//                override fun getHeaders(): MutableMap<String, String> {
-//
-//                    val header = mutableMapOf<String, String>()
-//                    header["Authorization"] = "Bearer " + MonetizrSdk.apikey
-//                    return header
-//                }
-//            }
-//
-//            // Access the RequestQueue through singleton class.
-//            SingletonRequest.getInstance(this).addToRequestQueue(jsonObjectRequest)
-//        } else {
-//            // Show a solid information that chosen variant is not available
-//            Toast.makeText(this, R.string.variant_not_found, Toast.LENGTH_LONG).show()
-//        }
+        // Shipping address modal dismissed, receive data and submit checkout
+        modalBottomSheet.dialog.setOnDismissListener {
+            userMadeInteraction = true
+            var variantForCheckout: JSONObject?
+
+            // User just pushes checkout button, it means that initial
+            // variant has to be chosen to finish buying
+            variantForCheckout = initialVariant
+
+            // If this value is true, then user has completed selection and
+            // selected variant can be found by selected options from variants array
+            if (selectionAccomplished) {
+                variantForCheckout = searchSelectedVariant()
+            }
+
+            // Make a checkout request
+            if (variantForCheckout != null) {
+                val language = Locale.getDefault().displayLanguage
+                val jsonBody = JSONObject()
+                val variantId = variantForCheckout.getString("id")
+
+                jsonBody.put("product_handle", productTag)
+                jsonBody.put("variantId", variantId)
+                jsonBody.put("language", language)
+                jsonBody.put("quantity", 1)
+                val url = MonetizrSdk.apiAddress + "products/checkout"
+
+                if (MonetizrSdk.firstCheckout) {
+                    Telemetrics.firstimpressioncheckout()
+                    MonetizrSdk.firstCheckout = false
+                }
+
+                val jsonObjectRequest = object : JsonObjectRequest(
+                    Method.POST, url, jsonBody,
+                    Response.Listener { response ->
+                        if (continueWithPayment == true) {
+                            checkoutId = response.getJSONObject("data").getJSONObject("checkoutCreate").getJSONObject("checkout").getString("id")
+
+                            continueWithPaymentToken(checkoutId)
+                            Log.i("MonetizrSDK", "checkout id: " + checkoutId)
+                        } else {
+                            // Successful response, now show shops window
+                            showProductView(response)
+                        }
+                    },
+                    Response.ErrorListener { error ->
+                        if (MonetizrSdk.debuggable) {
+                            // Die silently, so it does not provide any bad experience
+                            Log.i("MonetizrSDK", "Received API error $error")
+                            error.printStackTrace()
+                        }
+                    }) {
+
+                    // Override headers to pass authorization
+                    override fun getHeaders(): MutableMap<String, String> {
+
+                        val header = mutableMapOf<String, String>()
+                        header["Authorization"] = "Bearer " + MonetizrSdk.apikey
+                        return header
+                    }
+                }
+
+                // Access the RequestQueue through singleton class.
+                SingletonRequest.getInstance(this).addToRequestQueue(jsonObjectRequest)
+            } else {
+                // Show a solid information that chosen variant is not available
+                Toast.makeText(this, R.string.variant_not_found, Toast.LENGTH_LONG).show()
+            }
+        }
     }
 
     /**
