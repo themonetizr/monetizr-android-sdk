@@ -35,7 +35,7 @@ import kotlin.collections.ArrayList
 /**
  * Full-screen activity that shows product information
  */
-class ProductActivity : AppCompatActivity() {
+class ProductActivity : AppCompatActivity(), EditDialogListener {
 
     // Recycler view - view that draws images
     private lateinit var recyclerView: androidx.recyclerview.widget.RecyclerView
@@ -48,6 +48,9 @@ class ProductActivity : AppCompatActivity() {
 
     // The first product variant that is being chosen
     private lateinit var initialVariant: JSONObject
+
+    // Shipping address
+    private lateinit var shippingAddress: JSONObject
 
     // Available variants fro product
     private lateinit var variants: JSONArray
@@ -320,8 +323,17 @@ class ProductActivity : AppCompatActivity() {
         calculateElementSize(newConfig.orientation)
     }
 
+    /**
+     * Data returned from shipping address input to use for checkout process
+     */
+    override fun updateResult(address: JSONObject) {
+        shippingAddress = address
+    }
+
     // Send a checkout request to backend and show shop on return
     private fun checkout(continueWithPayment: Boolean = false) {
+        Log.i("MonetizrSDK", "why is this modal called again")
+
 
         // Show modal bottom sheet for shipping address input
         val modalBottomSheet = BottomModal()
@@ -333,6 +345,11 @@ class ProductActivity : AppCompatActivity() {
         modalBottomSheet.dialog.setOnDismissListener {
             userMadeInteraction = true
             var variantForCheckout: JSONObject?
+
+            // Really dismiss this modal as it shows up on back pressed
+            supportFragmentManager.findFragmentByTag(BottomModal.TAG)?.let {
+                (it as BottomModal).dismiss()
+            }
 
             // User just pushes checkout button, it means that initial
             // variant has to be chosen to finish buying
@@ -354,6 +371,8 @@ class ProductActivity : AppCompatActivity() {
                 jsonBody.put("variantId", variantId)
                 jsonBody.put("language", language)
                 jsonBody.put("quantity", 1)
+                jsonBody.put("shippingAddress", shippingAddress.toString())
+
                 val url = MonetizrSdk.apiAddress + "products/checkout"
 
                 if (MonetizrSdk.firstCheckout) {
@@ -368,8 +387,7 @@ class ProductActivity : AppCompatActivity() {
                             checkoutId = response.getJSONObject("data").getJSONObject("checkoutCreate").getJSONObject("checkout").getString("id")
 
                             continueWithPaymentToken(checkoutId)
-                            Log.i("MonetizrSDK", "checkout id: " + checkoutId)
-                        } else {
+                                                   } else {
                             // Successful response, now show shops window
                             showProductView(response)
                         }
@@ -377,7 +395,7 @@ class ProductActivity : AppCompatActivity() {
                     Response.ErrorListener { error ->
                         if (MonetizrSdk.debuggable) {
                             // Die silently, so it does not provide any bad experience
-                            Log.i("MonetizrSDK", "Received API error $error")
+                            Log.i("MonetizrSDK", "Received API error " + error.networkResponse.data.toString())
                             error.printStackTrace()
                         }
                     }) {

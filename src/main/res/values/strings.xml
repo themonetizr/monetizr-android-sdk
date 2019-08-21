@@ -21,6 +21,7 @@
 	<string name="country">Country/Region*</string>
 	<string name="zip_code">Postal code*</string>
 	<string name="phone">Phone (optional)</string>
+	<string name="province">Province</string>
 	<string name="shipping_submit_button">Submit</string>
 	<string name="required">* Required</string>
 	<string name="shipping_address">Shipping Address</string>

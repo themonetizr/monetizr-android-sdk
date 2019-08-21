@@ -18,11 +18,17 @@
 		<LinearLayout android:layout_width="match_parent"
 		              android:layout_height="wrap_content"
 		              android:orientation="vertical">
-			<MaterialTextView
-					android:id="@+id/text_view_id"
-					android:layout_height="wrap_content"
-					android:layout_width="wrap_content"
-					android:text="@string/shipping_address" />
+
+			<TextView
+				android:text="@string/shipping_address"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:textStyle="bold"
+				app:autoSizeTextType="uniform"
+				app:autoSizeMinTextSize="18sp"
+				app:autoSizeMaxTextSize="40sp"
+				app:autoSizeStepGranularity="2sp"
+				/>
 
 			<com.google.android.material.textfield.TextInputLayout
 					android:layout_width="match_parent"
@@ -84,6 +90,19 @@
 				<com.google.android.material.textfield.TextInputEditText
 						android:layout_width="match_parent"
 						android:id="@+id/shipping_city"
+						android:layout_height="wrap_content"/>
+
+			</com.google.android.material.textfield.TextInputLayout>
+
+			<com.google.android.material.textfield.TextInputLayout
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:hint="@string/province"
+					app:helperText="@string/required">
+
+				<com.google.android.material.textfield.TextInputEditText
+						android:layout_width="match_parent"
+						android:id="@+id/shipping_province"
 						android:layout_height="wrap_content"/>
 
 			</com.google.android.material.textfield.TextInputLayout>
