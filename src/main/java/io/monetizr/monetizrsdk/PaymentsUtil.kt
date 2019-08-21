@@ -226,17 +226,16 @@ object PaymentsUtil {
 
                 // An optional shipping address requirement is a top-level property of the
                 // PaymentDataRequest JSON object.
-                val shippingAddressParameters = JSONObject().apply {
-                    put("phoneNumberRequired", false)
-                    put("allowedCountryCodes", JSONArray(Constants.SHIPPING_SUPPORTED_COUNTRIES))
-                }
+//                val shippingAddressParameters = JSONObject().apply {
+//                    put("phoneNumberRequired", false)
+//                    put("allowedCountryCodes", JSONArray(Constants.SHIPPING_SUPPORTED_COUNTRIES))
+//                }
 //                put("shippingAddressRequired", true)
-                put("shippingAddressParameters", shippingAddressParameters)
+//                put("shippingAddressParameters", shippingAddressParameters)
             }
         } catch (e: JSONException) {
             return null
         }
-
     }
 }
 

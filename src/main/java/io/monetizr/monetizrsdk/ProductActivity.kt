@@ -71,7 +71,7 @@ class ProductActivity : AppCompatActivity(), EditDialogListener {
     private var activityLaunched: Long = 0
 
     // Checkout id returned from request for payment
-    private var checkoutId: String = ""
+    private lateinit var checkoutInfo: JSONObject
 
     private lateinit var mPaymentsClient: PaymentsClient
 
@@ -384,10 +384,9 @@ class ProductActivity : AppCompatActivity(), EditDialogListener {
                     Method.POST, url, jsonBody,
                     Response.Listener { response ->
                         if (continueWithPayment == true) {
-                            checkoutId = response.getJSONObject("data").getJSONObject("checkoutCreate").getJSONObject("checkout").getString("id")
-
-                            continueWithPaymentToken(checkoutId)
-                                                   } else {
+                            checkoutInfo = response
+                            requestPayment()
+                       } else {
                             // Successful response, now show shops window
                             showProductView(response)
                         }
@@ -422,21 +421,9 @@ class ProductActivity : AppCompatActivity(), EditDialogListener {
      * Make a checkout with payment token available
      */
     private fun checkoutWithPaymentTokenButtonClick() {
-        Log.i("MonetizrSDK", "Payment with token")
-        Toast.makeText(this, "Googlep pay", Toast.LENGTH_LONG).show()
 
         // Request for checkout token
         checkout(true)
-    }
-
-    private fun continueWithPaymentToken(checkoutId: String) {
-        Log.i("MonetizrSDK", "Callback from checkout id, will still need to have billing address " + checkoutId)
-        requestPayment()
-
-        //    .idempotencyKey(paymentToken)
-//            .type("google_pay")
-//            .paymentData(paymentToken)
-//            .identifier(paymentToken)
     }
 
     /**
@@ -583,6 +570,9 @@ class ProductActivity : AppCompatActivity(), EditDialogListener {
         }
     }
 
+    /**
+     * Show google pay button if service available
+     */
     fun possiblyShowGooglePayButton() {
         val isReadyToPayJson = PaymentsUtil.isReadyToPayRequest() ?: return
         val request = IsReadyToPayRequest.fromJson(isReadyToPayJson.toString()) ?: return
@@ -616,18 +606,18 @@ class ProductActivity : AppCompatActivity(), EditDialogListener {
         }
     }
 
+    /**
+     * Create payment request
+     */
     private fun requestPayment() {
 
         // Disables the button to prevent multiple clicks.
         button_google_pay.isClickable = false
 
-        // The price provided to the API should include taxes and shipping.
-        // This price is not displayed to the user.
-        val garmentPriceMicros = 0.01
-        //(selectedGarment.getDouble("price") * 1000000).roundToLong()
-        val price = "0.01"
+        // The price provided to the API include taxes and shipping costs.
+        val totalPrice = checkoutInfo.getJSONObject("data").getJSONObject("checkoutCreate").getJSONObject("checkout").getJSONObject("totalPriceV2").getString("amount")
 
-        val paymentDataRequestJson = PaymentsUtil.getPaymentDataRequest(price)
+        val paymentDataRequestJson = PaymentsUtil.getPaymentDataRequest(totalPrice)
         if (paymentDataRequestJson == null) {
             Log.e("RequestPayment", "Can't fetch payment data request")
             return
@@ -694,33 +684,80 @@ class ProductActivity : AppCompatActivity(), EditDialogListener {
             val paymentMethodData = JSONObject(paymentInformation).getJSONObject("paymentMethodData")
             Log.i("MonetizrSDK", paymentMethodData.toString())
 
-            // If the gateway is set to "example", no payment information is returned - instead, the
-            // token will only consist of "examplePaymentMethodToken".
-            if (paymentMethodData
-                    .getJSONObject("tokenizationData")
-                    .getString("type") == "PAYMENT_GATEWAY" && paymentMethodData
-                    .getJSONObject("tokenizationData")
-                    .getString("token") == "examplePaymentMethodToken") {
-
-                AlertDialog.Builder(this)
-                    .setTitle("Warning")
-                    .setMessage("Gateway name set to \"example\" - please modify " +
-                            "Constants.java and replace it with your own gateway.")
-                    .setPositiveButton("OK", null)
-                    .create()
-                    .show()
-            }
-
-            val billingName = paymentMethodData.getJSONObject("info")
-                .getJSONObject("billingAddress").getString("name")
-            Log.i("MonetizrSDK", billingName)
-
-            Toast.makeText(this, "This is some kind of text here", Toast.LENGTH_LONG).show()
-
-            // Logging token string.
-            Log.i("MonetizrSDK", "this is what somes out: " + paymentMethodData
+            Log.i("MonetizrSDK", "this is what comes out: " + paymentMethodData
                 .getJSONObject("tokenizationData")
                 .getString("token"))
+
+            // If the gateway is set to "example", no payment information is returned - instead, the
+            // token will only consist of "examplePaymentMethodToken".
+//            if (paymentMethodData
+//                    .getJSONObject("tokenizationData")
+//                    .getString("type") == "PAYMENT_GATEWAY" && paymentMethodData
+//                    .getJSONObject("tokenizationData")
+//                    .getString("token") == "examplePaymentMethodToken") {
+
+//                AlertDialog.Builder(this)
+//                    .setTitle("Warning")
+//                    .setMessage("Gateway name set to \"example\" - please modify " +
+//                            "Constants.java and replace it with your own gateway.")
+//                    .setPositiveButton("OK", null)
+//                    .create()
+//                    .show()
+//            }
+
+                val billingAddress = paymentMethodData.getJSONObject("info")
+                    .getJSONObject("billingAddress")
+               // Log.i("MonetizrSDK", billingName)
+
+//                val jsonBody = JSONObject()
+//
+//                jsonBody.put("checkoutId", productTag)
+//                jsonBody.put("product_handle", productTag)
+//                jsonBody.put("billingAddress", billingAddress.toString())
+//                jsonBody.put("idempotencyKey", "")
+//                jsonBody.put("paymentAmount", 1)
+//                jsonBody.put("paymentData", shippingAddress.toString())
+//                jsonBody.put("test", true)
+//                jsonBody.put("type", "google_pay")
+//
+//                val url = MonetizrSdk.apiAddress + "products/checkoutwithpayment"
+//
+//                if (MonetizrSdk.firstCheckout) {
+//                    Telemetrics.firstimpressioncheckout()
+//                    MonetizrSdk.firstCheckout = false
+//                }
+//
+//                val jsonObjectRequest = object : JsonObjectRequest(
+//                    Method.POST, url, jsonBody,
+//                    Response.Listener { response ->
+//                        // Nothing here, close view
+//                        Toast.makeText(this, "payment success", Toast.LENGTH_LONG).show()
+////                        this.finish()
+//                    },
+//                    Response.ErrorListener { error ->
+//                        if (MonetizrSdk.debuggable) {
+//                            // Die silently, so it does not provide any bad experience
+//                            Log.i("MonetizrSDK", "Received API error " + error.networkResponse.data.toString())
+//                            error.printStackTrace()
+//                        }
+//                    }) {
+//
+//                    // Override headers to pass authorization
+//                    override fun getHeaders(): MutableMap<String, String> {
+//
+//                        val header = mutableMapOf<String, String>()
+//                        header["Authorization"] = "Bearer " + MonetizrSdk.apikey
+//                        return header
+//                    }
+//                }
+//
+//                // Access the RequestQueue through singleton class.
+//                SingletonRequest.getInstance(this).addToRequestQueue(jsonObjectRequest)
+
+//            Toast.makeText(this, "This is some kind of text here", Toast.LENGTH_LONG).show()
+            // Logging token string.
+
+            // Complete payment with request to shopify complete with checkout
 
         } catch (e: JSONException) {
             Log.e("handlePaymentSuccess", "Error: " + e.toString())
