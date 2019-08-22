@@ -11,7 +11,6 @@
 	android:paddingBottom="24dp"
 	android:paddingRight="24dp">
 
-
 	<ScrollView
 			android:layout_width="match_parent"
 			android:layout_height="match_parent">
@@ -30,56 +29,56 @@
 				app:autoSizeStepGranularity="2sp"
 				/>
 
-			<com.google.android.material.textfield.TextInputLayout
-					android:layout_width="match_parent"
-					android:layout_height="wrap_content"
-					android:hint="@string/first_name"
-					app:helperText="@string/required">
+			<!--<com.google.android.material.textfield.TextInputLayout-->
+					<!--android:layout_width="match_parent"-->
+					<!--android:layout_height="wrap_content"-->
+					<!--android:hint="@string/first_name"-->
+					<!--app:helperText="@string/required">-->
 
-				<com.google.android.material.textfield.TextInputEditText
-						android:layout_width="match_parent"
-						android:id="@+id/shipping_first_name"
-						android:layout_height="wrap_content"/>
+				<!--<com.google.android.material.textfield.TextInputEditText-->
+						<!--android:layout_width="match_parent"-->
+						<!--android:id="@+id/shipping_first_name"-->
+						<!--android:layout_height="wrap_content"/>-->
 
-			</com.google.android.material.textfield.TextInputLayout>
+			<!--</com.google.android.material.textfield.TextInputLayout>-->
 
-			<com.google.android.material.textfield.TextInputLayout
-					android:layout_width="match_parent"
-					android:layout_height="wrap_content"
-					android:hint="@string/last_name"
-					app:helperText="@string/required">
+			<!--<com.google.android.material.textfield.TextInputLayout-->
+					<!--android:layout_width="match_parent"-->
+					<!--android:layout_height="wrap_content"-->
+					<!--android:hint="@string/last_name"-->
+					<!--app:helperText="@string/required">-->
 
-				<com.google.android.material.textfield.TextInputEditText
-						android:layout_width="match_parent"
-						android:id="@+id/shipping_last_name"
-						android:layout_height="wrap_content"/>
+				<!--<com.google.android.material.textfield.TextInputEditText-->
+						<!--android:layout_width="match_parent"-->
+						<!--android:id="@+id/shipping_last_name"-->
+						<!--android:layout_height="wrap_content"/>-->
 
-			</com.google.android.material.textfield.TextInputLayout>
+			<!--</com.google.android.material.textfield.TextInputLayout>-->
 
-			<com.google.android.material.textfield.TextInputLayout
-					android:layout_width="match_parent"
-					android:layout_height="wrap_content"
-					android:hint="@string/address_1"
-					app:helperText="@string/required">
+			<!--<com.google.android.material.textfield.TextInputLayout-->
+					<!--android:layout_width="match_parent"-->
+					<!--android:layout_height="wrap_content"-->
+					<!--android:hint="@string/address_1"-->
+					<!--app:helperText="@string/required">-->
 
-				<com.google.android.material.textfield.TextInputEditText
-						android:layout_width="match_parent"
-						android:id="@+id/shipping_address1"
-						android:layout_height="wrap_content"/>
+				<!--<com.google.android.material.textfield.TextInputEditText-->
+						<!--android:layout_width="match_parent"-->
+						<!--android:id="@+id/shipping_address1"-->
+						<!--android:layout_height="wrap_content"/>-->
 
-			</com.google.android.material.textfield.TextInputLayout>
+			<!--</com.google.android.material.textfield.TextInputLayout>-->
 
-			<com.google.android.material.textfield.TextInputLayout
-					android:layout_width="match_parent"
-					android:layout_height="wrap_content"
-					android:hint="@string/address_2">
+			<!--<com.google.android.material.textfield.TextInputLayout-->
+					<!--android:layout_width="match_parent"-->
+					<!--android:layout_height="wrap_content"-->
+					<!--android:hint="@string/address_2">-->
 
-				<com.google.android.material.textfield.TextInputEditText
-						android:layout_width="match_parent"
-						android:id="@+id/shipping_address2"
-						android:layout_height="wrap_content"/>
+				<!--<com.google.android.material.textfield.TextInputEditText-->
+						<!--android:layout_width="match_parent"-->
+						<!--android:id="@+id/shipping_address2"-->
+						<!--android:layout_height="wrap_content"/>-->
 
-			</com.google.android.material.textfield.TextInputLayout>
+			<!--</com.google.android.material.textfield.TextInputLayout>-->
 
 			<com.google.android.material.textfield.TextInputLayout
 					android:layout_width="match_parent"
@@ -94,18 +93,18 @@
 
 			</com.google.android.material.textfield.TextInputLayout>
 
-			<com.google.android.material.textfield.TextInputLayout
-					android:layout_width="match_parent"
-					android:layout_height="wrap_content"
-					android:hint="@string/province"
-					app:helperText="@string/required">
+			<!--<com.google.android.material.textfield.TextInputLayout-->
+					<!--android:layout_width="match_parent"-->
+					<!--android:layout_height="wrap_content"-->
+					<!--android:hint="@string/province"-->
+					<!--app:helperText="@string/required">-->
 
-				<com.google.android.material.textfield.TextInputEditText
-						android:layout_width="match_parent"
-						android:id="@+id/shipping_province"
-						android:layout_height="wrap_content"/>
+				<!--<com.google.android.material.textfield.TextInputEditText-->
+						<!--android:layout_width="match_parent"-->
+						<!--android:id="@+id/shipping_province"-->
+						<!--android:layout_height="wrap_content"/>-->
 
-			</com.google.android.material.textfield.TextInputLayout>
+			<!--</com.google.android.material.textfield.TextInputLayout>-->
 
 			<com.google.android.material.textfield.TextInputLayout
 					android:layout_width="match_parent"
@@ -120,30 +119,30 @@
 
 			</com.google.android.material.textfield.TextInputLayout>
 
-			<com.google.android.material.textfield.TextInputLayout
-					android:layout_width="match_parent"
-					android:layout_height="wrap_content"
-					android:hint="@string/zip_code"
-					app:helperText="@string/required">
+			<!--<com.google.android.material.textfield.TextInputLayout-->
+					<!--android:layout_width="match_parent"-->
+					<!--android:layout_height="wrap_content"-->
+					<!--android:hint="@string/zip_code"-->
+					<!--app:helperText="@string/required">-->
 
-				<com.google.android.material.textfield.TextInputEditText
-						android:layout_width="match_parent"
-						android:id="@+id/shipping_zip"
-						android:layout_height="wrap_content"/>
+				<!--<com.google.android.material.textfield.TextInputEditText-->
+						<!--android:layout_width="match_parent"-->
+						<!--android:id="@+id/shipping_zip"-->
+						<!--android:layout_height="wrap_content"/>-->
 
-			</com.google.android.material.textfield.TextInputLayout>
+			<!--</com.google.android.material.textfield.TextInputLayout>-->
 
-			<com.google.android.material.textfield.TextInputLayout
-					android:layout_width="match_parent"
-					android:layout_height="wrap_content"
-					android:hint="@string/phone">
+			<!--<com.google.android.material.textfield.TextInputLayout-->
+					<!--android:layout_width="match_parent"-->
+					<!--android:layout_height="wrap_content"-->
+					<!--android:hint="@string/phone">-->
 
-				<com.google.android.material.textfield.TextInputEditText
-						android:layout_width="match_parent"
-						android:id="@+id/shipping_phone"
-						android:layout_height="wrap_content"/>
+				<!--<com.google.android.material.textfield.TextInputEditText-->
+						<!--android:layout_width="match_parent"-->
+						<!--android:id="@+id/shipping_phone"-->
+						<!--android:layout_height="wrap_content"/>-->
 
-			</com.google.android.material.textfield.TextInputLayout>
+			<!--</com.google.android.material.textfield.TextInputLayout>-->
 
 			<com.google.android.material.button.MaterialButton
 				android:id="@+id/shipping_submit_button"

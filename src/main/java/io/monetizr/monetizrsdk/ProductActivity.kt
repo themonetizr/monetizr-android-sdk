@@ -332,7 +332,21 @@ class ProductActivity : AppCompatActivity(), EditDialogListener {
 
     // Send a checkout request to backend and show shop on return
     private fun checkout(continueWithPayment: Boolean = false) {
-        Log.i("MonetizrSDK", "why is this modal called again")
+        val isReadyToPayJson = PaymentsUtil.isReadyToPayRequest() ?: return
+        val request = IsReadyToPayRequest.fromJson(isReadyToPayJson.toString()) ?: return
+
+
+        // The call to isReadyToPay is asynchronous and returns a Task. Need to provide an
+        // OnCompleteListener to be triggered when the result of the call is known.
+        val task = mPaymentsClient.isReadyToPay(request)
+        task.addOnCompleteListener { completedTask ->
+            try {
+                completedTask.getResult(ApiException::class.java)?.let(::setGooglePayAvailable)
+            } catch (exception: ApiException) {
+                // Process error
+                Log.i("MonetizrSDK", "Error on payment processing" + exception.toString())
+            }
+        }
 
 
         // Show modal bottom sheet for shipping address input
