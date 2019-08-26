@@ -10,3 +10,9 @@
 .externalNativeBuild
 /build
 build/
+
+#Files from Windows Android Studio
+/.idea
+/gradle
+gradlew
+gradlew.bat
