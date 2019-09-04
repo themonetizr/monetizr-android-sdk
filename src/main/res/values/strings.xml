@@ -22,7 +22,27 @@
 	<string name="zip_code">Postal code*</string>
 	<string name="phone">Phone (optional)</string>
 	<string name="province">Province</string>
-	<string name="shipping_submit_button">Submit</string>
+	<string name="confirm_button">Confirm</string>
 	<string name="required">* Required</string>
 	<string name="shipping_address">Shipping Address</string>
+	<string name="confirm_dialog">Confirm order</string>
+	<string name="confirm_price">Price:</string>
+	<string name="confirm_tax">Taxes:</string>
+	<string name="confirm_total_without_shipping">Total without shipping:</string>
+	<string name="confirm_shipping_rates">Shipping options</string>
+	<string name="confirm_total_with_shipping">Total:</string>
+	<string-array name="Colors">
+		<item name="color">Red</item>
+		<item name="color">Orange</item>
+		<item name="color">Yellow</item>
+		<item name="color">Green</item>
+		<item name="color">Blue</item>
+		<item name="color">White</item>
+		<item name="color">Black</item>
+		<item name="color">Purple</item>
+		<item name="color">Pink</item>
+		<item name="color">Gray</item>
+		<item name="color">Cyan Blue</item>
+		<item name="color">Magenta</item>
+	</string-array>
 </resources>

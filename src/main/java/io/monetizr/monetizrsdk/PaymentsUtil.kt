@@ -3,6 +3,7 @@ package io.monetizr.monetizrsdk
 import android.app.Activity
 import com.google.android.gms.wallet.PaymentsClient
 import com.google.android.gms.wallet.Wallet
+import com.google.android.gms.wallet.WalletObjectsClient
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
@@ -196,6 +197,21 @@ object PaymentsUtil {
     }
 
     /**
+     * Creates an instance of [WalletObjectsClient] for use in an [Activity] using the
+     * environment and theme set in [Constants].
+     *
+     * @param activity is the caller's activity.
+     */
+    fun createWalletClient(activity: Activity): WalletObjectsClient
+    {
+        val walletOptions = Wallet.WalletOptions.Builder()
+            .setEnvironment(Constants.PAYMENTS_ENVIRONMENT)
+            .build()
+
+        return Wallet.getWalletObjectsClient(activity, walletOptions)
+    }
+
+    /**
      * Provide Google Pay API with a payment amount, currency, and amount status.
      *
      * @return information about the requested payment.
@@ -206,7 +222,7 @@ object PaymentsUtil {
     private fun getTransactionInfo(price: String): JSONObject {
         return JSONObject().apply {
             put("totalPrice", price)
-            put("totalPriceStatus", "FINAL")
+            put("totalPriceStatus", "ESTIMATED")
             put("currencyCode", Constants.CURRENCY_CODE)
         }
     }
@@ -226,12 +242,13 @@ object PaymentsUtil {
 
                 // An optional shipping address requirement is a top-level property of the
                 // PaymentDataRequest JSON object.
-//                val shippingAddressParameters = JSONObject().apply {
-//                    put("phoneNumberRequired", false)
+                val shippingAddressParameters = JSONObject().apply {
+                    put("phoneNumberRequired", false)
 //                    put("allowedCountryCodes", JSONArray(Constants.SHIPPING_SUPPORTED_COUNTRIES))
-//                }
-//                put("shippingAddressRequired", true)
-//                put("shippingAddressParameters", shippingAddressParameters)
+                }
+                put("shippingAddressRequired", true)
+                put("emailRequired", true)
+                put("shippingAddressParameters", shippingAddressParameters)
             }
         } catch (e: JSONException) {
             return null

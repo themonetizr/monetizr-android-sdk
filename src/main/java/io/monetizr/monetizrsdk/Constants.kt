@@ -75,7 +75,7 @@ object Constants {
      *
      * @value #PAYMENT_GATEWAY_TOKENIZATION_NAME
      */
-    const val PAYMENT_GATEWAY_TOKENIZATION_NAME = "example"
+    const val PAYMENT_GATEWAY_TOKENIZATION_NAME = "stripe"
 
     /**
      * Custom parameters required by the processor/gateway.
@@ -87,7 +87,8 @@ object Constants {
      */
     val PAYMENT_GATEWAY_TOKENIZATION_PARAMETERS = mapOf(
         "gateway" to PAYMENT_GATEWAY_TOKENIZATION_NAME,
-        "gatewayMerchantId" to "exampleGatewayMerchantId"
+        "stripe:version" to "2018-10-31",
+        "stripe:publishableKey" to "pk_test_sYaxaE3cKVtUeTWIcegmUOV8"
     )
 
     /**

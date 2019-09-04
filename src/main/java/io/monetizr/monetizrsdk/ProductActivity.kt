@@ -52,6 +52,14 @@ class ProductActivity : AppCompatActivity(), EditDialogListener {
     // Shipping address
     private lateinit var shippingAddress: JSONObject
 
+    // Shipping address
+    private lateinit var chosenShippingRate: ShippingRate
+
+    private lateinit var paymentInformation: String
+
+    // Billing address
+    private lateinit var billingAddress: JSONObject
+
     // Available variants fro product
     private lateinit var variants: JSONArray
 
@@ -326,108 +334,72 @@ class ProductActivity : AppCompatActivity(), EditDialogListener {
     /**
      * Data returned from shipping address input to use for checkout process
      */
-    override fun updateResult(address: JSONObject) {
-        shippingAddress = address
+    override fun updateResult(shippingRate: ShippingRate) {
+        chosenShippingRate = shippingRate
     }
 
     // Send a checkout request to backend and show shop on return
-    private fun checkout(continueWithPayment: Boolean = false) {
-        val isReadyToPayJson = PaymentsUtil.isReadyToPayRequest() ?: return
-        val request = IsReadyToPayRequest.fromJson(isReadyToPayJson.toString()) ?: return
-
-
-        // The call to isReadyToPay is asynchronous and returns a Task. Need to provide an
-        // OnCompleteListener to be triggered when the result of the call is known.
-        val task = mPaymentsClient.isReadyToPay(request)
-        task.addOnCompleteListener { completedTask ->
-            try {
-                completedTask.getResult(ApiException::class.java)?.let(::setGooglePayAvailable)
-            } catch (exception: ApiException) {
-                // Process error
-                Log.i("MonetizrSDK", "Error on payment processing" + exception.toString())
-            }
-        }
-
+    private fun checkout(proceedWithPayment: Boolean = false) {
 
         // Show modal bottom sheet for shipping address input
-        val modalBottomSheet = BottomModal()
-        modalBottomSheet.isCancelable = false
-        modalBottomSheet.show(supportFragmentManager, BottomModal.TAG)
-        supportFragmentManager.executePendingTransactions()
+        userMadeInteraction = true
+        var variantForCheckout: JSONObject = searchSelectedVariant()
 
-        // Shipping address modal dismissed, receive data and submit checkout
-        modalBottomSheet.dialog.setOnDismissListener {
-            userMadeInteraction = true
-            var variantForCheckout: JSONObject?
+        // Make a checkout request
+        if (variantForCheckout != null) {
+            val language = Locale.getDefault().displayLanguage
+            val jsonBody = JSONObject()
+            val variantId = variantForCheckout.getString("id")
 
-            // Really dismiss this modal as it shows up on back pressed
-            supportFragmentManager.findFragmentByTag(BottomModal.TAG)?.let {
-                (it as BottomModal).dismiss()
+            jsonBody.put("product_handle", productTag)
+            jsonBody.put("variantId", variantId)
+            jsonBody.put("language", language)
+            jsonBody.put("quantity", 1)
+
+            // Add shipping address if it is available from google pay
+            if (proceedWithPayment) {
+                jsonBody.put("shippingAddress", shippingAddress)
             }
 
-            // User just pushes checkout button, it means that initial
-            // variant has to be chosen to finish buying
-            variantForCheckout = initialVariant
+            val url = MonetizrSdk.apiAddress + "products/checkout"
 
-            // If this value is true, then user has completed selection and
-            // selected variant can be found by selected options from variants array
-            if (selectionAccomplished) {
-                variantForCheckout = searchSelectedVariant()
+            if (MonetizrSdk.firstCheckout) {
+                Telemetrics.firstimpressioncheckout()
+                MonetizrSdk.firstCheckout = false
             }
 
-            // Make a checkout request
-            if (variantForCheckout != null) {
-                val language = Locale.getDefault().displayLanguage
-                val jsonBody = JSONObject()
-                val variantId = variantForCheckout.getString("id")
-
-                jsonBody.put("product_handle", productTag)
-                jsonBody.put("variantId", variantId)
-                jsonBody.put("language", language)
-                jsonBody.put("quantity", 1)
-                jsonBody.put("shippingAddress", shippingAddress.toString())
-
-                val url = MonetizrSdk.apiAddress + "products/checkout"
-
-                if (MonetizrSdk.firstCheckout) {
-                    Telemetrics.firstimpressioncheckout()
-                    MonetizrSdk.firstCheckout = false
-                }
-
-                val jsonObjectRequest = object : JsonObjectRequest(
-                    Method.POST, url, jsonBody,
-                    Response.Listener { response ->
-                        if (continueWithPayment == true) {
-                            checkoutInfo = response
-                            requestPayment()
-                       } else {
-                            // Successful response, now show shops window
-                            showProductView(response)
-                        }
-                    },
-                    Response.ErrorListener { error ->
-                        if (MonetizrSdk.debuggable) {
-                            // Die silently, so it does not provide any bad experience
-                            Log.i("MonetizrSDK", "Received API error " + error.networkResponse.data.toString())
-                            error.printStackTrace()
-                        }
-                    }) {
-
-                    // Override headers to pass authorization
-                    override fun getHeaders(): MutableMap<String, String> {
-
-                        val header = mutableMapOf<String, String>()
-                        header["Authorization"] = "Bearer " + MonetizrSdk.apikey
-                        return header
+            val jsonObjectRequest = object : JsonObjectRequest(
+                Method.POST, url, jsonBody,
+                Response.Listener { response ->
+                    if (proceedWithPayment) {
+                        showBottomModalWithShipping(response)
+                    } else {
+                        // Successful response, show shops window
+                        showProductView(response)
                     }
-                }
+                },
+                Response.ErrorListener { error ->
+                    if (MonetizrSdk.debuggable) {
+                        // Die silently, so it does not provide any bad experience
+                        Log.i("MonetizrSDK", "Received API error " + error.networkResponse.data.toString())
+                        error.printStackTrace()
+                    }
+                }) {
 
-                // Access the RequestQueue through singleton class.
-                SingletonRequest.getInstance(this).addToRequestQueue(jsonObjectRequest)
-            } else {
-                // Show a solid information that chosen variant is not available
-                Toast.makeText(this, R.string.variant_not_found, Toast.LENGTH_LONG).show()
+                // Override headers to pass authorization
+                override fun getHeaders(): MutableMap<String, String> {
+
+                    val header = mutableMapOf<String, String>()
+                    header["Authorization"] = "Bearer " + MonetizrSdk.apikey
+                    return header
+                }
             }
+
+            // Access the RequestQueue through singleton class.
+            SingletonRequest.getInstance(this).addToRequestQueue(jsonObjectRequest)
+        } else {
+            // Show a solid information that chosen variant is not available
+            Toast.makeText(this, R.string.variant_not_found, Toast.LENGTH_LONG).show()
         }
     }
 
@@ -437,7 +409,7 @@ class ProductActivity : AppCompatActivity(), EditDialogListener {
     private fun checkoutWithPaymentTokenButtonClick() {
 
         // Request for checkout token
-        checkout(true)
+        requestPayment()
     }
 
     /**
@@ -457,27 +429,30 @@ class ProductActivity : AppCompatActivity(), EditDialogListener {
     /**
      * Searching for selected variant in request results
      */
-    private fun searchSelectedVariant(): JSONObject? {
-        var selectedVariant: JSONObject? = null
+    private fun searchSelectedVariant(): JSONObject {
+        var selectedVariant: JSONObject = initialVariant
 
-        for (i in 0 until variants.length()) {
-            val selectedOptions = variants.getJSONObject(i).getJSONObject("node").getJSONArray("selectedOptions")
-            var numberOfMatchingOptions = 0
+        // User has selected any variant
+        if (::usersSelectedOptions.isInitialized && !usersSelectedOptions.isEmpty()) {
+            for (i in 0 until variants.length()) {
+                val selectedOptions = variants.getJSONObject(i).getJSONObject("node").getJSONArray("selectedOptions")
+                var numberOfMatchingOptions = 0
 
-            // Iteration in options to search for the selected ones
-            for (j in 0 until selectedOptions.length()) {
-                val option = selectedOptions.getJSONObject(j).getString("value")
+                // Iteration in options to search for the selected ones
+                for (j in 0 until selectedOptions.length()) {
+                    val option = selectedOptions.getJSONObject(j).getString("value")
 
-                // Search for option inside users choice
-                if (usersSelectedOptions.indexOf(option) != -1) {
-                    numberOfMatchingOptions++
+                    // Search for option inside users choice
+                    if (usersSelectedOptions.indexOf(option) != -1) {
+                        numberOfMatchingOptions++
+                    }
                 }
-            }
 
-            if (numberOfMatchingOptions == usersSelectedOptions.size) {
-                // This is the variant user has chosen, stop and exit from loop
-                selectedVariant = variants.getJSONObject(i).getJSONObject("node")
-                break
+                if (numberOfMatchingOptions == usersSelectedOptions.size) {
+                    // This is the variant user has chosen, stop and exit from loop
+                    selectedVariant = variants.getJSONObject(i).getJSONObject("node")
+                    break
+                }
             }
         }
         return selectedVariant
@@ -615,7 +590,6 @@ class ProductActivity : AppCompatActivity(), EditDialogListener {
         if (available) {
             button_google_pay.visibility = View.VISIBLE
         } else {
-
             Toast.makeText(this, "Pay not available", Toast.LENGTH_LONG).show()
         }
     }
@@ -628,8 +602,10 @@ class ProductActivity : AppCompatActivity(), EditDialogListener {
         // Disables the button to prevent multiple clicks.
         button_google_pay.isClickable = false
 
-        // The price provided to the API include taxes and shipping costs.
-        val totalPrice = checkoutInfo.getJSONObject("data").getJSONObject("checkoutCreate").getJSONObject("checkout").getJSONObject("totalPriceV2").getString("amount")
+        // Search for product price, as it changes according to selected variants
+        // This price is estimated and will be updated with taxes and shipping rates after receiving information from payment processor
+        var variantForCheckout: JSONObject = searchSelectedVariant()
+        val totalPrice = variantForCheckout.getJSONObject("priceV2").getString("amount")
 
         val paymentDataRequestJson = PaymentsUtil.getPaymentDataRequest(totalPrice)
         if (paymentDataRequestJson == null) {
@@ -648,7 +624,7 @@ class ProductActivity : AppCompatActivity(), EditDialogListener {
     }
 
     /**
-     * Handle a resolved activity from the Google Pay payment sheet.
+     * Handle response from Google payment sheet, now there is shipping and billing addresses, as well as email
      *
      * @param requestCode Request code originally supplied to AutoResolveHelper in requestPayment().
      * @param resultCode Result code returned by the Google Pay API.
@@ -691,12 +667,75 @@ class ProductActivity : AppCompatActivity(), EditDialogListener {
      * Data](https://developers.google.com/pay/api/android/reference/object.PaymentData)
      */
     private fun handlePaymentSuccess(paymentData: PaymentData) {
-        val paymentInformation = paymentData.toJson() ?: return
+
+        paymentInformation = paymentData.toJson() ?: return
 
         try {
             // Token will be null if PaymentDataRequest was not constructed using fromJson(String).
+            val shippingAddressData = JSONObject(paymentInformation).getJSONObject("shippingAddress")
+
+            shippingAddress = JSONObject()
+
+            // Construct shipping address for checkout, so taxes, and shipping rates can be returned and showed to user
+            shippingAddress.put("firstName", shippingAddressData.getString("name"))
+            shippingAddress.put("lastName", shippingAddressData.getString("name"))
+            shippingAddress.put("address1", shippingAddressData.getString("address1"))
+            shippingAddress.put("address2", shippingAddressData.getString("address2"))
+            shippingAddress.put("city", shippingAddressData.getString("locality"))
+            shippingAddress.put("province", shippingAddressData.getString("administrativeArea"))
+            shippingAddress.put("country", shippingAddressData.getString("countryCode"))
+            shippingAddress.put("zip", shippingAddressData.getString("postalCode"))
+
+            // Proceed with making checkout request to get taxes, total cost and shipping information
+            checkout(true)
+        } catch (e: JSONException) {
+            // something wrong with payment token, not available
+            Log.e("handlePaymentSuccess", "Error: " + e.toString())
+        }
+
+    }
+
+    // Show bottom modal with information from checkout about billin
+    private fun showBottomModalWithShipping(checkoutInfo: JSONObject){
+
+        // Show modal bottom sheet for shipping address input
+        val modalBottomSheet = BottomModal()
+
+        val data = Bundle()
+        data.putString("checkoutInfo", checkoutInfo.toString())
+        modalBottomSheet.setArguments(data)
+
+        modalBottomSheet.isCancelable = false
+        modalBottomSheet.show(supportFragmentManager, BottomModal.TAG)
+        supportFragmentManager.executePendingTransactions()
+
+        // Shipping address modal dismissed, receive data and submit checkout
+        modalBottomSheet.dialog.setOnDismissListener {
+            userMadeInteraction = true
+
+            // Really dismiss this modal as it shows up on back pressed
+            supportFragmentManager.findFragmentByTag(BottomModal.TAG)?.let {
+                (it as BottomModal).dismiss()
+            }
+
+
+            // Send request to complete payment with data
+            // Token will be null if PaymentDataRequest was not constructed using fromJson(String).
             val paymentMethodData = JSONObject(paymentInformation).getJSONObject("paymentMethodData")
-            Log.i("MonetizrSDK", paymentMethodData.toString())
+            val billingAddressData = paymentMethodData.getJSONObject("info").getJSONObject("billingAddress")
+            val email = JSONObject(paymentInformation).getString("email")
+
+            var billingAddress = JSONObject()
+
+            // Construct shipping address for checkout, so taxes, and shipping rates can be returned and showed to user
+            billingAddress.put("firstName", billingAddressData.getString("name"))
+            billingAddress.put("lastName", billingAddressData.getString("name"))
+            billingAddress.put("address1", billingAddressData.getString("address1"))
+            billingAddress.put("address2", billingAddressData.getString("address2"))
+            billingAddress.put("city", billingAddressData.getString("locality"))
+            billingAddress.put("province", billingAddressData.getString("administrativeArea"))
+            billingAddress.put("country", billingAddressData.getString("countryCode"))
+            billingAddress.put("zip", billingAddressData.getString("postalCode"))
 
             Log.i("MonetizrSDK", "this is what comes out: " + paymentMethodData
                 .getJSONObject("tokenizationData")
@@ -704,79 +743,61 @@ class ProductActivity : AppCompatActivity(), EditDialogListener {
 
             // If the gateway is set to "example", no payment information is returned - instead, the
             // token will only consist of "examplePaymentMethodToken".
-//            if (paymentMethodData
-//                    .getJSONObject("tokenizationData")
-//                    .getString("type") == "PAYMENT_GATEWAY" && paymentMethodData
-//                    .getJSONObject("tokenizationData")
-//                    .getString("token") == "examplePaymentMethodToken") {
+//
+            // Payment information
+            val jsonBody = JSONObject()
+            val checkoutId = checkoutInfo.getJSONObject("data").getJSONObject("checkoutCreate").getJSONObject("checkout").getString("id")
+            val paymentToken = paymentMethodData.getJSONObject("tokenizationData").getString("token")
+            var variantForCheckout: JSONObject = searchSelectedVariant()
 
-//                AlertDialog.Builder(this)
-//                    .setTitle("Warning")
-//                    .setMessage("Gateway name set to \"example\" - please modify " +
-//                            "Constants.java and replace it with your own gateway.")
-//                    .setPositiveButton("OK", null)
-//                    .create()
-//                    .show()
-//            }
 
-                val billingAddress = paymentMethodData.getJSONObject("info")
-                    .getJSONObject("billingAddress")
-               // Log.i("MonetizrSDK", billingName)
+            val totalPrice = variantForCheckout.getJSONObject("priceV2").getString("amount")
+            val paymentAmount = JSONObject()
+            paymentAmount.put("amount", totalPrice.toDouble() + chosenShippingRate.price!!.toDouble())
+            paymentAmount.put("currencyCode", chosenShippingRate.currencyCode)
 
-//                val jsonBody = JSONObject()
-//
-//                jsonBody.put("checkoutId", productTag)
-//                jsonBody.put("product_handle", productTag)
-//                jsonBody.put("billingAddress", billingAddress.toString())
-//                jsonBody.put("idempotencyKey", "")
-//                jsonBody.put("paymentAmount", 1)
-//                jsonBody.put("paymentData", shippingAddress.toString())
-//                jsonBody.put("test", true)
-//                jsonBody.put("type", "google_pay")
-//
-//                val url = MonetizrSdk.apiAddress + "products/checkoutwithpayment"
-//
-//                if (MonetizrSdk.firstCheckout) {
-//                    Telemetrics.firstimpressioncheckout()
-//                    MonetizrSdk.firstCheckout = false
-//                }
-//
-//                val jsonObjectRequest = object : JsonObjectRequest(
-//                    Method.POST, url, jsonBody,
-//                    Response.Listener { response ->
-//                        // Nothing here, close view
-//                        Toast.makeText(this, "payment success", Toast.LENGTH_LONG).show()
-////                        this.finish()
-//                    },
-//                    Response.ErrorListener { error ->
-//                        if (MonetizrSdk.debuggable) {
-//                            // Die silently, so it does not provide any bad experience
-//                            Log.i("MonetizrSDK", "Received API error " + error.networkResponse.data.toString())
-//                            error.printStackTrace()
-//                        }
-//                    }) {
-//
-//                    // Override headers to pass authorization
-//                    override fun getHeaders(): MutableMap<String, String> {
-//
-//                        val header = mutableMapOf<String, String>()
-//                        header["Authorization"] = "Bearer " + MonetizrSdk.apikey
-//                        return header
-//                    }
-//                }
-//
-//                // Access the RequestQueue through singleton class.
-//                SingletonRequest.getInstance(this).addToRequestQueue(jsonObjectRequest)
 
-//            Toast.makeText(this, "This is some kind of text here", Toast.LENGTH_LONG).show()
-            // Logging token string.
+            jsonBody.put("checkoutId", checkoutId)
+            jsonBody.put("product_handle", productTag)
+            jsonBody.put("billingAddress", billingAddress)
+            jsonBody.put("idempotencyKey", paymentToken)
+            jsonBody.put("paymentAmount", paymentAmount)
+            jsonBody.put("paymentData", paymentToken)
+            jsonBody.put("test", true)
+            jsonBody.put("type", "google_pay")
+            jsonBody.put("shippingAddress", shippingAddress)
+            jsonBody.put("shippingRateHandle", chosenShippingRate.handle)
+            jsonBody.put("email", email)
 
-            // Complete payment with request to shopify complete with checkout
+            // Make a checkout request with selected shipping address, shipping rate and added payment token, because it can be done here
+            val url = MonetizrSdk.apiAddress + "products/checkoutwithpayment"
+            val jsonObjectRequest = object : JsonObjectRequest(
+                Method.POST, url, jsonBody,
+                Response.Listener { response ->
+                    // Nothing here, close view
+                    Toast.makeText(this, "payment success", Toast.LENGTH_LONG).show()
+//                        this.finish()
+                },
+                Response.ErrorListener { error ->
+                    if (MonetizrSdk.debuggable) {
+                        // Die silently, so it does not provide any bad experience
+                        Log.i("MonetizrSDK", "Received API error " + error.networkResponse.data.toString())
+                        error.printStackTrace()
+                    }
+                }) {
 
-        } catch (e: JSONException) {
-            Log.e("handlePaymentSuccess", "Error: " + e.toString())
+                // Override headers to pass authorization
+                override fun getHeaders(): MutableMap<String, String> {
+
+                    val header = mutableMapOf<String, String>()
+                    header["Authorization"] = "Bearer " + MonetizrSdk.apikey
+                    return header
+                }
+            }
+
+            // Access the RequestQueue through singleton class.
+            SingletonRequest.getInstance(this).addToRequestQueue(jsonObjectRequest)
         }
-
     }
 
     /**

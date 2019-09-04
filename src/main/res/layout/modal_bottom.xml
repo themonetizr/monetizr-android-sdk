@@ -19,7 +19,100 @@
 		              android:orientation="vertical">
 
 			<TextView
-				android:text="@string/shipping_address"
+				android:text="@string/confirm_dialog"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:textStyle="bold"
+				app:autoSizeTextType="uniform"
+				app:autoSizeMinTextSize="24sp"
+				app:autoSizeMaxTextSize="40sp"
+				app:autoSizeStepGranularity="2sp"
+				android:padding="5dp"
+				/>
+
+			<View
+				android:layout_width="match_parent"
+				android:layout_height="2dp"
+				android:background="#c0c0c0"/>
+
+			<TextView
+					android:text="@string/confirm_price"
+					android:id="@+id/confirm_price_subtotal"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:textStyle="bold"
+					app:autoSizeTextType="uniform"
+					app:autoSizeMinTextSize="18sp"
+					app:autoSizeMaxTextSize="40sp"
+					app:autoSizeStepGranularity="2sp"
+					android:padding="5dp"
+			/>
+
+			<TextView
+					android:text="@string/confirm_tax"
+					android:id="@+id/confirm_price_tax"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:textStyle="bold"
+					app:autoSizeTextType="uniform"
+					app:autoSizeMinTextSize="18sp"
+					app:autoSizeMaxTextSize="40sp"
+					app:autoSizeStepGranularity="2sp"
+					android:padding="5dp"
+			/>
+
+			<View
+				android:layout_width="match_parent"
+				android:layout_height="2dp"
+				android:background="#c0c0c0"/>
+
+			<TextView
+					android:text="@string/confirm_total_without_shipping"
+					android:id="@+id/confirm_price_without_shippping"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:textStyle="bold"
+					app:autoSizeTextType="uniform"
+					app:autoSizeMinTextSize="18sp"
+					app:autoSizeMaxTextSize="40sp"
+					app:autoSizeStepGranularity="2sp"
+					android:padding="5dp"
+			/>
+
+			<View
+				android:layout_width="match_parent"
+				android:layout_height="2dp"
+				android:background="#c0c0c0"/>
+
+			<TextView
+					android:text="@string/confirm_shipping_rates"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:textStyle="bold"
+					app:autoSizeTextType="uniform"
+					app:autoSizeMinTextSize="18sp"
+					app:autoSizeMaxTextSize="40sp"
+					app:autoSizeStepGranularity="2sp"
+					android:padding="5dp"
+			/>
+
+			<ListView
+					android:id="@+id/shipping_list_view"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					app:layout_constraintBottom_toBottomOf="parent"
+					app:layout_constraintEnd_toEndOf="parent"
+					app:layout_constraintStart_toStartOf="parent"
+					app:layout_constraintTop_toTopOf="parent" />
+
+
+			<View
+				android:layout_width="match_parent"
+				android:layout_height="2dp"
+				android:background="#c0c0c0"/>
+
+			<TextView
+				android:text="@string/confirm_total_with_shipping"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:textStyle="bold"
@@ -27,128 +120,14 @@
 				app:autoSizeMinTextSize="18sp"
 				app:autoSizeMaxTextSize="40sp"
 				app:autoSizeStepGranularity="2sp"
-				/>
-
-			<!--<com.google.android.material.textfield.TextInputLayout-->
-					<!--android:layout_width="match_parent"-->
-					<!--android:layout_height="wrap_content"-->
-					<!--android:hint="@string/first_name"-->
-					<!--app:helperText="@string/required">-->
-
-				<!--<com.google.android.material.textfield.TextInputEditText-->
-						<!--android:layout_width="match_parent"-->
-						<!--android:id="@+id/shipping_first_name"-->
-						<!--android:layout_height="wrap_content"/>-->
-
-			<!--</com.google.android.material.textfield.TextInputLayout>-->
-
-			<!--<com.google.android.material.textfield.TextInputLayout-->
-					<!--android:layout_width="match_parent"-->
-					<!--android:layout_height="wrap_content"-->
-					<!--android:hint="@string/last_name"-->
-					<!--app:helperText="@string/required">-->
-
-				<!--<com.google.android.material.textfield.TextInputEditText-->
-						<!--android:layout_width="match_parent"-->
-						<!--android:id="@+id/shipping_last_name"-->
-						<!--android:layout_height="wrap_content"/>-->
-
-			<!--</com.google.android.material.textfield.TextInputLayout>-->
-
-			<!--<com.google.android.material.textfield.TextInputLayout-->
-					<!--android:layout_width="match_parent"-->
-					<!--android:layout_height="wrap_content"-->
-					<!--android:hint="@string/address_1"-->
-					<!--app:helperText="@string/required">-->
-
-				<!--<com.google.android.material.textfield.TextInputEditText-->
-						<!--android:layout_width="match_parent"-->
-						<!--android:id="@+id/shipping_address1"-->
-						<!--android:layout_height="wrap_content"/>-->
-
-			<!--</com.google.android.material.textfield.TextInputLayout>-->
-
-			<!--<com.google.android.material.textfield.TextInputLayout-->
-					<!--android:layout_width="match_parent"-->
-					<!--android:layout_height="wrap_content"-->
-					<!--android:hint="@string/address_2">-->
-
-				<!--<com.google.android.material.textfield.TextInputEditText-->
-						<!--android:layout_width="match_parent"-->
-						<!--android:id="@+id/shipping_address2"-->
-						<!--android:layout_height="wrap_content"/>-->
-
-			<!--</com.google.android.material.textfield.TextInputLayout>-->
-
-			<com.google.android.material.textfield.TextInputLayout
-					android:layout_width="match_parent"
-					android:layout_height="wrap_content"
-					android:hint="@string/city"
-					app:helperText="@string/required">
-
-				<com.google.android.material.textfield.TextInputEditText
-						android:layout_width="match_parent"
-						android:id="@+id/shipping_city"
-						android:layout_height="wrap_content"/>
-
-			</com.google.android.material.textfield.TextInputLayout>
-
-			<!--<com.google.android.material.textfield.TextInputLayout-->
-					<!--android:layout_width="match_parent"-->
-					<!--android:layout_height="wrap_content"-->
-					<!--android:hint="@string/province"-->
-					<!--app:helperText="@string/required">-->
-
-				<!--<com.google.android.material.textfield.TextInputEditText-->
-						<!--android:layout_width="match_parent"-->
-						<!--android:id="@+id/shipping_province"-->
-						<!--android:layout_height="wrap_content"/>-->
-
-			<!--</com.google.android.material.textfield.TextInputLayout>-->
-
-			<com.google.android.material.textfield.TextInputLayout
-					android:layout_width="match_parent"
-					android:layout_height="wrap_content"
-					android:hint="@string/country"
-					app:helperText="@string/required">
-
-				<com.google.android.material.textfield.TextInputEditText
-						android:layout_width="match_parent"
-						android:id="@+id/shipping_country"
-						android:layout_height="wrap_content"/>
-
-			</com.google.android.material.textfield.TextInputLayout>
-
-			<!--<com.google.android.material.textfield.TextInputLayout-->
-					<!--android:layout_width="match_parent"-->
-					<!--android:layout_height="wrap_content"-->
-					<!--android:hint="@string/zip_code"-->
-					<!--app:helperText="@string/required">-->
-
-				<!--<com.google.android.material.textfield.TextInputEditText-->
-						<!--android:layout_width="match_parent"-->
-						<!--android:id="@+id/shipping_zip"-->
-						<!--android:layout_height="wrap_content"/>-->
-
-			<!--</com.google.android.material.textfield.TextInputLayout>-->
-
-			<!--<com.google.android.material.textfield.TextInputLayout-->
-					<!--android:layout_width="match_parent"-->
-					<!--android:layout_height="wrap_content"-->
-					<!--android:hint="@string/phone">-->
-
-				<!--<com.google.android.material.textfield.TextInputEditText-->
-						<!--android:layout_width="match_parent"-->
-						<!--android:id="@+id/shipping_phone"-->
-						<!--android:layout_height="wrap_content"/>-->
-
-			<!--</com.google.android.material.textfield.TextInputLayout>-->
+				android:padding="5dp"
+			/>
 
 			<com.google.android.material.button.MaterialButton
 				android:id="@+id/shipping_submit_button"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:text="@string/shipping_submit_button"/>
+				android:text="@string/confirm_button"/>
 		</LinearLayout>
 	</ScrollView>
 
