@@ -3,10 +3,13 @@ package io.monetizr.monetizrsdk
 import android.content.Context
 import android.graphics.Bitmap
 import android.util.LruCache
+import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.toolbox.ImageLoader
 import com.android.volley.toolbox.Volley
+
+
 
 /**
  * Creating singleton patter for REST API requests, easier to make calls without class initialization
@@ -43,6 +46,7 @@ class SingletonRequest constructor(context: Context) {
     }
 
     fun <T> addToRequestQueue(req: Request<T>) {
+        req.retryPolicy = DefaultRetryPolicy(20 * 1000, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
         requestQueue.add(req)
     }
 }

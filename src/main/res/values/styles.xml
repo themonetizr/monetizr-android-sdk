@@ -1,5 +1,5 @@
 <resources>
-	<style name="MonetizrTheme" parent="Theme.MaterialComponents.Light"/>
+	<style name="MonetizrTheme" parent="Theme.MaterialComponents.Light.NoActionBar"/>
 
 	<style name="FullscreenTheme" parent="MonetizrTheme">
 		<item name="android:actionBarStyle">@style/FullscreenActionBarStyle</item>

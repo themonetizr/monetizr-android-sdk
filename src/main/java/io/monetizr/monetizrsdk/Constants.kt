@@ -88,7 +88,7 @@ object Constants {
     val PAYMENT_GATEWAY_TOKENIZATION_PARAMETERS = mapOf(
         "gateway" to PAYMENT_GATEWAY_TOKENIZATION_NAME,
         "stripe:version" to "2018-10-31",
-        "stripe:publishableKey" to "pk_test_sYaxaE3cKVtUeTWIcegmUOV8"
+        "stripe:publishableKey" to "pk_test_OS6QyI1IBsFtonsnFk6rh2wb00mSXyblvu"
     )
 
     /**

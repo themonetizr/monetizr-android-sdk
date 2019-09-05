@@ -697,7 +697,7 @@ class ProductActivity : AppCompatActivity(), EditDialogListener {
 
     // Show bottom modal with information from checkout about billin
     private fun showBottomModalWithShipping(checkoutInfo: JSONObject){
-
+        Log.i("MonetizrSDK", "Show bottom modal, must be called once, never more!!")
         // Show modal bottom sheet for shipping address input
         val modalBottomSheet = BottomModal()
 
