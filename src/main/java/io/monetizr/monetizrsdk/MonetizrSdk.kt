@@ -3,18 +3,25 @@ package io.monetizr.monetizrsdk
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.util.DisplayMetrics
 import android.util.Log
+import android.view.WindowManager
+import android.widget.ProgressBar
+import android.widget.RelativeLayout
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat.startActivity
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.*
+
 
 /**
  * Monetizr Sdk entry point.
@@ -64,6 +71,7 @@ class MonetizrSdk {
         private var initialLaunch: Boolean = true
         var firstCheckout: Boolean = true
         var firstImpressionClick: Boolean = true
+        var progressDialog: AlertDialog ?= null
 
         /**
          * Show product for specified tag. Method is singleton pattern and called as MonetizrSdk.showProductForTag('product-tag')
@@ -78,6 +86,7 @@ class MonetizrSdk {
 
                 // Check for internet connectivity
                 if (isNetworkAvailable(application)) {
+                    showProgressDialog()
                     requestProductInformation(application, productTag, apikey)
 
                     // Store device data, as device is not persons information, it is not GDPR regulation
@@ -221,7 +230,47 @@ class MonetizrSdk {
 
             val customArguments = Bundle()
             val activityContext = currentActivity as Context
+            hideProgressBar()
             startActivity(activityContext, intent, customArguments)
+        }
+
+        /**
+         * Show progress dialog on top of active context
+         */
+        fun showProgressDialog() {
+            val application = ActivityProvider.currentActivity as Context
+
+            val holderLayout = RelativeLayout(application)
+            val params = RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT)
+            holderLayout.layoutParams = params
+
+            val progressBar = ProgressBar(application)
+            progressBar.isIndeterminate = true
+            holderLayout.addView(progressBar, params)
+
+            val builder = AlertDialog.Builder(application)
+            builder.setCancelable(true)
+            builder.setView(holderLayout)
+
+            progressDialog = builder.create()
+            progressDialog!!.show()
+            val window = progressDialog!!.getWindow()
+            if (window != null) {
+                val layoutParams = WindowManager.LayoutParams()
+                layoutParams.copyFrom(progressDialog!!.getWindow().getAttributes())
+                layoutParams.width = RelativeLayout.LayoutParams.MATCH_PARENT
+                layoutParams.height = RelativeLayout.LayoutParams.MATCH_PARENT
+                progressDialog!!.getWindow().setAttributes(layoutParams)
+                progressDialog!!.getWindow().setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            }
+        }
+
+        /**
+         * Hide progress dialog
+         */
+        fun hideProgressBar(){
+            progressDialog!!.dismiss()
         }
     }
 }

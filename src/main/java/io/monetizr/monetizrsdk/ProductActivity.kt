@@ -341,6 +341,8 @@ class ProductActivity : AppCompatActivity(), EditDialogListener {
     // Send a checkout request to backend and show shop on return
     private fun checkout(proceedWithPayment: Boolean = false) {
 
+        MonetizrSdk.showProgressDialog()
+
         // Show modal bottom sheet for shipping address input
         userMadeInteraction = true
         var variantForCheckout: JSONObject = searchSelectedVariant()
@@ -371,6 +373,7 @@ class ProductActivity : AppCompatActivity(), EditDialogListener {
             val jsonObjectRequest = object : JsonObjectRequest(
                 Method.POST, url, jsonBody,
                 Response.Listener { response ->
+                    MonetizrSdk.hideProgressBar()
                     if (proceedWithPayment) {
                         showBottomModalWithShipping(response)
                     } else {
@@ -574,7 +577,7 @@ class ProductActivity : AppCompatActivity(), EditDialogListener {
                 completedTask.getResult(ApiException::class.java)?.let(::setGooglePayAvailable)
             } catch (exception: ApiException) {
                 // Process error
-                Log.i("MonetizrSDK", "this is the stuff" + exception.toString())
+                Log.i("MonetizrSDK", "Error requestion payments: " + exception.toString())
             }
         }
     }
@@ -590,7 +593,7 @@ class ProductActivity : AppCompatActivity(), EditDialogListener {
         if (available) {
             button_google_pay.visibility = View.VISIBLE
         } else {
-            Toast.makeText(this, "Pay not available", Toast.LENGTH_LONG).show()
+            Log.i("MonetizrSDK", "Payments are not available")
         }
     }
 
@@ -609,7 +612,7 @@ class ProductActivity : AppCompatActivity(), EditDialogListener {
 
         val paymentDataRequestJson = PaymentsUtil.getPaymentDataRequest(totalPrice)
         if (paymentDataRequestJson == null) {
-            Log.e("RequestPayment", "Can't fetch payment data request")
+            Log.i("MonetizrSDK", "Can't fetch payment data request")
             return
         }
         val request = PaymentDataRequest.fromJson(paymentDataRequestJson.toString())
@@ -697,7 +700,6 @@ class ProductActivity : AppCompatActivity(), EditDialogListener {
 
     // Show bottom modal with information from checkout about billin
     private fun showBottomModalWithShipping(checkoutInfo: JSONObject){
-        Log.i("MonetizrSDK", "Show bottom modal, must be called once, never more!!")
         // Show modal bottom sheet for shipping address input
         val modalBottomSheet = BottomModal()
 
@@ -713,6 +715,7 @@ class ProductActivity : AppCompatActivity(), EditDialogListener {
         modalBottomSheet.dialog.setOnDismissListener {
             userMadeInteraction = true
 
+            MonetizrSdk.showProgressDialog()
             // Really dismiss this modal as it shows up on back pressed
             supportFragmentManager.findFragmentByTag(BottomModal.TAG)?.let {
                 (it as BottomModal).dismiss()
@@ -736,10 +739,6 @@ class ProductActivity : AppCompatActivity(), EditDialogListener {
             billingAddress.put("province", billingAddressData.getString("administrativeArea"))
             billingAddress.put("country", billingAddressData.getString("countryCode"))
             billingAddress.put("zip", billingAddressData.getString("postalCode"))
-
-            Log.i("MonetizrSDK", "this is what comes out: " + paymentMethodData
-                .getJSONObject("tokenizationData")
-                .getString("token"))
 
             // If the gateway is set to "example", no payment information is returned - instead, the
             // token will only consist of "examplePaymentMethodToken".
@@ -773,9 +772,9 @@ class ProductActivity : AppCompatActivity(), EditDialogListener {
             val jsonObjectRequest = object : JsonObjectRequest(
                 Method.POST, url, jsonBody,
                 Response.Listener { response ->
+                    MonetizrSdk.hideProgressBar()
                     // Show success message and close after a short period
-                    Toast.makeText(this, "payment success", Toast.LENGTH_LONG).show()
-//                        this.finish()
+                    this.finish()
                 },
                 Response.ErrorListener { error ->
                     if (MonetizrSdk.debuggable) {
