@@ -9,4 +9,6 @@
 		<attr name="metaButtonBarButtonStyle" format="reference"/>
 	</declare-styleable>
 
+	<dimen name="bottom_sheet_corner_radius">8dp</dimen>
+	<dimen name="bottom_sheet_top_padding">8dp</dimen>
 </resources>

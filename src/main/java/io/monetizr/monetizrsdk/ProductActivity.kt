@@ -756,7 +756,6 @@ class ProductActivity : AppCompatActivity(), EditDialogListener {
             paymentAmount.put("amount", totalPrice.toDouble() + chosenShippingRate.price!!.toDouble())
             paymentAmount.put("currencyCode", chosenShippingRate.currencyCode)
 
-
             jsonBody.put("checkoutId", checkoutId)
             jsonBody.put("product_handle", productTag)
             jsonBody.put("billingAddress", billingAddress)
@@ -774,7 +773,7 @@ class ProductActivity : AppCompatActivity(), EditDialogListener {
             val jsonObjectRequest = object : JsonObjectRequest(
                 Method.POST, url, jsonBody,
                 Response.Listener { response ->
-                    // Nothing here, close view
+                    // Show success message and close after a short period
                     Toast.makeText(this, "payment success", Toast.LENGTH_LONG).show()
 //                        this.finish()
                 },

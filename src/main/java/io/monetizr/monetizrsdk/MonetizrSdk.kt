@@ -178,7 +178,7 @@ class MonetizrSdk {
             val language = Locale.getDefault().displayLanguage
             val url = apiAddress + "products/tag/" + productTag + "?size=" + realWidth + "&language=" + language
 
-            // Make a json request to APPI
+            // Make a json request to API
             val jsonObjectRequest = object : JsonObjectRequest(
                 Method.GET, url, null,
                 Response.Listener { response ->

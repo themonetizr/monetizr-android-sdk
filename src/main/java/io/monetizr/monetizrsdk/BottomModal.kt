@@ -1,15 +1,23 @@
 package io.monetizr.monetizrsdk
 
+import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.BaseAdapter
+import android.widget.ListView
+import android.widget.RadioButton
+import android.widget.TextView
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import org.json.JSONArray
 import org.json.JSONObject
+
+
+
+
 
 
 
@@ -20,24 +28,28 @@ interface EditDialogListener {
     fun updateResult(shippingRate: ShippingRate)
 }
 
+/**
+ * Bottom modal for choosing shipping rates and confirm ordering
+ */
 class BottomModal : BottomSheetDialogFragment() {
 
     var listener: EditDialogListener ?= null
 
 
+    override fun getTheme(): Int = R.style.BottomSheetDialogTheme
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog = BottomSheetDialog(requireContext(), theme)
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         var bottomModal: View = inflater.inflate(R.layout.modal_bottom, container, false)
 
-        val checkoutInfo: JSONObject = JSONObject(arguments!!.getString("checkoutInfo"))
+        val checkoutInfo = JSONObject(arguments!!.getString("checkoutInfo"))
 
         val shippingRates: JSONArray = checkoutInfo.getJSONObject("data").getJSONObject("checkoutCreate").getJSONObject("checkout").getJSONObject("availableShippingRates").getJSONArray("shippingRates")
 
-
-        val checkoutId = checkoutInfo.getJSONObject("data").getJSONObject("checkoutCreate").getJSONObject("checkout").getString("id")
         val subtotalPrice = checkoutInfo.getJSONObject("data").getJSONObject("checkoutCreate").getJSONObject("checkout").getJSONObject("subtotalPriceV2")
         val totalPrice = checkoutInfo.getJSONObject("data").getJSONObject("checkoutCreate").getJSONObject("checkout").getJSONObject("totalPriceV2")
         val totalTax = checkoutInfo.getJSONObject("data").getJSONObject("checkoutCreate").getJSONObject("checkout").getJSONObject("totalTaxV2")
-
 
         var subtotalPriceField: TextView = bottomModal.findViewById(R.id.confirm_price_subtotal)
         subtotalPriceField.text = subtotalPriceField.text.toString() + " " + subtotalPrice.getString("amount") + " " + subtotalPrice.getString("currencyCode")
@@ -45,8 +57,10 @@ class BottomModal : BottomSheetDialogFragment() {
         var priceTaxField: TextView = bottomModal.findViewById(R.id.confirm_price_tax)
         priceTaxField.text = priceTaxField.text.toString() + " " + totalTax.getString("amount") + " " + totalTax.getString("currencyCode")
 
-        var priceTotalWithoutTaxField: TextView = bottomModal.findViewById(R.id.confirm_price_without_shippping)
-        priceTotalWithoutTaxField.text = priceTotalWithoutTaxField.text.toString() + " " + totalPrice.getString("amount") + " " + totalPrice.getString("currencyCode")
+        var priceTotalWithTaxField: TextView = bottomModal.findViewById(R.id.confirm_price_without_shippping)
+        priceTotalWithTaxField.text = priceTotalWithTaxField.text.toString() + " " + totalPrice.getString("amount") + " " + totalPrice.getString("currencyCode")
+
+        var priceTotalWithShipping: TextView = bottomModal.findViewById(R.id.shipping_total_price)
 
         // Get form inputs for shipping address
         var listView = bottomModal.findViewById<ListView>(R.id.shipping_list_view)
@@ -64,24 +78,18 @@ class BottomModal : BottomSheetDialogFragment() {
         }
 
         var arrayAdapter = ShippingRateAdapter(activity!!.baseContext, listItems)
+        arrayAdapter.holderTotalPrice = priceTotalWithShipping
+        arrayAdapter.totalPrice = totalPrice.getString("amount").toDouble()
+        arrayAdapter.currencyCode = totalPrice.getString("currencyCode")
 
         listView.adapter = arrayAdapter
-
-        arrayAdapter?.notifyDataSetChanged()
-
-        listView!!.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
-            Toast.makeText(
-                activity!!.baseContext,
-                "Click ListItem Number $position", Toast.LENGTH_LONG
-            )
-                .show()
-        }
 
         var submit: View = bottomModal.findViewById(R.id.shipping_submit_button)
         submit.isEnabled = true
         submit.setOnClickListener {
+
             // Pass back chosen shipping method
-            listener!!.updateResult(listItems[0])
+            listener!!.updateResult(listItems[arrayAdapter.lastSelectedPosition()])
             dialog.dismiss()
         }
 
@@ -93,56 +101,23 @@ class BottomModal : BottomSheetDialogFragment() {
         listener = context as EditDialogListener
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-
-        Log.i("MonetizrSDK", "why is this modal called again from onview created??" )
-
-        // Submit button
-
-
-//        var watcher: TextWatcher = object : TextWatcher {
-//            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-//            }
-//
-//            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
-//            }
-//
-//            override fun afterTextChanged(s: Editable) {
-////                if( TextUtils.isEmpty(city.text) || TextUtils.isEmpty(country.text)) {
-////                    submit.isEnabled = false
-////                } else {
-////                    submit.isEnabled = true
-////                }
-//            }
-//        }
-
-
-
-        // Add text change listeners to required fields
-//        firstName.addTextChangedListener(watcher)
-//        lastName.addTextChangedListener(watcher)
-//        address1.addTextChangedListener(watcher)
-//        address2.addTextChangedListener(watcher)
-//        city.addTextChangedListener(watcher)
-//        country.addTextChangedListener(watcher)
-//        zipCode.addTextChangedListener(watcher)
-//        phone.addTextChangedListener(watcher)
-//        province.addTextChangedListener(watcher)
-
-        // Show keyboard
-//        city.requestFocus()
-//        dialog.window!!.setSoftInputMode(
-//            WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE
-//        )
-    }
-
     private inner class ShippingRateAdapter(private val context: Context,
                                             private val dataSource: ArrayList<ShippingRate>) : BaseAdapter(){
 
+        private inner class ShippingItemViewHolder {
+            internal var titleTextView: TextView? = null
+            internal var subtitleTextView: TextView? = null
+            internal var shippingRateView: RadioButton? = null
+        }
+
         private val inflater: LayoutInflater
                 = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+
+        var selected: RadioButton? = null
+        var lastSelectedPosition = 0
+        var holderTotalPrice: TextView? = null
+        var totalPrice: Double = 0.0
+        var currencyCode: String? = ""
 
         override fun getCount(): Int {
             return dataSource.size
@@ -156,23 +131,59 @@ class BottomModal : BottomSheetDialogFragment() {
             return position.toLong()
         }
 
+        fun lastSelectedPosition(): Int{
+            return lastSelectedPosition
+        }
+
+        fun updateTotalPrice (chosenShippingPrice: Double) {
+            holderTotalPrice!!.text = getResources().getString(R.string.confirm_total_with_shipping) + " " + (totalPrice + chosenShippingPrice).toString() + " " + currencyCode
+        }
+
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
 
-            // Get view for row item
-            val rowView = inflater.inflate(R.layout.shipping_rate_item, parent, false)
+            var view = convertView
+            val viewHolder: ShippingItemViewHolder
 
-            // Get title element
-            val titleTextView = rowView.findViewById(R.id.shipping_list_title) as TextView
+            if (view == null) {
+                // Get view for row item
+                view = inflater.inflate(R.layout.shipping_rate_item, parent, false)
 
-            // Get subtitle element
-            val subtitleTextView = rowView.findViewById(R.id.shipping_list_detail) as TextView
+                viewHolder = ShippingItemViewHolder()
+                viewHolder.titleTextView = view.findViewById(R.id.shipping_list_title) as TextView
+                viewHolder.subtitleTextView = view.findViewById(R.id.shipping_list_detail) as TextView
+                viewHolder.shippingRateView = view.findViewById(R.id.shipping_checkbox) as RadioButton
+
+            } else {
+                viewHolder = view.tag as ShippingItemViewHolder
+            }
+
 
             val shippingRate = getItem(position) as ShippingRate
+            viewHolder.titleTextView!!.text = shippingRate.title
+            viewHolder.subtitleTextView!!.text = shippingRate.price + " " + shippingRate.currencyCode
 
-            titleTextView.text = shippingRate.title
-            subtitleTextView.text = shippingRate.price + " " + shippingRate.currencyCode
+            // Set first option as selected
+            if (position == 0) {
+                if (selected == null) {
+                    viewHolder.shippingRateView!!.isChecked = true
+                    selected = viewHolder.shippingRateView
+                    updateTotalPrice(dataSource[position].price!!.toDouble())
+                }
+            }
 
-            return rowView
+            viewHolder.shippingRateView!!.setOnClickListener {
+                if (selected != null) {
+                    selected!!.isChecked = false
+                }
+                viewHolder.shippingRateView!!.isChecked = true
+                lastSelectedPosition = position
+                selected = viewHolder!!.shippingRateView
+                updateTotalPrice(dataSource[position].price!!.toDouble())
+            }
+
+            view!!.tag = viewHolder
+
+            return view
         }
 
     }

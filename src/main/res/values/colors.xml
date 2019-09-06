@@ -8,6 +8,7 @@
 	<color name="black_overlay">#66000000</color>
 	<color name="blue_text">#007aff</color>
 	<color name="grey_text">#bbbdbf</color>
+	<color name="bottom_sheet_grey_text">#6d6d6d</color>
 	<color name="dark_grey_text">#212121</color>
 	<color name="variant_background">#231f20</color>
 	<color name="dialog_header_background">#efeff4</color>

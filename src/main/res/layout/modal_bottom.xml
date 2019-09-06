@@ -6,10 +6,9 @@
 	android:orientation="vertical"
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
-	android:paddingLeft="24dp"
-	android:paddingTop="24dp"
+	android:paddingTop="10dp"
 	android:paddingBottom="24dp"
-	android:paddingRight="24dp">
+	>
 
 	<ScrollView
 			android:layout_width="match_parent"
@@ -22,30 +21,30 @@
 				android:text="@string/confirm_dialog"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:textStyle="bold"
-				app:autoSizeTextType="uniform"
-				app:autoSizeMinTextSize="24sp"
-				app:autoSizeMaxTextSize="40sp"
-				app:autoSizeStepGranularity="2sp"
-				android:padding="5dp"
+				android:textSize="18sp"
+				android:paddingLeft="20dp"
+				android:paddingRight="20dp"
+				android:layout_marginTop="10dp"
+				android:layout_marginBottom="10dp"
+				android:textColor="@color/bottom_sheet_grey_text"
 				/>
 
 			<View
 				android:layout_width="match_parent"
 				android:layout_height="2dp"
-				android:background="#c0c0c0"/>
+				android:background="#A09F9F"/>
 
 			<TextView
 					android:text="@string/confirm_price"
 					android:id="@+id/confirm_price_subtotal"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
-					android:textStyle="bold"
-					app:autoSizeTextType="uniform"
-					app:autoSizeMinTextSize="18sp"
-					app:autoSizeMaxTextSize="40sp"
-					app:autoSizeStepGranularity="2sp"
-					android:padding="5dp"
+					android:textSize="16sp"
+					android:paddingLeft="20dp"
+					android:paddingRight="20dp"
+					android:layout_marginTop="10dp"
+					android:layout_marginBottom="5dp"
+					android:textColor="@color/bottom_sheet_grey_text"
 			/>
 
 			<TextView
@@ -53,53 +52,56 @@
 					android:id="@+id/confirm_price_tax"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
-					android:textStyle="bold"
-					app:autoSizeTextType="uniform"
-					app:autoSizeMinTextSize="18sp"
-					app:autoSizeMaxTextSize="40sp"
-					app:autoSizeStepGranularity="2sp"
-					android:padding="5dp"
+					android:textSize="16sp"
+					android:paddingBottom="5dp"
+					android:paddingLeft="20dp"
+					android:paddingRight="20dp"
+					android:layout_marginBottom="5dp"
+					android:textColor="@color/bottom_sheet_grey_text"
 			/>
 
 			<View
 				android:layout_width="match_parent"
 				android:layout_height="2dp"
-				android:background="#c0c0c0"/>
+				android:background="#A09F9F"/>
 
 			<TextView
 					android:text="@string/confirm_total_without_shipping"
 					android:id="@+id/confirm_price_without_shippping"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
-					android:textStyle="bold"
-					app:autoSizeTextType="uniform"
-					app:autoSizeMinTextSize="18sp"
-					app:autoSizeMaxTextSize="40sp"
-					app:autoSizeStepGranularity="2sp"
-					android:padding="5dp"
+					android:textSize="16sp"
+					android:paddingLeft="20dp"
+					android:paddingRight="20dp"
+					android:layout_marginTop="15dp"
+					android:layout_marginBottom="15dp"
+					android:textColor="@color/bottom_sheet_grey_text"
 			/>
 
 			<View
 				android:layout_width="match_parent"
 				android:layout_height="2dp"
-				android:background="#c0c0c0"/>
+				android:background="#A09F9F"/>
 
 			<TextView
 					android:text="@string/confirm_shipping_rates"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
-					android:textStyle="bold"
 					app:autoSizeTextType="uniform"
-					app:autoSizeMinTextSize="18sp"
-					app:autoSizeMaxTextSize="40sp"
-					app:autoSizeStepGranularity="2sp"
-					android:padding="5dp"
+					android:textSize="16sp"
+					android:layout_marginTop="10dp"
+					android:layout_marginBottom="10dp"
+					android:paddingLeft="20dp"
+					android:paddingRight="20dp"
+					android:textColor="@color/bottom_sheet_grey_text"
 			/>
 
 			<ListView
 					android:id="@+id/shipping_list_view"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
+					android:layout_marginLeft="20dp"
+					android:layout_marginRight="20dp"
 					app:layout_constraintBottom_toBottomOf="parent"
 					app:layout_constraintEnd_toEndOf="parent"
 					app:layout_constraintStart_toStartOf="parent"
@@ -109,24 +111,29 @@
 			<View
 				android:layout_width="match_parent"
 				android:layout_height="2dp"
-				android:background="#c0c0c0"/>
+				android:background="#A09F9F"/>
 
 			<TextView
 				android:text="@string/confirm_total_with_shipping"
+				android:id="@+id/shipping_total_price"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:textStyle="bold"
-				app:autoSizeTextType="uniform"
-				app:autoSizeMinTextSize="18sp"
-				app:autoSizeMaxTextSize="40sp"
-				app:autoSizeStepGranularity="2sp"
-				android:padding="5dp"
+				android:textSize="16sp"
+				android:layout_marginTop="15dp"
+				android:layout_marginBottom="15dp"
+				android:paddingLeft="20dp"
+				android:paddingRight="20dp"
+				android:textColor="@color/bottom_sheet_grey_text"
 			/>
 
 			<com.google.android.material.button.MaterialButton
 				android:id="@+id/shipping_submit_button"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
+				android:textColor="@color/colorWhite"
+				android:gravity="center"
+				app:backgroundTint="#4285f4"
+				android:layout_gravity="center_vertical|center_horizontal"
 				android:text="@string/confirm_button"/>
 		</LinearLayout>
 	</ScrollView>
