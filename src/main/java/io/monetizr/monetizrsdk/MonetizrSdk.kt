@@ -6,7 +6,6 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.ConnectivityManager
-import android.net.NetworkInfo
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.util.DisplayMetrics
@@ -21,7 +20,10 @@ import com.android.volley.toolbox.JsonObjectRequest
 import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.*
-
+import android.net.NetworkCapabilities
+import android.os.Build
+import io.monetizr.monetizrsdk.dto.Product
+import io.monetizr.monetizrsdk.ui.activity.ProductActivity
 
 /**
  * Monetizr Sdk entry point.
@@ -71,7 +73,7 @@ class MonetizrSdk {
         private var initialLaunch: Boolean = true
         var firstCheckout: Boolean = true
         var firstImpressionClick: Boolean = true
-        var progressDialog: AlertDialog ?= null
+        var progressDialog: AlertDialog? = null
 
         /**
          * Show product for specified tag. Method is singleton pattern and called as MonetizrSdk.showProductForTag('product-tag')
@@ -101,7 +103,8 @@ class MonetizrSdk {
                     }
 
                     // Check if this is the first installation
-                    val monetizrSdkPreference = PreferenceManager.getDefaultSharedPreferences(application)
+                    val monetizrSdkPreference =
+                        PreferenceManager.getDefaultSharedPreferences(application)
                     val isFirstRun = monetizrSdkPreference.getBoolean("MonetizrSdkFirstrun", true)
 
                     // Checking for application first launch, install event
@@ -116,9 +119,11 @@ class MonetizrSdk {
                     }
 
                     // Check for application update, if application with monetiizr is being updated
-                    val appVersion = monetizrSdkPreference.getString("MonetizrSdkBundleVersion", "0")
+                    val appVersion =
+                        monetizrSdkPreference.getString("MonetizrSdkBundleVersion", "0")
                     val ctx = ActivityProvider.currentActivity
-                    val pInfo = application.packageManager.getPackageInfo((ctx as Activity).packageName, 0)
+                    val pInfo =
+                        application.packageManager.getPackageInfo((ctx as Activity).packageName, 0)
                     val version = pInfo.versionName
                     if (appVersion != version) {
                         Telemetrics.update()
@@ -176,7 +181,11 @@ class MonetizrSdk {
          * @param   productTag  {String}   Product that is being requested
          * @param   apiKey      {String}   Provided API auth key
          */
-        private fun requestProductInformation(context: Context, productTag: String, apiKey: String) {
+        private fun requestProductInformation(
+            context: Context,
+            productTag: String,
+            apiKey: String
+        ) {
             val ctx = ActivityProvider.currentActivity
             val display = (ctx as Activity).windowManager.defaultDisplay
 
@@ -185,7 +194,8 @@ class MonetizrSdk {
             display.getRealMetrics(realMetrics)
             val realWidth = realMetrics.widthPixels
             val language = Locale.getDefault().displayLanguage
-            val url = apiAddress + "products/tag/" + productTag + "?size=" + realWidth + "&language=" + language
+            val url =
+                apiAddress + "products/tag/" + productTag + "?size=" + realWidth + "&language=" + language
 
             // Make a json request to API
             val jsonObjectRequest = object : JsonObjectRequest(
@@ -201,10 +211,8 @@ class MonetizrSdk {
                         error.printStackTrace()
                     }
                 }) {
-
                 // Override headers to pass authorization
                 override fun getHeaders(): MutableMap<String, String> {
-
                     val header = mutableMapOf<String, String>()
                     header["Authorization"] = "Bearer $apiKey"
                     return header
@@ -224,6 +232,7 @@ class MonetizrSdk {
         private fun showProductWindow(productInfo: JSONObject, productTag: String) {
             val currentActivity = ActivityProvider.currentActivity
             val intent = Intent(currentActivity, ProductActivity::class.java).apply {
+                val product = Product(productInfo)
                 putExtra("product", productInfo.toString())
                 putExtra("product_tag", productTag)
             }
@@ -240,36 +249,42 @@ class MonetizrSdk {
         fun showProgressDialog() {
             val application = ActivityProvider.currentActivity as Context
 
+            //RelativeLayout.LayoutParams.MATCH_PARENT
             val holderLayout = RelativeLayout(application)
-            val params = RelativeLayout.LayoutParams(
-                RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT)
+            val params = RelativeLayout.LayoutParams(200, 200)
+            params.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
             holderLayout.layoutParams = params
+
 
             val progressBar = ProgressBar(application)
             progressBar.isIndeterminate = true
             holderLayout.addView(progressBar, params)
 
-            val builder = AlertDialog.Builder(application)
-            builder.setCancelable(true)
-            builder.setView(holderLayout)
+            val alertBuilder = AlertDialog.Builder(application)
+            alertBuilder.setCancelable(true)
+            alertBuilder.setView(holderLayout)
 
-            progressDialog = builder.create()
-            progressDialog!!.show()
-            val window = progressDialog!!.getWindow()
-            if (window != null) {
-                val layoutParams = WindowManager.LayoutParams()
-                layoutParams.copyFrom(progressDialog!!.getWindow().getAttributes())
-                layoutParams.width = RelativeLayout.LayoutParams.MATCH_PARENT
-                layoutParams.height = RelativeLayout.LayoutParams.MATCH_PARENT
-                progressDialog!!.getWindow().setAttributes(layoutParams)
-                progressDialog!!.getWindow().setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            progressDialog = alertBuilder.create()
+            progressDialog!!.let { dialog ->
+                val window = progressDialog!!.window
+                val dialogWindow = dialog.window
+
+                if (window != null && dialogWindow != null) {
+                    val layoutParams = WindowManager.LayoutParams()
+                    layoutParams.copyFrom(dialogWindow.attributes)
+                    layoutParams.width = RelativeLayout.LayoutParams.MATCH_PARENT
+                    layoutParams.height = RelativeLayout.LayoutParams.MATCH_PARENT
+                    dialogWindow.attributes = layoutParams
+                    dialogWindow.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                }
+                dialog.show()
             }
         }
 
         /**
          * Hide progress dialog
          */
-        fun hideProgressBar(){
+        fun hideProgressBar() {
             progressDialog!!.dismiss()
         }
     }
