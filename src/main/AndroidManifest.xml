@@ -17,20 +17,20 @@
 				android:value="@integer/google_play_services_version"/>
 		<service android:name="io.monetizr.monetizrsdk.ClearedService" android:stopWithTask="false" />
 		<provider
-				android:name=".AppContextProvider"
+				android:name=".provider.AppContextProvider"
 				android:authorities="${applicationId}.monetizrsdk.applicationprovider"
 				android:directBootAware="true"
 				android:exported="false"
 				android:initOrder="900" tools:targetApi="n"/>
 		<provider
-				android:name=".LastActivityProvider"
+				android:name=".provider.LastActivityProvider"
 				android:authorities="${applicationId}.monetizrsdk.lastactivityprovider"
 				android:directBootAware="true"
 				android:exported="false"
 				android:initOrder="900" tools:targetApi="n"/>
 
 		<activity
-				android:name=".ProductActivity"
+				android:name=".ui.activity.ProductActivity"
 				android:configChanges="orientation"
 				android:label="@string/title_activity_product"
 				android:windowSoftInputMode="adjustResize"
