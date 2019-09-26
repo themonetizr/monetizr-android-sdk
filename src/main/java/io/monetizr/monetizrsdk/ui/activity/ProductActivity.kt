@@ -25,6 +25,7 @@ import io.monetizr.monetizrsdk.payment.PaymentsUtil
 import io.monetizr.monetizrsdk.ui.adapter.ImageGalleryAdapter
 import io.monetizr.monetizrsdk.ui.adapter.ItemIndicator
 import io.monetizr.monetizrsdk.ui.adapter.ItemSnapHelper
+import io.monetizr.monetizrsdk.ui.dialog.OptionsDialog
 import io.monetizr.monetizrsdk.ui.dialog.ShippingRateDialogListener
 import kotlinx.android.synthetic.main.activity_product.*
 import kotlinx.android.synthetic.main.item_shipping_rate.*
@@ -42,8 +43,9 @@ class ProductActivity : AppCompatActivity(), ShippingRateDialogListener {
         paymentsClient = PaymentsUtil.createPaymentsClient(this)
         startService(Intent(baseContext, ClearedService::class.java))
 
-        val json = JSONObject(intent!!.getStringExtra(Parameters.PRODUCT_JSON)!!)
-        val product = Product(json)
+        val json = intent!!.getStringExtra(Parameters.PRODUCT_JSON)!!
+        val jsonObject = JSONObject(json)
+        val product = Product(jsonObject)
 
         initImageAdapter(product.images)
         initGooglePayButton()
@@ -55,9 +57,9 @@ class ProductActivity : AppCompatActivity(), ShippingRateDialogListener {
         productTitleView.text = product.title
         productDescriptionView.text = product.descriptionIos
 
-
-        closeButtonView.setOnClickListener { this.finish() }
+        closeButtonView.setOnClickListener { finish() }
         payButtonView.setOnClickListener { checkoutWithPaymentTokenButtonClick() }
+        variantContainerView.setOnClickListener { showOptionDialog(json) }
 
         hideNavigationBar()
     }
@@ -175,12 +177,12 @@ class ProductActivity : AppCompatActivity(), ShippingRateDialogListener {
     private fun initImageAdapter(photos: ArrayList<String>) {
         val imageGalleryAdapter = ImageGalleryAdapter(this, photos)
         val layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        val recyclerView = findViewById<RecyclerView>(R.id.productImagesView)
-        recyclerView.setHasFixedSize(true)
-        recyclerView.layoutManager = layoutManager
-        ItemSnapHelper().attachToRecyclerView(recyclerView)
-        recyclerView.addItemDecoration(ItemIndicator())
-        recyclerView.adapter = imageGalleryAdapter
+
+        productImagesView.setHasFixedSize(true)
+        productImagesView.layoutManager = layoutManager
+        ItemSnapHelper().attachToRecyclerView(productImagesView)
+        productImagesView.addItemDecoration(ItemIndicator())
+        productImagesView.adapter = imageGalleryAdapter
     }
 
     private fun initProductPriceTitle(product: Product) {
@@ -233,7 +235,11 @@ class ProductActivity : AppCompatActivity(), ShippingRateDialogListener {
         }
     }
 
+    private fun showOptionDialog(product: String) {
+        val fragment = OptionsDialog.newInstance(product)
+        fragment.show(supportFragmentManager, "Option")
 
+    }
     //endregion
 
     companion object {
