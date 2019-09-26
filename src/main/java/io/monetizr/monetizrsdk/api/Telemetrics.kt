@@ -12,20 +12,22 @@ import io.monetizr.monetizrsdk.provider.ActivityProvider
 import io.monetizr.monetizrsdk.provider.ApplicationProvider
 import io.monetizr.monetizrsdk.provider.ApplicationProvider.sessionStart
 import io.monetizr.monetizrsdk.MonetizrSdk
+import io.monetizr.monetizrsdk.misc.ConfigHelper
+import io.monetizr.monetizrsdk.misc.Parameters
 import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.*
-
 
 @Suppress("SpellCheckingInspection")
 class Telemetrics {
 
     companion object {
-
         private fun sendPostRequest(jsonBody: JSONObject, endpoint: String) {
-            val url = MonetizrSdk.apiAddress + endpoint
             val ctx = ApplicationProvider.application as Context
-            WebApi.getInstance(ctx).makeRequest(url, Request.Method.POST, jsonBody, MonetizrSdk.apikey, {}, Companion::onFail)
+            val apiKey = ConfigHelper.getConfigValue(ctx, Parameters.RAW_API_KEY)
+            val apiAddress = ConfigHelper.getConfigValue(ctx, Parameters.RAW_API_ENDPOINT)
+            val url = apiAddress + endpoint
+            WebApi.getInstance(ctx).makeRequest(url, Request.Method.POST, jsonBody, apiKey, {}, Companion::onFail)
         }
 
         private fun onFail(error: Throwable) {
@@ -37,9 +39,11 @@ class Telemetrics {
         }
 
         private fun sendGetRequest(endpoint: String) {
-            val url = MonetizrSdk.apiAddress + endpoint
             val ctx = ApplicationProvider.application as Context
-            WebApi.getInstance(ctx).makeRequest(url, Request.Method.GET, null, MonetizrSdk.apikey, {}, Companion::onFail)
+            val apiKey = ConfigHelper.getConfigValue(ctx, Parameters.RAW_API_KEY)
+            val apiAddress = ConfigHelper.getConfigValue(ctx, Parameters.RAW_API_ENDPOINT)
+            val url = apiAddress + endpoint
+            WebApi.getInstance(ctx).makeRequest(url, Request.Method.GET, null, apiKey, {}, Companion::onFail)
         }
 
         /**
