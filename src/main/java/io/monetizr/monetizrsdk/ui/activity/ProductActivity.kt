@@ -27,6 +27,7 @@ import io.monetizr.monetizrsdk.ui.adapter.ItemIndicator
 import io.monetizr.monetizrsdk.ui.adapter.ItemSnapHelper
 import io.monetizr.monetizrsdk.ui.dialog.ShippingRateDialogListener
 import kotlinx.android.synthetic.main.activity_product.*
+import kotlinx.android.synthetic.main.item_shipping_rate.*
 import org.json.JSONObject
 
 class ProductActivity : AppCompatActivity(), ShippingRateDialogListener {
@@ -47,11 +48,28 @@ class ProductActivity : AppCompatActivity(), ShippingRateDialogListener {
         initImageAdapter(product.images)
         initGooglePayButton()
 
+        initCheckoutTitle(product)
+
+        productTitleView.text = product.title
+        productDescriptionView.text = product.descriptionIos
+
+        val variant = product.getFirstVariant()
+        if (variant != null) {
+            productPriceView.text = variant.priceV2.formatString()
+        }
+
         closeButtonView.setOnClickListener { this.finish() }
-        checkoutButtonView.setOnClickListener { checkout() }
+
         payButtonView.setOnClickListener { checkoutWithPaymentTokenButtonClick() }
 
         hideNavigationBar()
+    }
+
+
+    private fun initCheckoutTitle(product: Product) {
+        if (product.buttonTitle != null && product.buttonTitle.isNotEmpty()) {
+            checkoutButtonView.text = product.buttonTitle
+        }
     }
 
     override fun onUserInteraction() {
@@ -91,7 +109,7 @@ class ProductActivity : AppCompatActivity(), ShippingRateDialogListener {
             }
         }
     }
-    
+
     override fun onShippingRateSelect(shippingRate: ShippingRate) {
 
     }

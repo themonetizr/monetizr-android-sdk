@@ -73,5 +73,13 @@ class Product {
         }
     }
 
+    public fun getFirstVariant(): Variant? {
+        return if (variants.size > 0) {
+            variants[0]
+        } else {
+            null
+        }
+    }
+
 
 }

@@ -29,6 +29,6 @@ class Price {
 
     public fun formatString(): String {
         // TODO currency formatter
-        return "$currency $amount"
+        return "$currencyCode $amount"
     }
 }

@@ -7,7 +7,7 @@ class Variant {
     private val product: ProductShort
     private val title: String
     private val selectedOptions: ArrayList<Option>
-    private val priceV2: Price
+      val priceV2: Price
     private val compareAtPriceV2: Price?
     private val image: String
 
