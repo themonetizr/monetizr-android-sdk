@@ -5,7 +5,7 @@ import org.json.JSONObject
 class Variant {
     private val id: String
     private val product: ProductShort
-    private val title: String
+    val title: String
     val selectedOptions: ArrayList<Option>
     val priceV2: Price
     private val compareAtPriceV2: Price?

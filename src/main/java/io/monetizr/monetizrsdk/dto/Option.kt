@@ -6,6 +6,7 @@ import org.json.JSONObject
 class Option {
     val name: String
     val values: ArrayList<String>
+    val value: String
 
     constructor(json: JSONObject) {
         this.name = json.getString("name")
@@ -23,7 +24,9 @@ class Option {
 
         if (json.has("value")) {
             val some = json.getString("value")
-            this.values.add(some)
+            this.value = some
+        }else {
+            this.value = ""
         }
 
     }
