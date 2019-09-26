@@ -1,11 +1,12 @@
-package io.monetizr.monetizrsdk
+package io.monetizr.monetizrsdk.provider
 
 import android.annotation.SuppressLint
 import android.app.Application
 import android.content.ContentProvider
 import android.content.Context
-import io.monetizr.monetizrsdk.ApplicationProvider.appStart
-import io.monetizr.monetizrsdk.ApplicationProvider.sessionStart
+import io.monetizr.monetizrsdk.MonetizrSdk
+import io.monetizr.monetizrsdk.provider.ApplicationProvider.appStart
+import io.monetizr.monetizrsdk.provider.ApplicationProvider.sessionStart
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.ConcurrentLinkedQueue

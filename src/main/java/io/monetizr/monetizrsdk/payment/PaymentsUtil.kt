@@ -1,9 +1,10 @@
-package io.monetizr.monetizrsdk
+package io.monetizr.monetizrsdk.payment
 
 import android.app.Activity
 import com.google.android.gms.wallet.PaymentsClient
 import com.google.android.gms.wallet.Wallet
 import com.google.android.gms.wallet.WalletObjectsClient
+import io.monetizr.monetizrsdk.misc.Constants
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject

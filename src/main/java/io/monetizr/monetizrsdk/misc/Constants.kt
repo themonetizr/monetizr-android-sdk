@@ -1,4 +1,4 @@
-package io.monetizr.monetizrsdk
+package io.monetizr.monetizrsdk.misc
 
 import com.google.android.gms.wallet.WalletConstants
 

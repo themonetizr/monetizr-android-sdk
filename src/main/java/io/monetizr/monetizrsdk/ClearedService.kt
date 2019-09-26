@@ -4,6 +4,7 @@ import android.app.Service
 import android.content.Intent
 import android.os.IBinder
 import android.util.Log
+import io.monetizr.monetizrsdk.api.Telemetrics
 
 /**
  * Service that manages to run in background and log application destroy to catch event and submit session length

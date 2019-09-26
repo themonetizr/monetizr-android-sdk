@@ -1,8 +1,10 @@
-package io.monetizr.monetizrsdk
+package io.monetizr.monetizrsdk.misc
 
 import android.content.Context
 import android.content.res.Resources
 import android.util.Log
+import io.monetizr.monetizrsdk.MonetizrSdk
+import io.monetizr.monetizrsdk.R
 import java.io.IOException
 import java.util.*
 

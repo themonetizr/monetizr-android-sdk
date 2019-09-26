@@ -2,24 +2,32 @@ package io.monetizr.monetizrsdk
 
 import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.ConnectivityManager
+<<<<<<< Updated upstream
 import android.os.Bundle
+=======
+import android.net.NetworkCapabilities
+import android.os.Build
+>>>>>>> Stashed changes
 import android.preference.PreferenceManager
 import android.util.DisplayMetrics
 import android.util.Log
-import android.view.WindowManager
 import android.widget.ProgressBar
 import android.widget.RelativeLayout
 import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContextCompat.startActivity
-import com.android.volley.Response
-import com.android.volley.toolbox.JsonObjectRequest
+import com.android.volley.Request
+import io.monetizr.monetizrsdk.api.Telemetrics
+import io.monetizr.monetizrsdk.api.WebApi
+import io.monetizr.monetizrsdk.misc.ConfigHelper
+import io.monetizr.monetizrsdk.misc.Parameters
+import io.monetizr.monetizrsdk.provider.ActivityProvider
+import io.monetizr.monetizrsdk.provider.ApplicationProvider
+import io.monetizr.monetizrsdk.ui.activity.ProductActivity
 import org.json.JSONObject
-import java.text.SimpleDateFormat
 import java.util.*
+<<<<<<< Updated upstream
 import android.net.NetworkCapabilities
 import android.os.Build
 import io.monetizr.monetizrsdk.dto.Product
@@ -30,19 +38,16 @@ import io.monetizr.monetizrsdk.ui.activity.ProductActivity
  *
  * For easier integration we are using singleton-pattern and companion objects
  */
+=======
+
+>>>>>>> Stashed changes
 class MonetizrSdk {
 
-    /**
-     * Settings are being provided in config.properties and
-     * Invoked from Application provider on host application launch
-     */
     init {
-        // Get access to application context and grab application settings
         val app = ApplicationProvider.application as Context
         apikey = ConfigHelper.getConfigValue(app, "monetizr_api_key")
         apiAddress = ConfigHelper.getConfigValue(app, "monetizr_api_url")
 
-        // Fallback for apikey and for api url to default values if no config was found
         if (apikey == "") {
             Log.i("MonetizrSDK", "Api key was not provided from config file")
 
@@ -55,24 +60,16 @@ class MonetizrSdk {
         }
     }
 
-    /**
-     * Singleton instance access point
-     */
     companion object {
-        // Application access key, allows to connect to oAuth 2 based api using generated token
         var apikey: String = ""
-
-        // Api host address, does come from settings, but can be changed
         var apiAddress: String = ""
-
-        // Debuggable library for development purposes, printing out logs
         var debuggable: Boolean = false
-
-        // Variables are being used to track if application is launched for the first time
-        // as well as if some events does happen for the first time
         private var initialLaunch: Boolean = true
         var firstCheckout: Boolean = true
+<<<<<<< Updated upstream
         var firstImpressionClick: Boolean = true
+=======
+>>>>>>> Stashed changes
         var progressDialog: AlertDialog? = null
 
         /**
@@ -81,92 +78,70 @@ class MonetizrSdk {
          * @param  productTag  {String}  Tag that user want to show. Tags are being provided by monetizr team
          */
         fun showProductForTag(productTag: String) {
-
-            // Die silently to not interfere with application if something goes wrong
             try {
                 val application = ApplicationProvider.application as Context
 
-                // Check for internet connectivity
                 if (isNetworkAvailable(application)) {
-                    showProgressDialog()
+                    createProgressDialog()
+                    showProgressBar()
                     requestProductInformation(application, productTag, apikey)
 
-                    // Store device data, as device is not persons information, it is not GDPR regulation
-                    Telemetrics.deviceData()
+                    // TODO make single request
+                    Telemetrics.sendDeviceInfo()
 
-                    // This is an initial application launch, store timers and launched products information
                     if (initialLaunch) {
-                        // Session is misleading as it tracks when application was started but logs only when sdk has been initialized
                         Telemetrics.session(ApplicationProvider.sessionStart)
-                        Telemetrics.firstimpression()
+                        Telemetrics.sndFirstImpression()
                         initialLaunch = false
                     }
 
+<<<<<<< Updated upstream
                     // Check if this is the first installation
                     val monetizrSdkPreference =
                         PreferenceManager.getDefaultSharedPreferences(application)
                     val isFirstRun = monetizrSdkPreference.getBoolean("MonetizrSdkFirstrun", true)
+=======
+                    val monetizrSdkPreference = PreferenceManager.getDefaultSharedPreferences(application)
+                    val isFirstRun = monetizrSdkPreference.getBoolean(Parameters.IS_FIRST_RUN, true)
+>>>>>>> Stashed changes
 
-                    // Checking for application first launch, install event
                     if (isFirstRun) {
-                        // Run once on initial installation
                         val editor = monetizrSdkPreference.edit()
-                        editor.putBoolean("MonetizrSdkFirstrun", false)
+                        editor.putBoolean(Parameters.IS_FIRST_RUN, false)
                         editor.apply()
 
-                        // Save telemetric data on installation
-                        Telemetrics.install()
+                        Telemetrics.sendFistRun()
                     }
 
                     // Check for application update, if application with monetiizr is being updated
+<<<<<<< Updated upstream
                     val appVersion =
                         monetizrSdkPreference.getString("MonetizrSdkBundleVersion", "0")
                     val ctx = ActivityProvider.currentActivity
                     val pInfo =
                         application.packageManager.getPackageInfo((ctx as Activity).packageName, 0)
+=======
+                    val appVersion = monetizrSdkPreference.getString("MonetizrSdkBundleVersion", "0")
+                    val pInfo = application.packageManager.getPackageInfo((application as Activity).packageName, 0)
+>>>>>>> Stashed changes
                     val version = pInfo.versionName
                     if (appVersion != version) {
                         Telemetrics.update()
-
-                        // Update package info
                         val edit = monetizrSdkPreference.edit()
                         edit.putString("MonetizrSdkBundleVersion", version)
                         edit.apply()
                     }
                 } else {
-                    if (debuggable) {
-                        Log.i("MonetizrSDK", "Did not have internet access")
-                    }
+                    logError("Did not have internet access")
                 }
             } catch (e: Exception) {
-                if (debuggable) {
-                    Log.i("MonetizrSDK", "Did not have access to application context")
-                }
+                logError(e)
             }
         }
 
-        /**
-         * Format date to server datetime string
-         *
-         * @param  date  {Date}  Date object to transform to server timestamp with timezone
-         * @return {String} Datetime formatted to server timestamp
-         */
-        fun getStringTimeStampWithDate(date: Date): String {
-            val dateFormat = SimpleDateFormat(
-                "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
-                Locale.getDefault()
-            )
-            dateFormat.timeZone = TimeZone.getDefault()
-            return dateFormat.format(date)
-        }
-
-        /**
-         * Checking for network availability. It is not possible to store data without network access, at this moment at least
-         *
-         * @param   context    {Context}  Application context from which product has been called
-         * @return  {Boolean}             True/False for network state in device
-         */
+        @Suppress("DEPRECATION")
         private fun isNetworkAvailable(context: Context): Boolean {
+<<<<<<< Updated upstream
             val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
             if (Build.VERSION.SDK_INT < 23) {
@@ -202,10 +177,39 @@ class MonetizrSdk {
             productTag: String,
             apiKey: String
         ) {
+=======
+            var result = false
+            val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                cm?.run {
+                    cm.getNetworkCapabilities(cm.activeNetwork)?.run {
+                        result = when {
+                            hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+                            hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+                            hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
+                            else -> false
+                        }
+                    }
+                }
+            } else {
+                cm?.run {
+                    cm.activeNetworkInfo?.run {
+                        if (type == ConnectivityManager.TYPE_WIFI) {
+                            result = true
+                        } else if (type == ConnectivityManager.TYPE_MOBILE) {
+                            result = true
+                        }
+                    }
+                }
+            }
+            return result
+        }
+
+        private fun requestProductInformation(context: Context, productTag: String, apiKey: String) {
+>>>>>>> Stashed changes
             val ctx = ActivityProvider.currentActivity
             val display = (ctx as Activity).windowManager.defaultDisplay
 
-            // Get some device matrics, to request correct image size
             val realMetrics = DisplayMetrics()
             display.getRealMetrics(realMetrics)
             val realWidth = realMetrics.widthPixels
@@ -213,6 +217,7 @@ class MonetizrSdk {
             val url =
                 apiAddress + "products/tag/" + productTag + "?size=" + realWidth + "&language=" + language
 
+<<<<<<< Updated upstream
             // Make a json request to API
             val jsonObjectRequest = object : JsonObjectRequest(
                 Method.GET, url, null,
@@ -252,23 +257,38 @@ class MonetizrSdk {
                 putExtra("product", productInfo.toString())
                 putExtra("product_tag", productTag)
             }
-
-            val customArguments = Bundle()
-            val activityContext = currentActivity as Context
-            hideProgressBar()
-            startActivity(activityContext, intent, customArguments)
+=======
+            WebApi.getInstance(context).makeRequest(url, Request.Method.GET, null, apiKey, { onProductSuccess(it, productTag) }, ::onProductFail)
         }
 
-        /**
-         * Show progress dialog on top of active context
-         */
-        fun showProgressDialog() {
+        private fun onProductSuccess(response: JSONObject, productTag: String) {
+            hideProgressBar()
+            Telemetrics.clickreward(productTag)
+            showProductActivity(response, productTag)
+        }
+>>>>>>> Stashed changes
+
+        private fun onProductFail(error: Throwable) {
+            hideProgressBar()
+            logError(error)
+        }
+
+        private fun showProductActivity(productInfo: JSONObject, productTag: String) {
+            val currentActivity = ActivityProvider.currentActivity ?: return
+            ProductActivity.start(currentActivity, productInfo.toString(), productTag)
+        }
+
+        private fun createProgressDialog() {
             val application = ActivityProvider.currentActivity as Context
 
             //RelativeLayout.LayoutParams.MATCH_PARENT
             val holderLayout = RelativeLayout(application)
             val params = RelativeLayout.LayoutParams(200, 200)
+<<<<<<< Updated upstream
             params.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
+=======
+            params.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE)
+>>>>>>> Stashed changes
             holderLayout.layoutParams = params
 
 
@@ -281,6 +301,7 @@ class MonetizrSdk {
             alertBuilder.setView(holderLayout)
 
             progressDialog = alertBuilder.create()
+<<<<<<< Updated upstream
             progressDialog!!.let { dialog ->
                 val window = progressDialog!!.window
                 val dialogWindow = dialog.window
@@ -302,6 +323,31 @@ class MonetizrSdk {
          */
         fun hideProgressBar() {
             progressDialog!!.dismiss()
+=======
+            progressDialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        }
+
+        private fun logError(error: Throwable) {
+            if (debuggable) {
+                Log.i("MonetizrSDK", "has en error:  $error")
+                error.printStackTrace()
+            }
+        }
+
+        private fun logError(error: String) {
+            if (debuggable) {
+                Log.i("MonetizrSDK", "has en error: $error")
+            }
+        }
+
+        private fun showProgressBar() {
+            progressDialog?.show()
+        }
+
+        private fun hideProgressBar() {
+            progressDialog?.dismiss()
+            progressDialog = null
+>>>>>>> Stashed changes
         }
     }
 }

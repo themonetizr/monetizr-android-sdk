@@ -1,4 +1,4 @@
-package io.monetizr.monetizrsdk
+package io.monetizr.monetizrsdk.provider
 
 import android.content.ContentProvider
 import android.content.ContentValues

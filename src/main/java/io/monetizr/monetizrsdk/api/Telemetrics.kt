@@ -1,4 +1,4 @@
-package io.monetizr.monetizrsdk
+package io.monetizr.monetizrsdk.api
 
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -7,101 +7,49 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.provider.Settings
 import android.util.Log
-import com.android.volley.Response
-import com.android.volley.toolbox.JsonObjectRequest
-import io.monetizr.monetizrsdk.ApplicationProvider.sessionStart
+import com.android.volley.Request
+import io.monetizr.monetizrsdk.provider.ActivityProvider
+import io.monetizr.monetizrsdk.provider.ApplicationProvider
+import io.monetizr.monetizrsdk.provider.ApplicationProvider.sessionStart
+import io.monetizr.monetizrsdk.MonetizrSdk
 import org.json.JSONObject
+import java.text.SimpleDateFormat
 import java.util.*
 
 
-/**
- * Telemetrics class. Singleton patter to allow easier initialization and calls outside monetizr sdk in host application
- */
 @Suppress("SpellCheckingInspection")
 class Telemetrics {
 
     companion object {
 
-        /**
-         * Make POST request, add it to volley request queue to finish them
-         *
-         * @param  jsonBody  {JSONObject}  Request body parameters
-         * @param  endpoint  {String}      API endpoint to send request to
-         */
         private fun sendPostRequest(jsonBody: JSONObject, endpoint: String) {
             val url = MonetizrSdk.apiAddress + endpoint
-
-            val jsonObjectRequest = object : JsonObjectRequest(
-                Method.POST, url, jsonBody,
-                Response.Listener {
-                    // Successful response, Do nothing
-                },
-                Response.ErrorListener { error ->
-                    if (MonetizrSdk.debuggable) {
-                        // Die silently, so it does not provide any bad experience
-                        Log.i("MonetizrSDK", "Received API error $error")
-                        error.printStackTrace()
-                    }
-                }) {
-
-                // Override headers to pass authorization
-                override fun getHeaders(): MutableMap<String, String> {
-
-                    val header = mutableMapOf<String, String>()
-                    header["Authorization"] = "Bearer " + MonetizrSdk.apikey
-                    return header
-                }
-            }
-
-            // Access the RequestQueue through singleton class.
             val ctx = ApplicationProvider.application as Context
-            SingletonRequest.getInstance(ctx).addToRequestQueue(jsonObjectRequest)
+            WebApi.getInstance(ctx).makeRequest(url, Request.Method.POST, jsonBody, MonetizrSdk.apikey, {}, Companion::onFail)
         }
 
-        /**
-         * Create a GET requests
-         *
-         * @param  endpoint  {String}      API endpoint to send request to
-         */
-        private fun sendGetRequest(endpoint: String) {
-
-            val url = MonetizrSdk.apiAddress + endpoint
-
-            val jsonObjectRequest = object : JsonObjectRequest(
-                Method.GET, url, null,
-                Response.Listener {
-                    // Successful response, Do Nothing
-                },
-                Response.ErrorListener { error ->
-                    if (MonetizrSdk.debuggable) {
-                        // Die silently, so it does not provide any bad experience
-                        Log.i("MonetizrSDK", "Received API error $error")
-                        error.printStackTrace()
-                    }
-                }) {
-
-                // Override headers to pass authorization
-                override fun getHeaders(): MutableMap<String, String> {
-
-                    val header = mutableMapOf<String, String>()
-                    header["Authorization"] = "Bearer " + MonetizrSdk.apikey
-                    return header
-                }
+        private fun onFail(error: Throwable) {
+            if (MonetizrSdk.debuggable) {
+                // Die silently, so it does not provide any bad experience
+                Log.i("MonetizrSDK", "Received API error $error")
+                error.printStackTrace()
             }
+        }
 
-            // Access the RequestQueue through singleton class.
+        private fun sendGetRequest(endpoint: String) {
+            val url = MonetizrSdk.apiAddress + endpoint
             val ctx = ApplicationProvider.application as Context
-            SingletonRequest.getInstance(ctx).addToRequestQueue(jsonObjectRequest)
+            WebApi.getInstance(ctx).makeRequest(url, Request.Method.GET, null, MonetizrSdk.apikey, {}, Companion::onFail)
         }
 
         /**
          * Store some device information that is not relevant for specific user
          */
         @SuppressLint("HardwareIds")
-        fun deviceData() {
+        fun sendDeviceInfo() {
             val jsonBody = JSONObject()
             val application = ApplicationProvider.application as Context
-            var region: String
+            val region: String
 
             if (Build.VERSION.SDK_INT >= 24) {
                 region = application.resources.configuration.locales[0].country
@@ -120,7 +68,7 @@ class Telemetrics {
             jsonBody.put("device_identifier", androidId)
             jsonBody.put("language", language)
 
-            this.sendPostRequest(jsonBody, "telemetric/devicedata")
+            sendPostRequest(jsonBody, "telemetric/devicedata")
         }
 
         /**
@@ -131,8 +79,7 @@ class Telemetrics {
         fun clickreward(rewardTag: String) {
             val jsonBody = JSONObject()
             jsonBody.put("trigger_tag", rewardTag)
-
-            this.sendPostRequest(jsonBody, "telemetric/clickreward")
+            sendPostRequest(jsonBody, "telemetric/clickreward")
         }
 
         /**
@@ -147,7 +94,7 @@ class Telemetrics {
             jsonBody.put("number_of_triggers", numberOfTriggers)
             jsonBody.put("funnel_trigger_list", funnelTriggerList)
 
-            this.sendPostRequest(jsonBody, "telemetric/design")
+            sendPostRequest(jsonBody, "telemetric/design")
         }
 
         /**
@@ -160,7 +107,7 @@ class Telemetrics {
 
             jsonBody.put("trigger_tag", rewardTag)
 
-            this.sendPostRequest(jsonBody, "telemetric/dismiss")
+            sendPostRequest(jsonBody, "telemetric/dismiss")
         }
 
         /**
@@ -191,19 +138,19 @@ class Telemetrics {
             jsonBody.put("difficulty_level_name", difficultyLevelName)
             jsonBody.put("difficulty_estimation", difficultyEstimation)
 
-            this.sendPostRequest(jsonBody, "telemetric/encounter")
+            sendPostRequest(jsonBody, "telemetric/encounter")
         }
 
         /**
          * Milliseconds that have passed from time when application has started until the time first impression was shown to user
          */
-        fun firstimpression() {
+        fun sndFirstImpression() {
             val jsonBody = JSONObject()
 
             val launchTime = System.currentTimeMillis() - ApplicationProvider.appStart
             jsonBody.put("first_impression_shown", launchTime)
 
-            this.sendPostRequest(jsonBody, "telemetric/firstimpression")
+            sendPostRequest(jsonBody, "telemetric/firstimpression")
         }
 
         /**
@@ -215,7 +162,7 @@ class Telemetrics {
             val launchTime = System.currentTimeMillis() - ApplicationProvider.appStart
             jsonBody.put("first_impression_checkout", launchTime)
 
-            this.sendPostRequest(jsonBody, "telemetric/firstimpressioncheckout")
+            sendPostRequest(jsonBody, "telemetric/firstimpressioncheckout")
         }
 
         /**
@@ -227,7 +174,7 @@ class Telemetrics {
             val launchTime = System.currentTimeMillis() - ApplicationProvider.appStart
             jsonBody.put("first_impression_click", launchTime)
 
-            this.sendPostRequest(jsonBody, "telemetric/firstimpressionclick")
+            sendPostRequest(jsonBody, "telemetric/firstimpressionclick")
         }
 
         /**
@@ -240,7 +187,7 @@ class Telemetrics {
 
             jsonBody.put("first_impression_purchase", milliseconds)
 
-            this.sendPostRequest(jsonBody, "telemetric/firstimpressionpurchase")
+            sendPostRequest(jsonBody, "telemetric/firstimpressionpurchase")
         }
 
         /**
@@ -255,14 +202,14 @@ class Telemetrics {
             jsonBody.put("trigger_tag", rewardTag)
             jsonBody.put("time_until_dismiss", millisecondsProductVisible)
 
-            this.sendPostRequest(jsonBody, "telemetric/impressionvisible")
+            sendPostRequest(jsonBody, "telemetric/impressionvisible")
         }
 
         /**
          * Application, with integrated monetizr sdk has been installed
          */
         @SuppressLint("HardwareIds")
-        fun install() {
+        fun sendFistRun() {
             val jsonBody = JSONObject()
             val application = ApplicationProvider.application as Context
 
@@ -273,7 +220,7 @@ class Telemetrics {
             jsonBody.put("device_identifier", androidId)
             jsonBody.put("installed", true)
 
-            this.sendPostRequest(jsonBody, "telemetric/install")
+            sendPostRequest(jsonBody, "telemetric/install")
         }
 
         /**
@@ -295,7 +242,7 @@ class Telemetrics {
             jsonBody.put("game_progress", gameProgress)
             jsonBody.put("session_time", sessionTime)
 
-            this.sendPostRequest(jsonBody, "telemetric/playerbehaviour")
+            sendPostRequest(jsonBody, "telemetric/playerbehaviour")
         }
 
         /**
@@ -310,10 +257,7 @@ class Telemetrics {
             val jsonBody = JSONObject()
 
             val application = ApplicationProvider.application as Context
-            val androidId = Settings.Secure.getString(
-                application.contentResolver,
-                Settings.Secure.ANDROID_ID
-            )
+            val androidId = Settings.Secure.getString(application.contentResolver, Settings.Secure.ANDROID_ID)
 
             var region: String
 
@@ -330,7 +274,7 @@ class Telemetrics {
             jsonBody.put("country", region)
             jsonBody.put("city", city)
 
-            this.sendPostRequest(jsonBody, "telemetric/purchase")
+            sendPostRequest(jsonBody, "telemetric/purchase")
         }
 
         /**
@@ -350,7 +294,7 @@ class Telemetrics {
             jsonBody.put("device_identifier", androidId)
             jsonBody.put("session_start", sessionStart)
 
-            this.sendPostRequest(jsonBody, "telemetric/session")
+            sendPostRequest(jsonBody, "telemetric/session")
         }
 
         /**
@@ -360,20 +304,23 @@ class Telemetrics {
             val jsonBody = JSONObject()
 
             val application = ApplicationProvider.application as Context
-            val androidId = Settings.Secure.getString(
-                application.contentResolver,
-                Settings.Secure.ANDROID_ID
-            )
+            val androidId = Settings.Secure.getString(application.contentResolver, Settings.Secure.ANDROID_ID)
 
             val c = Calendar.getInstance()
             val date = c.time
-            val sessionEnd = MonetizrSdk.getStringTimeStampWithDate(date)
+            val sessionEnd = getStringTimeStampWithDate(date)
 
             jsonBody.put("device_identifier", androidId)
             jsonBody.put("session_start", sessionStart)
             jsonBody.put("session_end", sessionEnd)
 
-            this.sendPostRequest(jsonBody, "telemetric/session/session_end")
+            sendPostRequest(jsonBody, "telemetric/session/session_end")
+        }
+
+        fun getStringTimeStampWithDate(date: Date): String {
+            val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
+            dateFormat.timeZone = TimeZone.getDefault()
+            return dateFormat.format(date)
         }
 
         /**
@@ -383,10 +330,7 @@ class Telemetrics {
             val jsonBody = JSONObject()
 
             val application = ApplicationProvider.application as Context
-            val androidId = Settings.Secure.getString(
-                application.contentResolver,
-                Settings.Secure.ANDROID_ID
-            )
+            val androidId = Settings.Secure.getString(application.contentResolver, Settings.Secure.ANDROID_ID)
 
             var version = "undefined"
             try {
@@ -400,7 +344,7 @@ class Telemetrics {
             jsonBody.put("device_identifier", androidId)
             jsonBody.put("bundle_version", version)
 
-            this.sendPostRequest(jsonBody, "telemetric/update")
+            sendPostRequest(jsonBody, "telemetric/update")
         }
     }
 }
