@@ -3,18 +3,18 @@ package io.monetizr.monetizrsdk.dto
 import org.json.JSONObject
 
 class Product {
-    private val id: String
-    private val title: String
-    private val description: String
-    private val descriptionIos: String
-    private val descriptionHtml: String
+    val id: String
+    val title: String
+    val description: String
+    val descriptionIos: String
+    val descriptionHtml: String
 
-    private val button_title: String?
-    private val onlineStoreUrl: String?
-    private val availableForSale: Boolean
-    private val options: ArrayList<Option>
-    private val images: ArrayList<String>
-    private val variants: ArrayList<Variant>
+    val buttonTitle: String?
+    val onlineStoreUrl: String?
+    val availableForSale: Boolean
+    val options: ArrayList<Option>
+    val images: ArrayList<String>
+    val variants: ArrayList<Variant>
 
     constructor(json: JSONObject) {
         this.id = json.getString("id")
@@ -30,13 +30,13 @@ class Product {
         }
 
         if (json.has("button_title")) {
-            this.button_title = json.getString("button_title")
+            this.buttonTitle = json.getString("button_title")
         } else {
-            this.button_title = null
+            this.buttonTitle = null
         }
 
-        if (json.has("availableForSale")) {
-            this.onlineStoreUrl = json.getString("availableForSale")
+        if (json.has("onlineStoreUrl")) {
+            this.onlineStoreUrl = json.getString("onlineStoreUrl")
         } else {
             this.onlineStoreUrl = null
         }
@@ -47,7 +47,7 @@ class Product {
 
         if (json.has("options")) {
             val optionArray = json.getJSONArray("options")
-            for (i in 0..optionArray.length()) {
+            for (i in 0 until optionArray.length()) {
                 val optionObj = optionArray.getJSONObject(i)
                 val option = Option(optionObj)
                 this.options.add(option)
@@ -56,21 +56,22 @@ class Product {
 
         if (json.has("images")) {
             val imagesArray = json.getJSONObject("images").getJSONArray("edges")
-            for (i in 0..imagesArray.length()) {
+            for (i in 0 until imagesArray.length()) {
                 val obj = imagesArray.getJSONObject(i)
                 val src = obj.getJSONObject("node").getString("transformedSrc")
                 this.images.add(src)
             }
         }
 
-
         if (json.has("variants")) {
             val variantsArray = json.getJSONObject("variants").getJSONArray("edges")
-            for (i in 0..variantsArray.length()) {
+            for (i in 0 until variantsArray.length()) {
                 val obj = variantsArray.getJSONObject(i).getJSONObject("node")
                 val variant = Variant(obj)
                 this.variants.add(variant)
             }
         }
     }
+
+
 }

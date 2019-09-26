@@ -4,19 +4,23 @@ import org.json.JSONObject
 
 class Variant {
     private val id: String
-    private val product: Product
+    private val product: ProductShort
     private val title: String
     private val selectedOptions: ArrayList<Option>
     private val priceV2: Price
-    private val compareAtPriceV2: Price
+    private val compareAtPriceV2: Price?
     private val image: String
 
     constructor(json: JSONObject) {
         this.id = json.getString("id")
-        this.product = Product(json.getJSONObject("product"))
+        this.product = ProductShort(json.getJSONObject("product"))
         this.title = json.getString("title")
         this.priceV2 = Price(json.getJSONObject("priceV2"))
-        this.compareAtPriceV2 = Price(json.getJSONObject("compareAtPriceV2"))
+        if (json.has("compareAtPriceV2") && json.isNull("compareAtPriceV2") == false) {
+            this.compareAtPriceV2 = Price(json.getJSONObject("compareAtPriceV2"))
+        } else {
+            this.compareAtPriceV2 = null
+        }
 
         val image = json.getJSONObject("image").getString("transformedSrc")
         this.image = image
@@ -25,7 +29,7 @@ class Variant {
 
         if (json.has("selectedOptions")) {
             val optionArray = json.getJSONArray("selectedOptions")
-            for (i in 0..optionArray.length()) {
+            for (i in 0 until optionArray.length()) {
                 val optionObj = optionArray.getJSONObject(i)
                 val option = Option(optionObj)
                 this.selectedOptions.add(option)

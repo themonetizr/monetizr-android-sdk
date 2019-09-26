@@ -2,6 +2,8 @@ package io.monetizr.monetizrsdk
 
 import android.app.Activity
 import android.content.Context
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
@@ -143,19 +145,27 @@ class MonetizrSdk {
 
         private fun showProductActivity(productInfo: JSONObject, productTag: String) {
             val currentActivity = ActivityProvider.currentActivity ?: return
-            ProductActivity.start(currentActivity, productInfo.toString(), productTag)
+            val product = productInfo.getJSONObject("data")?.getJSONObject("productByHandle")
+
+            if (product != null) {
+                ProductActivity.start(currentActivity, product.toString(), productTag)
+            } else {
+                logError("Product not found")
+            }
         }
 
         private fun createProgressDialog() {
             val application = ActivityProvider.currentActivity as Context
 
             val holderLayout = RelativeLayout(application)
-            val params = RelativeLayout.LayoutParams(200, 200)
+            val params = RelativeLayout.LayoutParams(100, 100)
             params.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE)
             holderLayout.layoutParams = params
+            holderLayout.setBackgroundColor(Color.TRANSPARENT)
 
             val progressBar = ProgressBar(application)
             progressBar.isIndeterminate = true
+            progressBar.setBackgroundColor(Color.TRANSPARENT)
             holderLayout.addView(progressBar, params)
 
             val alertBuilder = AlertDialog.Builder(application)
@@ -163,6 +173,7 @@ class MonetizrSdk {
             alertBuilder.setView(holderLayout)
 
             progressDialog = alertBuilder.create()
+            progressDialog!!.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         }
 
         private fun logError(error: Throwable) {

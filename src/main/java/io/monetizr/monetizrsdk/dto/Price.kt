@@ -8,9 +8,23 @@ class Price {
     private val currency: String
 
     constructor(json: JSONObject) {
-        this.currencyCode = json.getString("currencyCode")
-        this.amount = json.getInt("amount")
-        this.currency = json.getString("currency")
+        if (json.has("currencyCode")) {
+            this.currencyCode = json.getString("currencyCode")
+        } else {
+            this.currencyCode = ""
+        }
+
+        if (json.has("amount")) {
+            this.amount = json.getInt("amount")
+        } else {
+            this.amount = 0
+        }
+
+        if (json.has("currency")) {
+            this.currency = json.getString("currency")
+        } else {
+            this.currency = ""
+        }
     }
 
     public fun formatString(): String {
