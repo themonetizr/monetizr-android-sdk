@@ -7,16 +7,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import io.monetizr.monetizrsdk.R
 import io.monetizr.monetizrsdk.dto.Checkout
-import io.monetizr.monetizrsdk.ui.adapter.ImageGalleryAdapter
-import io.monetizr.monetizrsdk.ui.adapter.ItemIndicator
-import io.monetizr.monetizrsdk.ui.adapter.ItemSnapHelper
 import io.monetizr.monetizrsdk.ui.adapter.ShippingRateAdapter
-import kotlinx.android.synthetic.main.shipping_dialog.*
+import kotlinx.android.synthetic.main.dialog_shipping.*
 
 class ShippingRateDialog : BottomSheetDialogFragment() {
     override fun getTheme(): Int = R.style.BottomSheetDialogTheme
@@ -24,7 +20,7 @@ class ShippingRateDialog : BottomSheetDialogFragment() {
     private var listener: ShippingRateDialogListener? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.shipping_dialog, container, false)
+        return inflater.inflate(R.layout.dialog_shipping, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
