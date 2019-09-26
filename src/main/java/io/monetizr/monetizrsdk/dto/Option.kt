@@ -4,8 +4,8 @@ import org.json.JSONArray
 import org.json.JSONObject
 
 class Option {
-    private val name: String
-    private val values: ArrayList<String>
+    val name: String
+    val values: ArrayList<String>
 
     constructor(json: JSONObject) {
         this.name = json.getString("name")

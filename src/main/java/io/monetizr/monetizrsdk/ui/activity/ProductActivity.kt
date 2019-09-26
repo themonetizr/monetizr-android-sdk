@@ -49,17 +49,14 @@ class ProductActivity : AppCompatActivity(), ShippingRateDialogListener {
         initGooglePayButton()
 
         initCheckoutTitle(product)
+        initProductPriceTitle(product)
+        initProductVariantsTitle(product)
 
         productTitleView.text = product.title
         productDescriptionView.text = product.descriptionIos
 
-        val variant = product.getFirstVariant()
-        if (variant != null) {
-            productPriceView.text = variant.priceV2.formatString()
-        }
 
         closeButtonView.setOnClickListener { this.finish() }
-
         payButtonView.setOnClickListener { checkoutWithPaymentTokenButtonClick() }
 
         hideNavigationBar()
@@ -185,6 +182,57 @@ class ProductActivity : AppCompatActivity(), ShippingRateDialogListener {
         recyclerView.addItemDecoration(ItemIndicator())
         recyclerView.adapter = imageGalleryAdapter
     }
+
+    private fun initProductPriceTitle(product: Product) {
+        val variant = product.getFirstVariant()
+        if (variant != null) {
+            productPriceView.text = variant.priceV2.formatString()
+        }
+    }
+
+    private fun initProductVariantsTitle(product: Product) {
+        if (product.variants.size >= 1) {
+            val variant = product.getFirstVariant()!!
+
+            if (variant.selectedOptions.size > 0) {
+                option1NameView.text = variant.selectedOptions[0].name
+                option1ValueView.text = variant.selectedOptions[0].values[0]
+
+                option1NameView.visibility = View.VISIBLE
+                option1ValueView.visibility = View.VISIBLE
+            } else {
+                option1NameView.visibility = View.GONE
+                option1ValueView.visibility = View.GONE
+            }
+
+            if (variant.selectedOptions.size > 1) {
+                option2NameView.text = variant.selectedOptions[1].name
+                option2ValueView.text = variant.selectedOptions[1].values[0]
+
+                option2NameView.visibility = View.VISIBLE
+                option2ValueView.visibility = View.VISIBLE
+            } else {
+                option2NameView.visibility = View.GONE
+                option2ValueView.visibility = View.GONE
+            }
+
+            if (variant.selectedOptions.size > 2) {
+                option3NameView.text = variant.selectedOptions[2].name
+                option3ValueView.text = variant.selectedOptions[2].values[0]
+
+                option3NameView.visibility = View.VISIBLE
+                option3ValueView.visibility = View.VISIBLE
+            } else {
+                option3NameView.visibility = View.GONE
+                option3ValueView.visibility = View.GONE
+            }
+
+            variantContainerView.isEnabled = product.variants.size > 1
+        } else {
+            variantContainerView.isEnabled = false
+        }
+    }
+
 
     //endregion
 
