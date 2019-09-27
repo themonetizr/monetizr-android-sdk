@@ -16,5 +16,6 @@
 	<color name="dialog_header_background">#efeff4</color>
 	<color name="line">#A09F9F</color>
 	<color name="transparent">#00FFFFFF</color>
+	<color name="transparent62">#9E000000</color>
 
 </resources>
