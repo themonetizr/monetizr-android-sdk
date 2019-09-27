@@ -27,9 +27,9 @@
 
     <style name="BottomSheetDialogTheme" parent="BaseBottomSheetDialog" />
 
-    <style name="DialogNoShadow" parent="@android:style/Theme.Dialog">
+    <style name="DialogShadow" parent="@android:style/Theme.Dialog">
         <item name="android:windowFrame">@null</item>
-        <item name="android:windowBackground">@color/transparent</item>
+        <item name="android:windowBackground">@color/transparent62</item>
         <item name="android:windowIsFloating">false</item>
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:windowTitleStyle">@null</item>
