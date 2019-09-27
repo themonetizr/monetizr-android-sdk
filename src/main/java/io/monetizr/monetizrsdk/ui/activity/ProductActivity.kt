@@ -198,7 +198,7 @@ class ProductActivity : AppCompatActivity(), ShippingRateDialogListener {
 
             if (variant.selectedOptions.size > 0) {
                 option1NameView.text = variant.selectedOptions[0].name
-                option1ValueView.text = variant.selectedOptions[0].values[0]
+                option1ValueView.text = variant.selectedOptions[0].value
 
                 option1NameView.visibility = View.VISIBLE
                 option1ValueView.visibility = View.VISIBLE
@@ -209,7 +209,7 @@ class ProductActivity : AppCompatActivity(), ShippingRateDialogListener {
 
             if (variant.selectedOptions.size > 1) {
                 option2NameView.text = variant.selectedOptions[1].name
-                option2ValueView.text = variant.selectedOptions[1].values[0]
+                option2ValueView.text = variant.selectedOptions[1].value
 
                 option2NameView.visibility = View.VISIBLE
                 option2ValueView.visibility = View.VISIBLE
@@ -220,7 +220,7 @@ class ProductActivity : AppCompatActivity(), ShippingRateDialogListener {
 
             if (variant.selectedOptions.size > 2) {
                 option3NameView.text = variant.selectedOptions[2].name
-                option3ValueView.text = variant.selectedOptions[2].values[0]
+                option3ValueView.text = variant.selectedOptions[2].value
 
                 option3NameView.visibility = View.VISIBLE
                 option3ValueView.visibility = View.VISIBLE

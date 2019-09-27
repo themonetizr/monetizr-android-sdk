@@ -15,6 +15,7 @@ class Product {
     val options: ArrayList<Option>
     val images: ArrayList<String>
     val variants: ArrayList<Variant>
+    val variantHierarchy: HashSet<HierarchyVariant>
 
     constructor(json: JSONObject) {
         this.id = json.getString("id")
@@ -71,6 +72,8 @@ class Product {
                 this.variants.add(variant)
             }
         }
+
+        this.variantHierarchy = HierarchyVariant.buildStructure(variants)
     }
 
     public fun getFirstVariant(): Variant? {
