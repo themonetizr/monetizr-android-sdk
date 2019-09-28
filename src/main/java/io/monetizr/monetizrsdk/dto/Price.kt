@@ -3,9 +3,9 @@ package io.monetizr.monetizrsdk.dto
 import org.json.JSONObject
 
 class Price {
-    private val currencyCode: String
-    private val amount: Int
-    private val currency: String
+    val currencyCode: String
+    val amount: Int
+    val currency: String
 
     constructor(json: JSONObject) {
         if (json.has("currencyCode")) {

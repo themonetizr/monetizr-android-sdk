@@ -21,4 +21,12 @@ class ShippingRate {
             }
         }
     }
+
+    public fun firstPrice(): Price? {
+        return if (price.isEmpty() == false) {
+            price[0]
+        } else {
+            null
+        }
+    }
 }

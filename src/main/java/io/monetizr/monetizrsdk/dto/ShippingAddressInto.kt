@@ -2,7 +2,7 @@ package io.monetizr.monetizrsdk.dto
 
 import org.json.JSONObject
 
-data class PaymentInfo(
+data class ShippingAddressInto(
     val name: String,
     val surname: String,
     val address1: String,
@@ -13,7 +13,7 @@ data class PaymentInfo(
     val zip: String
 ) {
 
-    public fun getJsonObject(): JSONObject {
+    fun getJsonObject(): JSONObject {
         val shippingAddress = JSONObject()
         shippingAddress.put("firstName", name)
         shippingAddress.put("lastName", surname)

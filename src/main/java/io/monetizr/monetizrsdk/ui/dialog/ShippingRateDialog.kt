@@ -10,9 +10,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import io.monetizr.monetizrsdk.R
-import io.monetizr.monetizrsdk.dto.Checkout
+import io.monetizr.monetizrsdk.misc.Parameters
 import io.monetizr.monetizrsdk.ui.adapter.ShippingRateAdapter
 import kotlinx.android.synthetic.main.dialog_shipping.*
+import org.json.JSONObject
 
 class ShippingRateDialog : BottomSheetDialogFragment() {
     override fun getTheme(): Int = R.style.BottomSheetDialogTheme
@@ -27,35 +28,37 @@ class ShippingRateDialog : BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         this.isCancelable = false
 
-        var adapter = ShippingRateAdapter(ArrayList())
+        val adapter = ShippingRateAdapter(ArrayList())
         val layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         listView.setHasFixedSize(true)
         listView.layoutManager = layoutManager
         listView.adapter = adapter
 
         confirmButtonView.setOnClickListener {
+            val paymentData = arguments!!.getString(Parameters.PAYMENT_DATA)!!
+            val checkout = JSONObject(arguments!!.getString(Parameters.CHECKOUT))
             val item = adapter.getSelectedItem()
-            listener!!.onShippingRateSelect(item)
+            listener?.onShippingRateSelect(paymentData, checkout, item)
             dialog.dismiss()
-        }
 
+        }
     }
 
-    override fun onAttach(context: Context) {
+    override fun onAttach(context: Context?) {
         super.onAttach(context)
         listener = context as ShippingRateDialogListener
     }
 
     companion object {
-        const val TAG = "BottomModal"
+        const val TAG = "ShippingRateDialog"
 
-        fun newInstance(checkout: Checkout): ShippingRateDialog {
+        fun newInstance(paymentData: String, checkout: JSONObject): ShippingRateDialog {
             val args = Bundle()
-            //args.putParcelable(checkout)
+            args.putString(Parameters.PAYMENT_DATA, paymentData)
+            args.putString(Parameters.CHECKOUT, checkout.toString())
             val fragment = ShippingRateDialog()
             fragment.arguments = args
             return fragment
         }
     }
 }
-
