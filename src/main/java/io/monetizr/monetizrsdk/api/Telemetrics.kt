@@ -32,7 +32,6 @@ class Telemetrics {
 
         private fun onFail(error: Throwable) {
             if (MonetizrSdk.debuggable) {
-                // Die silently, so it does not provide any bad experience
                 Log.i("MonetizrSDK", "Received API error $error")
                 error.printStackTrace()
             }
@@ -61,10 +60,7 @@ class Telemetrics {
                 region = application.resources.configuration.locale.country
             }
 
-            val androidId = Settings.Secure.getString(
-                application.contentResolver,
-                Settings.Secure.ANDROID_ID
-            )
+            val androidId = Settings.Secure.getString(application.contentResolver, Settings.Secure.ANDROID_ID)
             val language = Locale.getDefault().displayLanguage
             jsonBody.put("device_name", Build.MANUFACTURER + " " + Build.MODEL)
             jsonBody.put("os_version", "Android: " + Build.VERSION.RELEASE + " SDK: " + Build.VERSION.SDK_INT)
