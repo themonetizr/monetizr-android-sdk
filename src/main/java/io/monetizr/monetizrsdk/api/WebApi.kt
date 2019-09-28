@@ -32,7 +32,7 @@ class WebApi constructor(context: Context) {
         requestQueue.add(req)
     }
 
-    fun makeRequest(url: String, method: Int, body: JSONObject?, key: String, success: (JSONObject) -> Any, fail: (Throwable) -> Any) {
+    fun makeRequest(url: String, method: Int, body: JSONObject?, key: String, success: (JSONObject) -> Unit, fail: (Throwable) -> Unit) {
         val jsonObjectRequest = object : JsonObjectRequest(
             method, url, body,
             Response.Listener { response -> success(response) },
