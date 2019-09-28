@@ -2,16 +2,12 @@ package io.monetizr.monetizrsdk
 
 import android.app.Activity
 import android.content.Context
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
 import android.preference.PreferenceManager
 import android.util.DisplayMetrics
 import android.util.Log
-import android.widget.ProgressBar
-import android.widget.RelativeLayout
 import androidx.appcompat.app.AlertDialog
 import com.android.volley.Request
 import io.monetizr.monetizrsdk.api.Telemetrics
@@ -21,6 +17,7 @@ import io.monetizr.monetizrsdk.misc.Parameters
 import io.monetizr.monetizrsdk.provider.ActivityProvider
 import io.monetizr.monetizrsdk.provider.ApplicationProvider
 import io.monetizr.monetizrsdk.ui.activity.ProductActivity
+import io.monetizr.monetizrsdk.ui.helpers.ProgressDialogBuilder
 import org.json.JSONObject
 import java.util.*
 
@@ -49,7 +46,7 @@ class MonetizrSdk {
                 val apiKey = ConfigHelper.getConfigValue(context, Parameters.RAW_API_KEY)
                 val endpoint = ConfigHelper.getConfigValue(context, Parameters.RAW_API_ENDPOINT)
 
-                createProgressDialog()
+                progressDialog = ProgressDialogBuilder.makeProgressDialog(activity)
                 showProgressBar()
                 requestProductInformation(activity, productTag, endpoint, apiKey)
                 sendTelemetricsInfo(activity)
@@ -154,36 +151,15 @@ class MonetizrSdk {
             }
         }
 
-        private fun createProgressDialog() {
-            val application = ActivityProvider.currentActivity as Context
 
-            val holderLayout = RelativeLayout(application)
-            val params = RelativeLayout.LayoutParams(100, 100)
-            params.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE)
-            holderLayout.layoutParams = params
-            holderLayout.setBackgroundColor(Color.TRANSPARENT)
-
-            val progressBar = ProgressBar(application)
-            progressBar.isIndeterminate = true
-            progressBar.setBackgroundColor(Color.TRANSPARENT)
-            holderLayout.addView(progressBar, params)
-
-            val alertBuilder = AlertDialog.Builder(application)
-            alertBuilder.setCancelable(true)
-            alertBuilder.setView(holderLayout)
-
-            progressDialog = alertBuilder.create()
-            progressDialog!!.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        }
-
-        private fun logError(error: Throwable) {
+        public fun logError(error: Throwable) {
             if (debuggable) {
                 Log.i("MonetizrSDK", "has en error:  $error")
                 error.printStackTrace()
             }
         }
 
-        private fun logError(error: String) {
+        public fun logError(error: String) {
             if (debuggable) {
                 Log.i("MonetizrSDK", "has en error:  $error")
             }
