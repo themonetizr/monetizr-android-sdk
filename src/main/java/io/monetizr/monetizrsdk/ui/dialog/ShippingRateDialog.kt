@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import io.monetizr.monetizrsdk.R
+import io.monetizr.monetizrsdk.dto.Checkout
 import io.monetizr.monetizrsdk.misc.Parameters
 import io.monetizr.monetizrsdk.ui.adapter.ShippingRateAdapter
 import kotlinx.android.synthetic.main.dialog_shipping.*
@@ -27,26 +28,32 @@ class ShippingRateDialog : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         this.isCancelable = false
+        val paymentData = arguments!!.getString(Parameters.PAYMENT_DATA)!!
+        val checkout = JSONObject(arguments!!.getString(Parameters.CHECKOUT))
 
-        val adapter = ShippingRateAdapter(ArrayList())
-        val layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-        listView.setHasFixedSize(true)
-        listView.layoutManager = layoutManager
-        listView.adapter = adapter
-
+        val adapter = initAdapter(checkout)
         confirmButtonView.setOnClickListener {
-            val paymentData = arguments!!.getString(Parameters.PAYMENT_DATA)!!
-            val checkout = JSONObject(arguments!!.getString(Parameters.CHECKOUT))
+
             val item = adapter.getSelectedItem()
             listener?.onShippingRateSelect(paymentData, checkout, item)
             dialog.dismiss()
 
         }
     }
-
+    
     override fun onAttach(context: Context?) {
         super.onAttach(context)
         listener = context as ShippingRateDialogListener
+    }
+
+    private fun initAdapter(json: JSONObject): ShippingRateAdapter {
+        val checkout = Checkout(json)
+        val adapter = ShippingRateAdapter(checkout.shippingRates)
+        val layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        listView.setHasFixedSize(true)
+        listView.layoutManager = layoutManager
+        listView.adapter = adapter
+        return adapter
     }
 
     companion object {
