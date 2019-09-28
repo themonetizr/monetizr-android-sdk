@@ -152,14 +152,14 @@ class MonetizrSdk {
         }
 
 
-        public fun logError(error: Throwable) {
+        fun logError(error: Throwable) {
             if (debuggable) {
                 Log.i("MonetizrSDK", "has en error:  $error")
                 error.printStackTrace()
             }
         }
 
-        public fun logError(error: String) {
+        fun logError(error: String) {
             if (debuggable) {
                 Log.i("MonetizrSDK", "has en error:  $error")
             }
