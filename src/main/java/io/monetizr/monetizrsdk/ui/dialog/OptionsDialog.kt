@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.monetizr.monetizrsdk.R
@@ -38,6 +39,8 @@ class OptionsDialog : DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setNoFocusable()
+
         val json = arguments!!.getString(Parameters.PRODUCT_JSON)
         val product = Product(JSONObject(json))
         val hierarchyList = product.variantHierarchy.toList()
@@ -95,5 +98,9 @@ class OptionsDialog : DialogFragment() {
 
         selectedView.visibility = View.VISIBLE
         selectedView.text = builder.toString()
+    }
+
+    private fun setNoFocusable(){
+        dialog?.window?.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE)
     }
 }
