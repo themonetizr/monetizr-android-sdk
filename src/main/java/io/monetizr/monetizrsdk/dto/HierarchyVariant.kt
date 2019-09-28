@@ -2,17 +2,21 @@ package io.monetizr.monetizrsdk.dto
 
 class HierarchyVariant {
     val id: String
-    val title: String
+    val name: String
     val level: Int
     val price: Price
-    val descendants: HashSet<HierarchyVariant>
+    val parent: HierarchyVariant?
+    val parents: HashSet<HierarchyVariant>?
+    val childs: HashSet<HierarchyVariant>
 
-    constructor(id: String, title: String, price: Price, level: Int, descendants: HashSet<HierarchyVariant>) {
+    constructor(id: String, name: String, price: Price, level: Int, parent: HierarchyVariant?, parents: HashSet<HierarchyVariant>?, childs: HashSet<HierarchyVariant>) {
         this.id = id
-        this.title = title
+        this.name = name
         this.level = level
         this.price = price
-        this.descendants = descendants
+        this.childs = childs
+        this.parent = parent
+        this.parents = parents
     }
 
     override fun equals(other: Any?): Boolean {
@@ -36,35 +40,34 @@ class HierarchyVariant {
 
 
     companion object {
-        private fun buildItems(level: Int, id: String?, rootId: String?, variants: ArrayList<Variant>): ArrayList<HierarchyVariant> {
+        private fun buildChilds(level: Int, parent: HierarchyVariant?, parents: HashSet<HierarchyVariant>?, variants: ArrayList<Variant>): ArrayList<HierarchyVariant> {
             val result = ArrayList<HierarchyVariant>()
 
             for (variant in variants) {
-                val title = variant.title
-                val split = title.split("/").map { it.trim() }
-                if (split.size < (level + 1)) continue
-                val item = split[level]
-                if (item.isEmpty()) continue
-
+                val string = variant.title
+                val parts = string.split("/").map { it.trim() }
+                if (parts.size < (level + 1)) continue
+                val name = variant.selectedOptions[level].name
 
                 if (level == 0) {
-                    val name = variant.selectedOptions[0].name
-                    val obj = HierarchyVariant(item, name, variant.priceV2, level, HashSet())
+                    val idLevel0 = parts[level]
+                    val obj = HierarchyVariant(idLevel0, name, variant.priceV2, level, null, null, HashSet())
                     result.add(obj)
                 } else if (level == 1) {
-                    val name = variant.selectedOptions[1].name
-                    val before = split[level - 1]
-                    if (before == id) {
-                        val obj = HierarchyVariant(item, name, variant.priceV2, level, HashSet())
+                    val idLevel0 = parts[level-1]
+                    val idLevel1 = parts[level]
+
+                    if (idLevel0 == parent!!.id) {
+                        val obj = HierarchyVariant(idLevel1, name, variant.priceV2, level, parent, parents, HashSet())
                         result.add(obj)
                     }
                 } else if (level == 2) {
-                    val name = variant.selectedOptions[2].name
-                    val before = split[level - 1]
-                    val root = split[level - 2]
+                    val idLevel0 = parts[level - 2]
+                    val idLevel1 = parts[level - 1]
+                    val idLevel2 = parts[level]
 
-                    if (before == id && root == rootId) {
-                        val obj = HierarchyVariant(item, name, variant.priceV2, level, HashSet())
+                    if (idLevel1 == parent!!.id && idLevel0 == parent.parent!!.id) {
+                        val obj = HierarchyVariant(idLevel2, name, variant.priceV2, level, parent, parents, HashSet())
                         result.add(obj)
                     }
                 }
@@ -73,19 +76,32 @@ class HierarchyVariant {
         }
 
         fun buildStructure(variants: ArrayList<Variant>): HashSet<HierarchyVariant> {
-            var result: HashSet<HierarchyVariant> = HashSet()
-            result.addAll(buildItems(0, null, null, variants))
+            val result: HashSet<HierarchyVariant> = HashSet()
+            if (variants.isEmpty() == false) {
+                val first = variants[0]
+                val levels = getMaxLevel(first)
 
-            for (item in result) {
-                item.descendants.addAll(buildItems(1, item.id, null, variants))
-            }
-
-            for (item in result) {
-                for (subItem in item.descendants) {
-                    subItem.descendants.addAll(buildItems(2, subItem.id, item.id, variants))
+                if (levels > 0) {
+                    result.addAll(buildChilds(0, null, null, variants))
+                }
+                if (levels > 1) {
+                    for (item in result) {
+                        item.childs.addAll(buildChilds(1, item, result, variants))
+                    }
+                }
+                if (levels > 2) {
+                    for (item in result) {
+                        for (childItem in item.childs) {
+                            childItem.childs.addAll(buildChilds(2, childItem, item.childs, variants))
+                        }
+                    }
                 }
             }
             return result
+        }
+
+        private fun getMaxLevel(variant: Variant): Int {
+            return variant.title.split("/").map { it.trim() }.size
         }
     }
 }

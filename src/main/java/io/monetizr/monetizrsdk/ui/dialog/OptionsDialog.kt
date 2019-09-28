@@ -15,6 +15,7 @@ import kotlinx.android.synthetic.main.dialog_options.*
 import org.json.JSONObject
 
 class OptionsDialog : DialogFragment() {
+    private val selected: ArrayList<HierarchyVariant> = ArrayList()
 
     companion object {
         fun newInstance(product: String): OptionsDialog {
@@ -41,26 +42,58 @@ class OptionsDialog : DialogFragment() {
         val product = Product(JSONObject(json))
         val hierarchyList = product.variantHierarchy.toList()
 
-        backView.setOnClickListener { initAdapter(hierarchyList) }
-        initAdapter(hierarchyList)
-    }
-
-    private fun initAdapter(hierarchyList: List<HierarchyVariant>) {
-        if (hierarchyList.isEmpty() == false) {
-            createAdapter(hierarchyList, hierarchyList[0].title)
-        }
-    }
-
-    private fun createAdapter(variants: List<HierarchyVariant>, title: String) {
-        titleView.text = title
-        val adapter = OptionAdapter(variants) {
-            if (it.descendants.isEmpty() == false) {
-                initAdapter(it.descendants.toList())
-            }
-        }
+        val adapter = OptionAdapter(::onItemNavigate, ::onLevelNavigate)
         val layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-        listView.setHasFixedSize(true)
         listView.layoutManager = layoutManager
         listView.adapter = adapter
+
+        adapter.goTo(hierarchyList)
+        backView.setOnClickListener {
+            removeLastSelectItem()
+            invalidateSelectTitle()
+            if (adapter.goBack() == false) {
+                dismiss()
+            }
+        }
+    }
+
+    private fun onLevelNavigate(list: List<HierarchyVariant>) {
+        if (list.isEmpty() == false) {
+            val first = list[0]
+            titleView.text = first.name
+        }
+    }
+
+    private fun onItemNavigate(item: HierarchyVariant) {
+        this.selected.add(item)
+        invalidateSelectTitle()
+
+        if (item.childs.isEmpty()) {
+            (activity as? OptionsDialogListener)?.onOptionsSelect(selected)
+            dismiss()
+        }
+    }
+
+    private fun removeLastSelectItem() {
+        if (this.selected.isEmpty() == false)
+            this.selected.removeAt(this.selected.size - 1)
+    }
+
+    private fun invalidateSelectTitle() {
+        if (selected.isEmpty()) {
+            selectedView.visibility = View.GONE
+
+            return
+        }
+        val builder = StringBuilder()
+        builder.append(getString(R.string.selected))
+
+        for (select in selected) {
+            builder.append(select.id)
+            builder.append(" ")
+        }
+
+        selectedView.visibility = View.VISIBLE
+        selectedView.text = builder.toString()
     }
 }

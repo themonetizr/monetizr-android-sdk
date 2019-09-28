@@ -7,11 +7,9 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import io.monetizr.monetizrsdk.R
 import io.monetizr.monetizrsdk.dto.HierarchyVariant
-import io.monetizr.monetizrsdk.dto.Option
-import io.monetizr.monetizrsdk.dto.Variant
 
-class OptionAdapter(private val items: List<HierarchyVariant>, val itemTap: (HierarchyVariant) -> Any) : RecyclerView.Adapter<OptionAdapter.ViewHolder>() {
-    var selected: HierarchyVariant? = null
+class OptionAdapter(val onItemNavigate: (HierarchyVariant) -> Any, val onLevelNavigate: (List<HierarchyVariant>) -> Any) : RecyclerView.Adapter<OptionAdapter.ViewHolder>() {
+    private val items: ArrayList<HierarchyVariant> = ArrayList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val context = parent.context
@@ -31,6 +29,29 @@ class OptionAdapter(private val items: List<HierarchyVariant>, val itemTap: (Hie
         return items.size
     }
 
+    fun goBack(): Boolean {
+        if (items.isEmpty() == false) {
+            val first = items[0]
+            val level = first.level
+            if (level > 0 && first.parents != null && first.parents.isEmpty() == false) {
+                goTo(first.parents.toList())
+                return true
+            } else {
+                return false
+            }
+        } else {
+            return false
+        }
+    }
+
+    fun goTo(param: List<HierarchyVariant>) {
+        if (param.isEmpty()) return
+        this.items.clear()
+        this.items.addAll(param)
+        this.onLevelNavigate(param)
+        notifyDataSetChanged()
+    }
+
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var nameView: TextView = itemView.findViewById(R.id.nameView)
         var priceView: TextView = itemView.findViewById(R.id.priceView)
@@ -38,9 +59,13 @@ class OptionAdapter(private val items: List<HierarchyVariant>, val itemTap: (Hie
 
         init {
             itemView.setOnClickListener {
-                selected = current
-                if (selected != null) {
-                    itemTap(selected!!)
+                current?.let {
+                    if (it.childs.toList().isEmpty() == false) {
+                        goTo(it.childs.toList())
+                        onItemNavigate(it)
+                    } else {
+                        onItemNavigate(it)
+                    }
                 }
             }
         }

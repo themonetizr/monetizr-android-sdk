@@ -17,6 +17,7 @@ import com.google.android.gms.wallet.PaymentsClient
 import io.monetizr.monetizrsdk.ClearedService
 import io.monetizr.monetizrsdk.R
 import io.monetizr.monetizrsdk.api.Telemetrics
+import io.monetizr.monetizrsdk.dto.HierarchyVariant
 import io.monetizr.monetizrsdk.dto.PaymentInfo
 import io.monetizr.monetizrsdk.dto.Product
 import io.monetizr.monetizrsdk.dto.ShippingRate
@@ -26,15 +27,17 @@ import io.monetizr.monetizrsdk.ui.adapter.ImageGalleryAdapter
 import io.monetizr.monetizrsdk.ui.adapter.ItemIndicator
 import io.monetizr.monetizrsdk.ui.adapter.ItemSnapHelper
 import io.monetizr.monetizrsdk.ui.dialog.OptionsDialog
+import io.monetizr.monetizrsdk.ui.dialog.OptionsDialogListener
 import io.monetizr.monetizrsdk.ui.dialog.ShippingRateDialogListener
 import kotlinx.android.synthetic.main.activity_product.*
 import kotlinx.android.synthetic.main.item_shipping_rate.*
 import org.json.JSONObject
 
-class ProductActivity : AppCompatActivity(), ShippingRateDialogListener {
+class ProductActivity : AppCompatActivity(), ShippingRateDialogListener, OptionsDialogListener {
     private var userMadeInteraction: Boolean = false
     private var activityLaunchedStamp: Long = 0
     private lateinit var paymentsClient: PaymentsClient
+    private val selectedOptions: ArrayList<HierarchyVariant> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,13 +65,6 @@ class ProductActivity : AppCompatActivity(), ShippingRateDialogListener {
         variantContainerView.setOnClickListener { showOptionDialog(json) }
 
         hideNavigationBar()
-    }
-
-
-    private fun initCheckoutTitle(product: Product) {
-        if (product.buttonTitle != null && product.buttonTitle.isNotEmpty()) {
-            checkoutButtonView.text = product.buttonTitle
-        }
     }
 
     override fun onUserInteraction() {
@@ -109,6 +105,13 @@ class ProductActivity : AppCompatActivity(), ShippingRateDialogListener {
         }
     }
 
+    override fun onOptionsSelect(options: ArrayList<HierarchyVariant>) {
+        hideNavigationBar()
+        selectedOptions.clear()
+        selectedOptions.addAll(options)
+        initProductVariantsValues(options)
+    }
+
     override fun onShippingRateSelect(shippingRate: ShippingRate) {
 
     }
@@ -142,7 +145,6 @@ class ProductActivity : AppCompatActivity(), ShippingRateDialogListener {
     private fun handleError(statusCode: Int) {
         Log.w("loadPaymentData failed", String.format("Error code: %d", statusCode))
     }
-
 
     //region ui
 
@@ -193,7 +195,9 @@ class ProductActivity : AppCompatActivity(), ShippingRateDialogListener {
     }
 
     private fun initProductVariantsTitle(product: Product) {
-        if (product.variants.size >= 1) {
+        variantContainerView.isEnabled = product.variants.size >= 1
+
+        if (product.variants.isEmpty() == false) {
             val variant = product.getFirstVariant()!!
 
             if (variant.selectedOptions.size > 0) {
@@ -228,18 +232,37 @@ class ProductActivity : AppCompatActivity(), ShippingRateDialogListener {
                 option3NameView.visibility = View.GONE
                 option3ValueView.visibility = View.GONE
             }
+        }
+    }
 
-            variantContainerView.isEnabled = product.variants.size > 1
-        } else {
-            variantContainerView.isEnabled = false
+    private fun initProductVariantsValues(options: ArrayList<HierarchyVariant>) {
+        if (options.isEmpty() == false) {
+
+            if (options.size > 0) {
+                option1ValueView.text = options[0].id
+            }
+
+            if (options.size > 1) {
+                option2ValueView.text = options[1].id
+            }
+
+            if (options.size > 2) {
+                option3ValueView.text = options[2].id
+            }
+        }
+    }
+
+    private fun initCheckoutTitle(product: Product) {
+        if (product.buttonTitle != null && product.buttonTitle.isNotEmpty()) {
+            checkoutButtonView.text = product.buttonTitle
         }
     }
 
     private fun showOptionDialog(product: String) {
         val fragment = OptionsDialog.newInstance(product)
         fragment.show(supportFragmentManager, "Option")
-
     }
+
     //endregion
 
     companion object {

@@ -32,4 +32,5 @@
 	<string name="confirm_shipping_rates">Shipping options</string>
 	<string name="confirm_total_with_shipping">Total:</string>
     <string name="back">Back</string>
+    <string name="selected">Selected:</string>
 </resources>
