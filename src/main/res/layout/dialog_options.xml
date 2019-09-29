@@ -14,7 +14,7 @@
         android:layout_width="300dp"
         android:layout_height="400dp"
         android:layout_gravity="center"
-        android:background="@drawable/variant_dialog_background"
+        android:background="@drawable/dialog_background"
         android:orientation="vertical">
 
         <FrameLayout
@@ -26,7 +26,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:textColor="@color/colorWhite"
+                android:textColor="@color/white"
                 android:textSize="14sp"
                 tools:text="Select size" />
 
@@ -62,9 +62,9 @@
             android:lines="1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/black_overlay"
+            android:background="@color/dark_gray"
             android:padding="8dp"
-            android:textColor="@color/grey_text"
+            android:textColor="@color/grey"
             android:textSize="14sp"
             android:text="@string/selected"
             android:visibility="gone"

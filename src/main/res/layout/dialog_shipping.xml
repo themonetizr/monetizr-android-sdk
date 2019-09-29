@@ -7,15 +7,11 @@
     android:orientation="vertical"
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingStart="15dp"
-        android:paddingTop="5dp"
-        android:paddingEnd="15dp"
-        android:paddingBottom="5dp"
+        android:padding="15dp"
         tools:ignore="UselessParent">
 
         <TextView
@@ -23,14 +19,14 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:text="@string/confirm_dialog"
-            android:textColor="@color/bottom_sheet_grey_text"
+            android:textColor="@color/grey"
             android:textSize="18sp" />
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="1dp"
+            android:layout_height="1px"
             android:layout_marginBottom="10dp"
-            android:background="@color/line" />
+            android:background="@color/grey" />
 
         <TextView
             android:id="@+id/subPriceView"
@@ -38,7 +34,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:text="@string/confirm_price"
-            android:textColor="@color/bottom_sheet_grey_text"
+            android:textColor="@color/grey"
             android:textSize="16sp" />
 
         <TextView
@@ -47,14 +43,14 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:text="@string/confirm_tax"
-            android:textColor="@color/bottom_sheet_grey_text"
+            android:textColor="@color/grey"
             android:textSize="16sp" />
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="1dp"
+            android:layout_height="1px"
             android:layout_marginBottom="10dp"
-            android:background="@color/line" />
+            android:background="@color/grey" />
 
         <TextView
             android:id="@+id/priceNoShippingView"
@@ -62,21 +58,21 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:text="@string/confirm_total_without_shipping"
-            android:textColor="@color/bottom_sheet_grey_text"
+            android:textColor="@color/grey"
             android:textSize="16sp" />
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="1dp"
+            android:layout_height="1px"
             android:layout_marginBottom="10dp"
-            android:background="@color/line" />
+            android:background="@color/grey" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:text="@string/confirm_shipping_rates"
-            android:textColor="@color/bottom_sheet_grey_text"
+            android:textColor="@color/grey"
             android:textSize="16sp"
             app:autoSizeTextType="uniform" />
 
@@ -88,9 +84,9 @@
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="1dp"
+            android:layout_height="1px"
             android:layout_marginBottom="10dp"
-            android:background="@color/line" />
+            android:background="@color/grey" />
 
         <TextView
             android:id="@+id/totalPriceView"
@@ -98,7 +94,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:text="@string/confirm_total_with_shipping"
-            android:textColor="@color/bottom_sheet_grey_text"
+            android:textColor="@color/grey"
             android:textSize="16sp" />
 
         <com.google.android.material.button.MaterialButton
@@ -107,8 +103,10 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical|center_horizontal"
             android:gravity="center"
+            android:paddingStart="@dimen/default_padding"
+            android:paddingEnd="@dimen/default_padding"
             android:text="@string/confirm_button"
-            android:textColor="@color/colorWhite" />
+            android:textColor="@color/white" />
 
     </LinearLayout>
 
