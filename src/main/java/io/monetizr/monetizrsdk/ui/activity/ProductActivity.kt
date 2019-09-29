@@ -206,12 +206,20 @@ class ProductActivity : AppCompatActivity(), ShippingRateDialogListener, Options
 
             WebApi.getInstance(this).makeRequest(
                 url, Request.Method.POST, jsonBody, apiKey,
-                {
+                { response ->
                     hideProgressDialog()
+                    val checkoutCreate = response.getJSONObject("data").getJSONObject("checkoutCreate")
+                    val checkout = checkoutCreate.getJSONObject("checkout")
+
                     if (withPayment) {
-                        showShippingDialog(proceedWithPayment!!.toJson(), it)
+                        showShippingDialog(proceedWithPayment!!.toJson(), checkout)
                     } else {
-                        showProductView(it)
+                        val checkoutErrors = checkoutCreate.getJSONArray("checkoutUserErrors")
+                        val checkoutRedirect = checkout.getString("webUrl")
+
+                        if (checkoutErrors.length() <= 0) {
+                            showProductView(checkoutRedirect)
+                        }
                     }
                 },
                 {
@@ -219,6 +227,13 @@ class ProductActivity : AppCompatActivity(), ShippingRateDialogListener, Options
                     logError(it)
                 }
             )
+        }
+    }
+
+    private fun showProductView(url: String?) {
+        try {
+            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+        } catch (error: Throwable) {
         }
     }
 
@@ -359,15 +374,6 @@ class ProductActivity : AppCompatActivity(), ShippingRateDialogListener, Options
 
     private fun hideProgressDialog() {
         progressDialog?.dismiss()
-    }
-
-    private fun showProductView(checkoutInfo: JSONObject) {
-        val checkoutErrors = checkoutInfo.getJSONObject("data").getJSONObject("checkoutCreate").getJSONArray("checkoutUserErrors")
-        val checkoutRedirect = checkoutInfo.getJSONObject("data").getJSONObject("checkoutCreate").getJSONObject("checkout").getString("webUrl")
-
-        if (checkoutErrors.length() <= 0) {
-            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(checkoutRedirect)))
-        }
     }
 
     private fun showShippingDialog(paymentInfo: String, checkoutInfo: JSONObject) {
