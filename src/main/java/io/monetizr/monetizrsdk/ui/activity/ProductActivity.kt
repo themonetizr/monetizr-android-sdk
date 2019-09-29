@@ -126,14 +126,21 @@ class ProductActivity : AppCompatActivity(), ShippingRateDialogListener, Options
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (requestCode == LOAD_PAYMENT_DATA_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
-            val paymentData = PaymentData.getFromIntent(intent)
-            if (paymentData != null) {
+        if (requestCode == LOAD_PAYMENT_DATA_REQUEST_CODE && resultCode == RESULT_OK) {
+            if (data != null) {
+                val paymentData = PaymentData.getFromIntent(data)
+                if (paymentData != null) {
+                    val tag = intent.getStringExtra(Parameters.PRODUCT_TAG)!!
+                    val json = intent.getStringExtra(Parameters.PRODUCT_JSON)!!
+                    val productJson = JSONObject(json)
+
+                    checkout(paymentData, tag, productJson)
+                }
+            } else {
                 val tag = intent.getStringExtra(Parameters.PRODUCT_TAG)!!
                 val json = intent.getStringExtra(Parameters.PRODUCT_JSON)!!
                 val productJson = JSONObject(json)
-
-                checkout(paymentData, tag, productJson)
+                checkout(null, tag, productJson)
             }
         }
 
