@@ -119,6 +119,7 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:lines="1"
                         android:id="@+id/option1NameView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -143,10 +144,12 @@
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/default_padding"
                     android:layout_weight="1"
                     android:orientation="vertical">
 
                     <TextView
+                        android:lines="1"
                         android:id="@+id/option2NameView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -156,6 +159,7 @@
                         tools:text="Fit" />
 
                     <TextView
+                        android:lines="1"
                         android:id="@+id/option2ValueView"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -171,6 +175,7 @@
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/default_padding"
                     android:layout_weight="1"
                     android:orientation="vertical">
 
