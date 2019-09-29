@@ -82,11 +82,6 @@ class ProductActivity : AppCompatActivity(), ShippingRateDialogListener, Options
         userMadeInteraction = true
     }
 
-    override fun onResume() {
-        super.onResume()
-        hideStatusBar()
-    }
-
     override fun onStop() {
         super.onStop()
         val productTag = intent!!.getStringExtra(Parameters.PRODUCT_TAG)
@@ -95,6 +90,18 @@ class ProductActivity : AppCompatActivity(), ShippingRateDialogListener, Options
 
         if (userMadeInteraction == false) {
             Telemetrics.dismiss(productTag)
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        hideStatusBar()
+    }
+
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+        if (hasFocus) {
+            hideStatusBar()
         }
     }
 
