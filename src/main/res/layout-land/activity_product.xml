@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/rootView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/black"
-    android:orientation="vertical">
+    android:orientation="horizontal">
 
     <FrameLayout
         android:id="@+id/topView"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_toStartOf="@id/center"
+        android:layout_weight="1"
         android:background="@android:color/white">
 
         <androidx.recyclerview.widget.RecyclerView
@@ -32,190 +31,189 @@
             tools:ignore="ContentDescription" />
     </FrameLayout>
 
-    <View
-        android:id="@+id/center"
+    <FrameLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_centerInParent="true" />
-
-    <LinearLayout
-        android:id="@+id/viewBottom"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_toEndOf="@id/center"
-        android:background="@android:color/black"
-        android:orientation="vertical">
+        android:layout_weight="1">
 
         <LinearLayout
+            android:id="@+id/viewBottom"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:orientation="horizontal">
+            android:layout_height="match_parent"
+            android:background="@android:color/black"
+            android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/productTitleView"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:textColor="@color/colorWhite"
-                android:textStyle="bold" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/productPriceView"
-                android:layout_width="80dp"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:textColor="@color/blue_primary"
-                android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/productTitleView"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:textColor="@color/colorWhite"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/productPriceView"
+                    android:layout_width="80dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:textColor="@color/blue_primary"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/productDescriptionView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="80dp"
+                    android:textColor="@color/grey_text"
+                    tools:text="sdfsdfsfdsfdsdfsfsdfsfsdfsfsfsdf" />
+
+            </ScrollView>
+
         </LinearLayout>
 
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1">
-
-            <TextView
-                android:id="@+id/productDescriptionView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingBottom="80dp"
-                android:textColor="@color/grey_text"
-                tools:text="sdfsdfsfdsfdsdfsfsdfsfsdfsfsfsdf" />
-
-        </ScrollView>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_toEndOf="@id/center"
-        android:orientation="vertical">
-
         <LinearLayout
-            android:id="@+id/variantContainerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/variant_background"
-            android:orientation="horizontal"
-            android:paddingStart="15dp"
-            android:paddingTop="5dp"
-            android:paddingEnd="10dp"
-            android:paddingBottom="5dp">
+            android:layout_gravity="bottom"
+            android:orientation="vertical">
 
             <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="vertical">
+                android:id="@+id/variantContainerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/variant_background"
+                android:orientation="horizontal"
+                android:paddingStart="15dp"
+                android:paddingTop="5dp"
+                android:paddingEnd="10dp"
+                android:paddingBottom="5dp">
 
-                <TextView
-                    android:id="@+id/option1NameView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textAllCaps="true"
-                    android:textColor="@color/grey_text"
-                    android:textSize="12sp" />
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/option1ValueView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textAllCaps="true"
-                    android:textColor="@color/colorWhite"
-                    android:textSize="16sp"
-                    tools:text="22" />
+                    <TextView
+                        android:id="@+id/option1NameView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAllCaps="true"
+                        android:textColor="@color/grey_text"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/option1ValueView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAllCaps="true"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="16sp"
+                        tools:text="22" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/option2NameView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAllCaps="true"
+                        android:textColor="@color/grey_text"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/option2ValueView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAllCaps="true"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="16sp"
+                        tools:text="22" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/option3NameView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAllCaps="true"
+                        android:textColor="@color/grey_text"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/option3ValueView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAllCaps="true"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="16sp"
+                        tools:text="22" />
+
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ic_navigate_next_black_24dp"
+                    android:tint="@color/grey_text"
+                    tools:ignore="ContentDescription" />
 
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="vertical">
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/option2NameView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/checkoutButtonView"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/googlepay_button_background"
+                    android:backgroundTint="#4285f4"
+                    android:gravity="center"
+                    android:text="@string/checkout_button_title"
                     android:textAllCaps="true"
-                    android:textColor="@color/grey_text"
-                    android:textSize="12sp" />
+                    android:textColor="@color/colorWhite" />
 
-                <TextView
-                    android:id="@+id/option2ValueView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textAllCaps="true"
-                    android:textColor="@color/colorWhite"
-                    android:textSize="16sp"
-                    tools:text="22" />
+                <androidx.appcompat.widget.AppCompatImageButton
+                    android:id="@+id/payButtonView"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/googlepay_button_background"
+                    android:padding="12dp"
+                    android:src="@drawable/google_pay_logo" />
 
             </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/option3NameView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textAllCaps="true"
-                    android:textColor="@color/grey_text"
-                    android:textSize="12sp" />
-
-                <TextView
-                    android:id="@+id/option3ValueView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textAllCaps="true"
-                    android:textColor="@color/colorWhite"
-                    android:textSize="16sp"
-                    tools:text="22" />
-
-            </LinearLayout>
-
-            <ImageView
-                android:layout_width="30dp"
-                android:layout_height="match_parent"
-                android:src="@drawable/ic_navigate_next_black_24dp"
-                android:tint="@color/grey_text"
-                tools:ignore="ContentDescription" />
 
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:orientation="horizontal">
+    </FrameLayout>
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/checkoutButtonView"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@drawable/googlepay_button_background"
-                android:backgroundTint="#4285f4"
-                android:gravity="center"
-                android:text="@string/checkout_button_title"
-                android:textAllCaps="true"
-                android:textColor="@color/colorWhite" />
-
-            <androidx.appcompat.widget.AppCompatImageButton
-                android:id="@+id/payButtonView"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@drawable/googlepay_button_background"
-                android:padding="12dp"
-                android:src="@drawable/google_pay_logo" />
-
-        </LinearLayout>
-
-    </LinearLayout>
-
-</RelativeLayout>
+</LinearLayout>
