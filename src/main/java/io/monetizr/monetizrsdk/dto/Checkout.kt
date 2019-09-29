@@ -14,7 +14,6 @@ class Checkout {
         totalTax = Price(checkOut.getJSONObject("totalTaxV2"))
         shippingRates = ArrayList()
 
-
         if (checkOut.has("availableShippingRates") && checkOut.getJSONObject("availableShippingRates").has("shippingRates")) {
             val array = checkOut.getJSONObject("availableShippingRates").getJSONArray("shippingRates")
 
@@ -24,5 +23,10 @@ class Checkout {
                 this.shippingRates.add(rate)
             }
         }
+    }
+
+    public fun getPriceNoShipping(): Price {
+        val sum = subtotalPrice.amount + totalTax.amount
+        return Price(totalTax.currencyCode, sum, totalTax.currency)
     }
 }

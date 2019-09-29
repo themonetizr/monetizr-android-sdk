@@ -29,18 +29,22 @@ class ShippingRateDialog : BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         this.isCancelable = false
         val paymentData = arguments!!.getString(Parameters.PAYMENT_DATA)!!
-        val checkout = JSONObject(arguments!!.getString(Parameters.CHECKOUT))
+        val checkoutJSON = JSONObject(arguments!!.getString(Parameters.CHECKOUT))
+        val checkout = Checkout(checkoutJSON)
 
-        val adapter = initAdapter(checkout)
+        subPriceView.text = getString(R.string.confirm_price, checkout.subtotalPrice.formatString())
+        taxView.text = getString(R.string.confirm_tax, checkout.totalTax.formatString())
+        priceNoShippingView.text = getString(R.string.confirm_total_without_shipping, checkout.getPriceNoShipping().formatString())
+        totalPriceView.text = getString(R.string.confirm_total_with_shipping, checkout.totalPrice.formatString())
+
+        val adapter = initAdapter(checkoutJSON)
         confirmButtonView.setOnClickListener {
-
             val item = adapter.getSelectedItem()
-            listener?.onShippingRateSelect(paymentData, checkout, item)
+            listener?.onShippingRateSelect(paymentData, checkoutJSON, item)
             dialog.dismiss()
-
         }
     }
-    
+
     override fun onAttach(context: Context?) {
         super.onAttach(context)
         listener = context as ShippingRateDialogListener

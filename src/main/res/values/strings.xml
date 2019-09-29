@@ -26,11 +26,13 @@
 	<string name="required">* Required</string>
 	<string name="shipping_address">Shipping Address</string>
 	<string name="confirm_dialog">Order information</string>
-	<string name="confirm_price">Price:</string>
-	<string name="confirm_tax">Taxes:</string>
-	<string name="confirm_total_without_shipping">Total without shipping:</string>
 	<string name="confirm_shipping_rates">Shipping options</string>
-	<string name="confirm_total_with_shipping">Total:</string>
+
+	<string name="confirm_price">Price: %1$s</string>
+	<string name="confirm_tax">Taxes: %1$s</string>
+	<string name="confirm_total_without_shipping">Total without shipping: %1$s</string>
+	<string name="confirm_total_with_shipping">Total: %1$s</string>
+
     <string name="back">Back</string>
     <string name="selected">Selected:</string>
 </resources>

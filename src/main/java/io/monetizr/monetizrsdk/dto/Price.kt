@@ -7,6 +7,12 @@ class Price {
     val amount: Int
     val currency: String
 
+    constructor(currencyCode: String, amount: Int, currency: String) {
+        this.currencyCode = currencyCode
+        this.amount = amount
+        this.currency = currency
+    }
+
     constructor(json: JSONObject) {
         if (json.has("currencyCode")) {
             this.currencyCode = json.getString("currencyCode")
