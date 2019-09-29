@@ -1,5 +1,7 @@
 package io.monetizr.monetizrsdk.ui.dialog
 
+import android.app.Dialog
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -18,19 +20,19 @@ import org.json.JSONObject
 class OptionsDialog : DialogFragment() {
     private val selected: ArrayList<HierarchyVariant> = ArrayList()
 
-    companion object {
-        fun newInstance(product: String): OptionsDialog {
-            val args = Bundle()
-            val fragment = OptionsDialog()
-            args.putString(Parameters.PRODUCT_JSON, product)
-            fragment.arguments = args
-            return fragment
-        }
-    }
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val dialog = super.onCreateDialog(savedInstanceState)
+        dialog.window?.addFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE)
+        dialog.window?.decorView?.systemUiVisibility = View.SYSTEM_UI_FLAG_LOW_PROFILE or
+                View.SYSTEM_UI_FLAG_FULLSCREEN or
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
+                View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or
+                View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
+                View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setStyle(STYLE_NO_TITLE, R.style.DialogShadow)
+        dialog.window?.decorView?.setBackgroundColor(Color.TRANSPARENT)
+        dialog.setOnShowListener { dialog.window?.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE) }
+        return dialog
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -39,7 +41,6 @@ class OptionsDialog : DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setNoFocusable()
 
         val json = arguments!!.getString(Parameters.PRODUCT_JSON)
         val product = Product(JSONObject(json))
@@ -100,7 +101,13 @@ class OptionsDialog : DialogFragment() {
         selectedView.text = builder.toString()
     }
 
-    private fun setNoFocusable(){
-        dialog?.window?.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE)
+    companion object {
+        fun newInstance(product: String): OptionsDialog {
+            val args = Bundle()
+            val fragment = OptionsDialog()
+            args.putString(Parameters.PRODUCT_JSON, product)
+            fragment.arguments = args
+            return fragment
+        }
     }
 }
