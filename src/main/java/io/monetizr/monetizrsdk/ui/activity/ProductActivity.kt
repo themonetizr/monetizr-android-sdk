@@ -98,6 +98,24 @@ class ProductActivity : AppCompatActivity(), ShippingRateDialogListener, Options
         }
     }
 
+    override fun onSaveInstanceState(outState: Bundle?) {
+        super.onSaveInstanceState(outState)
+        outState?.putStringArrayList(SELECTED_OPTIONS_KEY, selectedOptions)
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
+        super.onRestoreInstanceState(savedInstanceState)
+        savedInstanceState?.let {
+            if (it.containsKey(SELECTED_OPTIONS_KEY)) {
+                val restored = it.getStringArrayList(SELECTED_OPTIONS_KEY)
+                if (restored != null) {
+                    this.selectedOptions.clear()
+                    this.selectedOptions.addAll(restored)
+                }
+            }
+        }
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -390,6 +408,7 @@ class ProductActivity : AppCompatActivity(), ShippingRateDialogListener, Options
     companion object {
         var firstCheckout: Boolean = true
         const val LOAD_PAYMENT_DATA_REQUEST_CODE = 991
+        const val SELECTED_OPTIONS_KEY = "SELECTED_OPTIONS_KEY"
 
         fun start(context: Context, productJson: String, productTag: String) {
             val starter = Intent(context, ProductActivity::class.java)
