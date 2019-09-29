@@ -2,10 +2,12 @@ package io.monetizr.monetizrsdk.ui.dialog
 
 import android.app.Dialog
 import android.content.Context
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -39,8 +41,10 @@ class ShippingRateDialog : BottomSheetDialogFragment() {
 
         val adapter = initAdapter(checkoutJSON)
         confirmButtonView.setOnClickListener {
-            val item = adapter.getSelectedItem()
-            listener?.onShippingRateSelect(paymentData, checkoutJSON, item)
+            if (adapter.itemCount > 0) {
+                val item = adapter.getSelectedItem()
+                listener?.onShippingRateSelect(paymentData, checkoutJSON, item)
+            }
             dialog.dismiss()
         }
     }

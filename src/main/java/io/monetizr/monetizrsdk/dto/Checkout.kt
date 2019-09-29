@@ -14,7 +14,9 @@ class Checkout {
         totalTax = Price(checkOut.getJSONObject("totalTaxV2"))
         shippingRates = ArrayList()
 
-        if (checkOut.has("availableShippingRates") && checkOut.getJSONObject("availableShippingRates").has("shippingRates")) {
+        if (checkOut.has("availableShippingRates") && checkOut.isNull("availableShippingRates") == false &&
+            checkOut.getJSONObject("availableShippingRates").has("shippingRates")
+        ) {
             val array = checkOut.getJSONObject("availableShippingRates").getJSONArray("shippingRates")
 
             for (i in 0..array.length()) {
