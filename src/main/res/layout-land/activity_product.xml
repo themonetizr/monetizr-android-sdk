@@ -12,7 +12,7 @@
         android:id="@+id/topView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/center"
+        android:layout_toStartOf="@id/center"
         android:background="@android:color/white">
 
         <androidx.recyclerview.widget.RecyclerView
@@ -34,15 +34,15 @@
 
     <View
         android:id="@+id/center"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
         android:layout_centerInParent="true" />
 
     <LinearLayout
         android:id="@+id/viewBottom"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/center"
+        android:layout_toEndOf="@id/center"
         android:background="@android:color/black"
         android:orientation="vertical">
 
@@ -90,6 +90,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:layout_toEndOf="@id/center"
         android:orientation="vertical">
 
         <LinearLayout
