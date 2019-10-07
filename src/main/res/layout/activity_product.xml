@@ -46,7 +46,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="55dp"
                 android:orientation="horizontal"
                 android:paddingStart="@dimen/default_padding"
                 android:paddingEnd="@dimen/default_padding">
@@ -64,18 +64,43 @@
                     android:textStyle="bold"
                     tools:text="sdfsdfsdfs" />
 
-                <TextView
-                    android:id="@+id/productPriceView"
+                <LinearLayout
                     android:layout_width="100dp"
                     android:layout_height="match_parent"
-                    android:ellipsize="end"
-                    android:gravity="center"
-                    android:lines="1"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    tools:text="sdfsdfsdfs" />
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/productPriceView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:gravity="center"
+                        android:lines="1"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        tools:text="sdfsdfsdfs" />
+
+                    <TextView
+                        android:id="@+id/productDiscountView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:gravity="center"
+                        android:lines="1"
+                        android:textColor="@color/grey"
+                        android:textSize="14sp"
+                        tools:text="sdfsdfsdfs" />
+
+                </LinearLayout>
+
             </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_marginStart="@dimen/default_padding"
+                android:background="@color/grey"/>
 
             <ScrollView
                 android:layout_width="match_parent"
@@ -119,10 +144,10 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:lines="1"
                         android:id="@+id/option1NameView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:lines="1"
                         android:textAllCaps="true"
                         android:textColor="@color/grey"
                         android:textSize="14sp"
@@ -149,21 +174,21 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:lines="1"
                         android:id="@+id/option2NameView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:lines="1"
                         android:textAllCaps="true"
                         android:textColor="@color/grey"
                         android:textSize="14sp"
                         tools:text="Fit" />
 
                     <TextView
-                        android:lines="1"
                         android:id="@+id/option2ValueView"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="center_vertical"
+                        android:lines="1"
                         android:textAllCaps="true"
                         android:textColor="@color/white"
                         android:textSize="18sp"

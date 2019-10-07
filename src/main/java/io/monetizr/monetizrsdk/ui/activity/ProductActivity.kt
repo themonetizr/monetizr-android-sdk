@@ -32,6 +32,7 @@ import io.monetizr.monetizrsdk.ui.dialog.ShippingRateDialogListener
 import io.monetizr.monetizrsdk.ui.helpers.ProgressDialogBuilder
 import kotlinx.android.synthetic.main.activity_product.*
 import org.json.JSONObject
+import android.graphics.Paint.STRIKE_THRU_TEXT_FLAG
 
 class ProductActivity : AppCompatActivity(), ShippingRateDialogListener, OptionsDialogListener {
     private var userMadeInteraction: Boolean = false
@@ -289,6 +290,8 @@ class ProductActivity : AppCompatActivity(), ShippingRateDialogListener, Options
 
     private fun initProductPriceTitle(variant: Variant) {
         productPriceView.text = variant.priceV2.formatString()
+        productDiscountView.text = variant.priceV2.formatString()
+        productDiscountView.paintFlags = productDiscountView.paintFlags or STRIKE_THRU_TEXT_FLAG
     }
 
     private fun initProductVariantsTitle(variant: Variant) {
