@@ -34,8 +34,15 @@
 				android:configChanges="orientation"
 				android:label="@string/title_activity_product"
 				android:windowSoftInputMode="adjustResize"
-				android:theme="@style/FullscreenTheme">
-		</activity>
+				android:theme="@style/FullscreenTheme"/>
+
+		<activity
+			android:name=".ui.activity.ProductViewActivity"
+			android:configChanges="orientation"
+			android:label="@string/title_activity_product"
+			android:windowSoftInputMode="adjustResize"
+			android:theme="@style/FullscreenTheme"/>
+
 	</application>
 
 </manifest>
