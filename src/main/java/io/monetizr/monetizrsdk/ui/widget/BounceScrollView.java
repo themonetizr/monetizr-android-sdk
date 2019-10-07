@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Rect;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +18,6 @@ import androidx.core.view.ViewCompat;
 import androidx.core.widget.NestedScrollView;
 
 import io.monetizr.monetizrsdk.R;
-import io.monetizr.monetizrsdk.ui.helpers.UiHelpers;
 
 public class BounceScrollView extends NestedScrollView {
 
@@ -36,6 +34,7 @@ public class BounceScrollView extends NestedScrollView {
     private Interpolator mInterpolator;
     private View mChildView;
     private float mStart;
+    private float startDown = 0;
     private int mPreDelta;
     private int mOverScrolledDistance;
     private Rect mNormalRect = new Rect();
@@ -154,8 +153,6 @@ public class BounceScrollView extends NestedScrollView {
         return super.performClick();
     }
 
-    float startDown = 0;
-
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
         if (mChildView == null)
@@ -208,6 +205,7 @@ public class BounceScrollView extends NestedScrollView {
                 performClick();
             case MotionEvent.ACTION_CANCEL:
                 if (!mNormalRect.isEmpty()) {
+                    // bottom animation
                     if (startDown < ev.getY()) {
                         startDown = 0;
                         resetChildViewWithAnimation();
@@ -219,15 +217,13 @@ public class BounceScrollView extends NestedScrollView {
                 break;
         }
 
-        Log.d("QWEQWEQWE",getScrollY() +" " + mChildView.getTop());
-
+        // taps
         if (ev.getAction() == MotionEvent.ACTION_DOWN) {
             float halsScreen = (getHeight() / 2f);
             float pos = Math.abs(mChildView.getTop());
             float zone = halsScreen - pos;
             topZone = (zone  > ev.getY());
         }
-
 
         if (topZone) {
             if (ev.getAction() == MotionEvent.ACTION_UP) {
