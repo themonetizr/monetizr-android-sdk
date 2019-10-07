@@ -73,7 +73,7 @@ class ProductActivity : AppCompatActivity(), ShippingRateDialogListener, Options
 
         closeButtonView.setOnClickListener { finish() }
         payButtonView.setOnClickListener { payGooglePlayTap(productJson) }
-        productImagesView.setOnClickListener { ProductViewActivity.start(this, product.images) }
+
         variantContainerView.setOnClickListener { showOptionDialog(json) }
         checkoutButtonView.setOnClickListener { checkout(null, tag, productJson) }
 

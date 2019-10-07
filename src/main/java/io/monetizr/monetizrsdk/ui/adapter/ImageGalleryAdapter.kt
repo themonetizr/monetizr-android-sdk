@@ -11,6 +11,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.transition.DrawableCrossFadeFactory
 import io.monetizr.monetizrsdk.R
+import io.monetizr.monetizrsdk.ui.activity.ProductViewActivity
 
 class ImageGalleryAdapter(private val context: Context, private val productPhotos: ArrayList<String>) : RecyclerView.Adapter<ImageGalleryAdapter.ViewHolder>() {
 
@@ -23,6 +24,7 @@ class ImageGalleryAdapter(private val context: Context, private val productPhoto
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val productPhoto = productPhotos[position]
+        holder.itemView.setOnClickListener(holder)
         val imageView = holder.photoImageView
 
         val factory = DrawableCrossFadeFactory.Builder().setCrossFadeEnabled(true).build()
@@ -45,7 +47,11 @@ class ImageGalleryAdapter(private val context: Context, private val productPhoto
         return productPhotos.size
     }
 
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
+        override fun onClick(p0: View?) {
+            ProductViewActivity.start(context, productPhotos)
+        }
+
         var photoImageView: ImageView = itemView.findViewById(R.id.iv_photo)
     }
 }
