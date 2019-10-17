@@ -49,7 +49,7 @@ class ImageGalleryAdapter(private val context: Context, private val productPhoto
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
         override fun onClick(p0: View?) {
-            ProductViewActivity.start(context, productPhotos)
+            ProductViewActivity.start(context, productPhotos, adapterPosition)
         }
 
         var photoImageView: ImageView = itemView.findViewById(R.id.iv_photo)

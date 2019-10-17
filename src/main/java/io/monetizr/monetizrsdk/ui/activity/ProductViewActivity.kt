@@ -20,7 +20,8 @@ class ProductViewActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_product_view)
         val images = intent.getStringArrayListExtra(Parameters.PRODUCT_IMAGES)
-        initImageAdapter(images)
+        val pos = intent.getIntExtra(Parameters.PRODUCT_IMAGE_POS, 0);
+        initImageAdapter(images,pos)
         closeButtonView.setOnClickListener { finish() }
 
         hideStatusBar()
@@ -36,7 +37,7 @@ class ProductViewActivity : AppCompatActivity() {
         hideStatusBar()
     }
 
-    private fun initImageAdapter(photos: ArrayList<String>) {
+    private fun initImageAdapter(photos: ArrayList<String>, pos: Int) {
         val imageGalleryAdapter = ImageGalleryAdapter(this, photos)
         val layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
 
@@ -45,6 +46,7 @@ class ProductViewActivity : AppCompatActivity() {
         ItemSnapHelper().attachToRecyclerView(productImagesView)
         productImagesView.addItemDecoration(ItemIndicator())
         productImagesView.adapter = imageGalleryAdapter
+        layoutManager.scrollToPosition(pos)
     }
 
     private fun hideStatusBar() {
@@ -58,10 +60,11 @@ class ProductViewActivity : AppCompatActivity() {
     }
 
     companion object {
-        fun start(context: Context, images: ArrayList<String>) {
+        fun start(context: Context, images: ArrayList<String>, position: Int) {
             val starter = Intent(context, ProductViewActivity::class.java)
             starter.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
             starter.putExtra(Parameters.PRODUCT_IMAGES, images)
+            starter.putExtra(Parameters.PRODUCT_IMAGE_POS, position)
             context.startActivity(starter)
         }
     }
