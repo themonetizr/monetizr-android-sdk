@@ -28,7 +28,7 @@ class MonetizrSdk {
         private var initialLaunch: Boolean = true
         private var progressDialog: AlertDialog? = null
 
-        fun showProductForTag(productTag: String) {
+        fun showProductForTag(productTag: String, dynamicApiKey: String = "") {
             try {
                 val context = ApplicationProvider.application as Context
                 val activity = ActivityProvider.currentActivity
@@ -43,7 +43,13 @@ class MonetizrSdk {
                     return
                 }
 
-                val apiKey = ConfigHelper.getConfigValue(context, Parameters.RAW_API_KEY)
+                var apiKey = ConfigHelper.getConfigValue(context, Parameters.RAW_API_KEY)
+
+                // Use specified api key if it is passed to method
+                if (dynamicApiKey != "") {
+                    apiKey = dynamicApiKey
+                }
+
                 val endpoint = ConfigHelper.getConfigValue(context, Parameters.RAW_API_ENDPOINT)
 
                 progressDialog = ProgressDialogBuilder.makeProgressDialog(activity)
