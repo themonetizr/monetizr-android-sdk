@@ -3,11 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/transparent"
     android:clickable="true"
     android:focusable="true"
-    android:orientation="vertical"
-    tools:background="@color/colorAccent">
+    android:orientation="vertical">
 
     <LinearLayout
         android:animateLayoutChanges="true"
@@ -26,7 +24,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:textColor="@color/white"
                 android:textSize="14sp"
                 tools:text="Select size" />
 
@@ -43,7 +40,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:src="@drawable/ic_navigate_before_black_24dp"
-                    android:tint="@color/colorAccent"
                     tools:ignore="ContentDescription" />
 
                 <TextView
@@ -51,7 +47,6 @@
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
                     android:text="@string/back"
-                    android:textColor="@color/colorAccent"
                     android:textSize="16sp" />
             </LinearLayout>
 
@@ -62,13 +57,11 @@
             android:lines="1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/dark_gray"
             android:padding="8dp"
-            android:textColor="@color/grey"
             android:textSize="14sp"
             android:text="@string/selected"
             android:visibility="gone"
-            tools:text="sdfsd sdf" />
+            tools:text="" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/listView"

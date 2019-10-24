@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<color name="colorPrimary">#F5F5F5</color>
+	<color name="colorBackground">#25292f</color>
+
+	<color name="selectorBackground">#24272e</color>
+	<color name="seperatorBackground">#676d77</color>
+	<color name="colorCloseButton">#FFFFFF</color>
+</resources>

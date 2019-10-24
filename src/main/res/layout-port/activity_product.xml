@@ -1,25 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/rootView"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@android:color/black">
+    android:layout_height="match_parent">
 
     <com.themonetizr.monetizrsdk.ui.widget.SlideUpDownPanel
         android:id="@+id/vertical_slider"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentTop="true"
-        android:background="@android:color/black"
         android:clickable="false"
         android:orientation="vertical">
 
         <FrameLayout
             android:id="@+id/topView"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            tools:background="@color/grey">
+            android:layout_height="0dp">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/productImagesView"
@@ -31,11 +29,11 @@
                 android:id="@+id/closeButtonView"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
-                android:layout_gravity="end"
+                android:layout_gravity="start"
                 android:layout_marginTop="15dp"
                 android:padding="15dp"
+                android:tint="@color/colorPrimary"
                 android:src="@drawable/ic_close_black_24dp"
-                android:tint="@color/colorAccent"
                 tools:ignore="ContentDescription" />
         </FrameLayout>
 
@@ -43,14 +41,14 @@
             android:id="@+id/slider_root"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorPrimary">
+            android:background="?android:attr/colorBackground">
 
             <LinearLayout
                 android:id="@+id/viewBottom"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@android:color/black"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:background="?android:attr/colorBackground">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -65,12 +63,11 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:ellipsize="end"
-                        android:gravity="center"
+                        android:gravity="left|center"
                         android:lines="1"
-                        android:textColor="@color/white"
                         android:textSize="18sp"
                         android:textStyle="bold"
-                        tools:text="sdfsdfsdfs" />
+                        tools:text="" />
 
                     <LinearLayout
                         android:layout_width="100dp"
@@ -84,10 +81,9 @@
                             android:ellipsize="end"
                             android:gravity="center"
                             android:lines="1"
-                            android:textColor="@color/colorPrimary"
                             android:textSize="20sp"
                             android:textStyle="bold"
-                            tools:text="sdfsdfsdfs" />
+                            tools:text="" />
 
                         <TextView
                             android:id="@+id/productDiscountView"
@@ -96,9 +92,8 @@
                             android:ellipsize="end"
                             android:gravity="center"
                             android:lines="1"
-                            android:textColor="@color/grey"
                             android:textSize="14sp"
-                            tools:text="sdfsdfsdfs" />
+                            tools:text="" />
 
                     </LinearLayout>
 
@@ -106,9 +101,9 @@
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="1px"
+                    android:layout_height="2dp"
                     android:layout_marginStart="@dimen/default_padding"
-                    android:background="@color/grey" />
+                    android:background="@color/seperatorBackground"/>
 
                 <TextView
                     android:id="@+id/productDescriptionView"
@@ -117,9 +112,8 @@
                     android:paddingStart="@dimen/default_padding"
                     android:paddingTop="@dimen/default_padding"
                     android:paddingEnd="@dimen/default_padding"
-                    android:textColor="@color/white"
                     android:paddingBottom="20dp"
-                    tools:text="sdfsdfsfdsfdsdfsfsdfsfsdfsfsfsdfsdfsdfsfdsfdsdfsfsdfsfsdfsfsfsdfsdfsdfsfdsfdsdfsfsdfsfsdfsfsfsdfsdfsdfsfdsfdsdfsfsdfsfsdfsfsfsdfsdfsdfsfdsfdsdfsfsdfsfsdfsfsfsdfsdfsdfsfdsfdsdfsfsdfsfsdfsfsfsdfsdfsdfsfdsfdsdfsfsdfsfsdfsfsfsdfsdfsdfsfdsfdsdfsfsdfsfsdfsfsfsdfsdfsdfsfdsfdsdfsfsdfsfsdfsfsfsdfsdfsdfsfdsfdsdfsfsdfsfsdfsfsfsdfsdfsdfsfdsfdsdfsfsdfsfsdfsfsfsdfsdfsdfsfdsfdsdfsfsdfsfsdfsfsfsdfsdfsdfsfdsfdsdfsfsdfsfsdfsfsfsdfsdfsdfsfdsfdsdfsfsdfsfsdfsfsfsdf" />
+                    tools:text="" />
 
                 <View
                     android:layout_width="match_parent"
@@ -135,22 +129,22 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_gravity="bottom"
-        android:background="@android:color/transparent"
+        android:background="?android:attr/colorBackground"
         android:orientation="vertical">
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:background="@drawable/text_gradient" />
+            android:layout_height="10dp"
+            android:background="@color/selectorBackground"/>
 
         <LinearLayout
             android:id="@+id/variantContainerView"
             android:layout_width="match_parent"
             android:layout_height="45dp"
-            android:background="@android:color/black"
             android:orientation="horizontal"
             android:paddingStart="@dimen/default_padding"
-            android:paddingEnd="0dp">
+            android:paddingEnd="0dp"
+            android:background="@color/selectorBackground">
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -164,8 +158,7 @@
                     android:layout_height="wrap_content"
                     android:lines="1"
                     android:textAllCaps="true"
-                    android:textColor="@color/grey"
-                    android:textSize="14sp"
+                    android:textSize="12sp"
                     tools:text="Fit" />
 
                 <TextView
@@ -173,10 +166,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
-                    android:textAllCaps="true"
-                    android:textColor="@color/white"
-                    android:textSize="18sp"
+                    android:textAllCaps="false"
+                    android:textSize="16sp"
                     android:textStyle="bold"
+                    app:autoSizeTextType="uniform"
+                    app:autoSizeMinTextSize="8sp"
+                    app:autoSizeMaxTextSize="16sp"
+                    app:autoSizeStepGranularity="2sp"
                     tools:text="22" />
 
             </LinearLayout>
@@ -194,8 +190,7 @@
                     android:layout_height="wrap_content"
                     android:lines="1"
                     android:textAllCaps="true"
-                    android:textColor="@color/grey"
-                    android:textSize="14sp"
+                    android:textSize="12sp"
                     tools:text="Fit" />
 
                 <TextView
@@ -204,10 +199,13 @@
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
                     android:lines="1"
-                    android:textAllCaps="true"
-                    android:textColor="@color/white"
-                    android:textSize="18sp"
+                    android:textAllCaps="false"
+                    android:textSize="16sp"
                     android:textStyle="bold"
+                    app:autoSizeTextType="uniform"
+                    app:autoSizeMinTextSize="8sp"
+                    app:autoSizeMaxTextSize="16sp"
+                    app:autoSizeStepGranularity="2sp"
                     tools:text="22" />
 
             </LinearLayout>
@@ -224,8 +222,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textAllCaps="true"
-                    android:textColor="@color/grey"
-                    android:textSize="14sp"
+                    android:textSize="12sp"
                     tools:text="Fit" />
 
                 <TextView
@@ -233,10 +230,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
-                    android:textAllCaps="true"
-                    android:textColor="@color/white"
-                    android:textSize="18sp"
+                    android:textAllCaps="false"
+                    android:textSize="16sp"
                     android:textStyle="bold"
+                    app:autoSizeTextType="uniform"
+                    app:autoSizeMinTextSize="8sp"
+                    app:autoSizeMaxTextSize="16sp"
+                    app:autoSizeStepGranularity="2sp"
                     tools:text="22" />
 
             </LinearLayout>
@@ -246,7 +246,6 @@
                 android:layout_width="30dp"
                 android:layout_height="match_parent"
                 android:src="@drawable/ic_navigate_next_black_24dp"
-                android:tint="@color/grey"
                 tools:ignore="ContentDescription" />
 
         </LinearLayout>
@@ -254,7 +253,6 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:background="@android:color/black"
             android:orientation="horizontal"
             android:padding="@dimen/default_padding">
 
@@ -263,12 +261,9 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@drawable/button_background"
-                android:backgroundTint="@color/colorPrimary"
                 android:gravity="center"
                 android:text="@string/checkout_button_title"
-                android:textAllCaps="true"
-                android:textColor="@color/white" />
+                android:textAllCaps="false" />
 
             <Space
                 android:layout_width="@dimen/default_padding"
@@ -279,8 +274,6 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@drawable/button_background"
-                android:backgroundTint="@color/white"
                 android:padding="12dp"
                 android:src="@drawable/google_pay_logo" />
 
