@@ -1,4 +1,4 @@
-package io.monetizr.monetizrsdk;
+package com.themonetizr.monetizrsdk;
 
 import org.junit.Test;
 

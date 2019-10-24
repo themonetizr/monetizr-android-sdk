@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@android:color/black">
 
-    <io.monetizr.monetizrsdk.ui.widget.SlideUpDownPanel
+    <com.themonetizr.monetizrsdk.ui.widget.SlideUpDownPanel
         android:id="@+id/vertical_slider"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -128,7 +128,7 @@
 
         </LinearLayout>
 
-    </io.monetizr.monetizrsdk.ui.widget.SlideUpDownPanel>
+    </com.themonetizr.monetizrsdk.ui.widget.SlideUpDownPanel>
 
     <LinearLayout
         android:layout_width="match_parent"
