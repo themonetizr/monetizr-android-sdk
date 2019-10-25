@@ -43,7 +43,7 @@ class ShippingRateDialog : BottomSheetDialogFragment() {
                 val item = adapter.getSelectedItem()
                 listener?.onShippingRateSelect(paymentData, checkoutJSON, item)
             }
-            dialog.dismiss()
+            dialog?.dismiss()
         }
     }
 

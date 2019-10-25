@@ -4,8 +4,8 @@ import android.content.res.Resources
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
-import androidx.recyclerview.widget.RecyclerView
 import android.view.animation.AccelerateDecelerateInterpolator
+import androidx.recyclerview.widget.RecyclerView
 
 /**
  * Recycler view item indicator. Adds round indicators at the bottom of recycler view
@@ -16,7 +16,7 @@ class ItemIndicator : RecyclerView.ItemDecoration() {
      * Active and inactive indicator colors
      */
     private val colorActive = "#FFFFFF"
-    private val colorInactive = 0x33000000
+    private val colorInactive = "#C7C7C7"
 
     private val densityPixels = Resources.getSystem().displayMetrics.density
 
@@ -90,7 +90,7 @@ class ItemIndicator : RecyclerView.ItemDecoration() {
     }
 
     private fun drawInactiveIndicators(c: Canvas, indicatorStartX: Float, indicatorPosY: Float, itemCount: Int) {
-        mPaint.color = colorInactive
+        mPaint.color = Color.parseColor(colorInactive)
 
         // width of item indicator including padding
         val itemWidth = mIndicatorItemLength + mIndicatorItemPadding

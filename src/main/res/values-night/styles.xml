@@ -1,13 +1,14 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+	<style name="MonetizrTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar"/>
+
 	<style name="FullscreenTheme" parent="MonetizrTheme">
 		<item name="windowActionBar">false</item>
 		<item name="windowNoTitle">true</item>
 		<item name="metaButtonBarStyle">?android:attr/buttonBarStyle</item>
 		<item name="metaButtonBarButtonStyle">?android:attr/buttonBarButtonStyle</item>
-		<item name="android:windowLayoutInDisplayCutoutMode">shortEdges</item>
-		<item name="colorPrimary">@color/colorPrimary</item>
-		<item name="android:colorBackground">@color/colorBackground</item>
+		<item name="colorPrimary">#F5F5F5</item>
+		<item name="android:colorBackground">#17212B</item>
 	</style>
 
 	<style name="BottomSheet" parent="@style/Widget.Design.BottomSheet.Modal">

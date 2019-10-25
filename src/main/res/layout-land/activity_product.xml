@@ -27,7 +27,7 @@
             android:layout_gravity="start"
             android:layout_marginTop="15dp"
             android:padding="15dp"
-            android:tint="@color/colorPrimary"
+            android:tint="@color/overridePrimary"
             android:src="@drawable/ic_close_black_24dp"
             tools:ignore="ContentDescription" />
     </FrameLayout>
@@ -35,6 +35,7 @@
     <FrameLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
+        android:background="@color/colorBackground"
         android:layout_weight="1">
 
         <LinearLayout
@@ -96,176 +97,216 @@
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
                 android:layout_marginStart="@dimen/default_padding"
+                android:layout_marginEnd="@dimen/default_padding"
                 android:background="@color/seperatorBackground"/>
 
             <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/productDescriptionView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingStart="@dimen/default_padding"
-                    android:paddingTop="@dimen/default_padding"
-                    android:paddingEnd="@dimen/default_padding"
-                    android:paddingBottom="80dp"
+                    android:padding="@dimen/default_padding"
                     tools:text="" />
 
             </ScrollView>
 
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:orientation="vertical">
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="10dp"
-                android:background="@color/selectorBackground"/>
-
             <LinearLayout
-                android:id="@+id/variantContainerView"
-                android:layout_width="match_parent"
-                android:layout_height="45dp"
-                android:orientation="horizontal"
-                android:paddingStart="@dimen/default_padding"
-                android:paddingEnd="0dp"
-                android:background="@color/selectorBackground">
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
                     android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/option1NameView"
+                <View
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textAllCaps="true"
-                        android:textSize="12sp"
-                        tools:text="Fit" />
+                        android:layout_height="@dimen/default_padding"
+                        android:background="@color/selectorBackground"/>
 
-                    <TextView
-                        android:id="@+id/option1ValueView"
+                <LinearLayout
+                        android:id="@+id/variantContainerView"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center_vertical"
-                        android:textAllCaps="false"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        app:autoSizeTextType="uniform"
-                        app:autoSizeMinTextSize="8sp"
-                        app:autoSizeMaxTextSize="16sp"
-                        app:autoSizeStepGranularity="2sp"
-                        tools:text="22" />
+                        android:layout_height="60dp"
+                        android:orientation="horizontal"
+                        android:paddingStart="@dimen/default_padding"
+                        android:paddingEnd="@dimen/default_padding"
+                        android:paddingBottom="@dimen/default_padding"
+                        android:background="@color/selectorBackground">
+
+                    <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                        <TextView
+                                android:id="@+id/option1NameView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textAllCaps="true"
+                                android:textSize="12sp"
+                                tools:text="Fit" />
+
+                        <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="horizontal">
+
+                            <TextView
+                                    android:id="@+id/option1ValueView"
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:gravity="center_vertical"
+                                    android:textAllCaps="false"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold"
+                                    app:autoSizeTextType="uniform"
+                                    app:autoSizeMinTextSize="8sp"
+                                    app:autoSizeMaxTextSize="16sp"
+                                    app:autoSizeStepGranularity="2sp"
+                                    android:layout_weight="1"
+                                    tools:text="22" />
+
+                            <ImageView
+                                    android:layout_width="30dp"
+                                    android:layout_height="match_parent"
+                                    android:tint="@color/overridePrimary"
+                                    android:src="@drawable/ic_keyboard_arrow_down_black_24dp"
+                                    tools:ignore="ContentDescription" />
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                        <TextView
+                                android:id="@+id/option2NameView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textAllCaps="true"
+                                android:textSize="12sp"
+                                tools:text="Fit" />
+
+                        <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="horizontal">
+
+                            <TextView
+                                    android:id="@+id/option2ValueView"
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:gravity="center_vertical"
+                                    android:lines="1"
+                                    android:textAllCaps="false"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold"
+                                    app:autoSizeTextType="uniform"
+                                    app:autoSizeMinTextSize="8sp"
+                                    app:autoSizeMaxTextSize="16sp"
+                                    app:autoSizeStepGranularity="2sp"
+                                    android:layout_weight="1"
+                                    tools:text="22" />
+
+                            <ImageView
+                                    android:layout_width="30dp"
+                                    android:layout_height="match_parent"
+                                    android:tint="@color/overridePrimary"
+                                    android:src="@drawable/ic_keyboard_arrow_down_black_24dp"
+                                    tools:ignore="ContentDescription" />
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                        <TextView
+                                android:id="@+id/option3NameView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textAllCaps="true"
+                                android:textSize="12sp"
+                                tools:text="Fit" />
+
+                        <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="horizontal">
+
+                            <TextView
+                                    android:id="@+id/option3ValueView"
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:gravity="center_vertical"
+                                    android:textAllCaps="false"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold"
+                                    app:autoSizeTextType="uniform"
+                                    app:autoSizeMinTextSize="8sp"
+                                    app:autoSizeMaxTextSize="16sp"
+                                    app:autoSizeStepGranularity="2sp"
+                                    android:layout_weight="1"
+                                    tools:text="22" />
+
+                            <ImageView
+                                    android:layout_width="30dp"
+                                    android:layout_height="match_parent"
+                                    android:tint="@color/overridePrimary"
+                                    android:src="@drawable/ic_keyboard_arrow_down_black_24dp"
+                                    tools:ignore="ContentDescription" />
+                        </LinearLayout>
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/option2NameView"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textAllCaps="true"
-                        android:textSize="12sp"
-                        tools:text="Fit" />
+                        android:layout_height="60dp"
+                        android:orientation="horizontal"
+                        android:paddingTop="@dimen/default_padding"
+                        android:paddingBottom="@dimen/default_padding">
 
-                    <TextView
-                        android:id="@+id/option2ValueView"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center_vertical"
-                        android:textAllCaps="false"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        app:autoSizeTextType="uniform"
-                        app:autoSizeMinTextSize="8sp"
-                        app:autoSizeMaxTextSize="16sp"
-                        app:autoSizeStepGranularity="2sp"
-                        tools:text="22" />
+                    <androidx.appcompat.widget.AppCompatButton
+                            android:id="@+id/checkoutButtonView"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="@string/checkout_button_title"
+                            android:textAllCaps="false"
+                            android:background="@drawable/button_background"
+                            android:layout_marginStart="@dimen/default_padding"/>
+
+                    <Space
+                            android:layout_width="@dimen/default_padding"
+                            android:layout_height="match_parent" />
+
+                    <androidx.appcompat.widget.AppCompatImageButton
+                            android:id="@+id/payButtonView"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:padding="12dp"
+                            android:src="@drawable/google_pay_logo"
+                            android:layout_marginEnd="@dimen/default_padding"/>
 
                 </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/option3NameView"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textAllCaps="true"
-                        android:textSize="12sp"
-                        tools:text="Fit" />
-
-                    <TextView
-                        android:id="@+id/option3ValueView"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center_vertical"
-                        android:textAllCaps="false"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        app:autoSizeTextType="uniform"
-                        app:autoSizeMinTextSize="8sp"
-                        app:autoSizeMaxTextSize="16sp"
-                        app:autoSizeStepGranularity="2sp"
-                        tools:text="22" />
-
-                </LinearLayout>
-
-
-                <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/ic_navigate_next_black_24dp"
-                    tools:ignore="ContentDescription" />
 
             </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:orientation="horizontal"
-                android:padding="@dimen/default_padding">
-
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/checkoutButtonView"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="@string/checkout_button_title"
-                    android:textAllCaps="false"/>
-
-                <Space
-                    android:layout_width="@dimen/default_padding"
-                    android:layout_height="match_parent" />
-
-                <androidx.appcompat.widget.AppCompatImageButton
-                    android:id="@+id/payButtonView"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:padding="12dp"
-                    android:src="@drawable/google_pay_logo" />
-
-            </LinearLayout>
-
         </LinearLayout>
+
 
     </FrameLayout>
 

@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/rootView"
+    android:background="@color/colorBackground"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -32,7 +33,7 @@
                 android:layout_gravity="start"
                 android:layout_marginTop="15dp"
                 android:padding="15dp"
-                android:tint="@color/colorPrimary"
+                android:tint="@color/overridePrimary"
                 android:src="@drawable/ic_close_black_24dp"
                 tools:ignore="ContentDescription" />
         </FrameLayout>
@@ -41,14 +42,14 @@
             android:id="@+id/slider_root"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="?android:attr/colorBackground">
+            android:background="@color/colorBackground">
 
             <LinearLayout
                 android:id="@+id/viewBottom"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:background="?android:attr/colorBackground">
+                android:background="@color/colorBackground">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -103,6 +104,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="2dp"
                     android:layout_marginStart="@dimen/default_padding"
+                    android:layout_marginEnd="@dimen/default_padding"
                     android:background="@color/seperatorBackground"/>
 
                 <TextView
@@ -129,21 +131,22 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_gravity="bottom"
-        android:background="?android:attr/colorBackground"
+        android:background="@color/colorBackground"
         android:orientation="vertical">
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="10dp"
+            android:layout_height="@dimen/default_padding"
             android:background="@color/selectorBackground"/>
 
         <LinearLayout
             android:id="@+id/variantContainerView"
             android:layout_width="match_parent"
-            android:layout_height="45dp"
+            android:layout_height="60dp"
             android:orientation="horizontal"
             android:paddingStart="@dimen/default_padding"
-            android:paddingEnd="0dp"
+            android:paddingEnd="@dimen/default_padding"
+            android:paddingBottom="@dimen/default_padding"
             android:background="@color/selectorBackground">
 
             <LinearLayout
@@ -161,19 +164,33 @@
                     android:textSize="12sp"
                     tools:text="Fit" />
 
-                <TextView
-                    android:id="@+id/option1ValueView"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:textAllCaps="false"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    app:autoSizeTextType="uniform"
-                    app:autoSizeMinTextSize="8sp"
-                    app:autoSizeMaxTextSize="16sp"
-                    app:autoSizeStepGranularity="2sp"
-                    tools:text="22" />
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/option1ValueView"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:textAllCaps="false"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        app:autoSizeTextType="uniform"
+                        app:autoSizeMinTextSize="8sp"
+                        app:autoSizeMaxTextSize="16sp"
+                        app:autoSizeStepGranularity="2sp"
+                        android:layout_weight="1"
+                        tools:text="22" />
+
+                        <ImageView
+                            android:layout_width="30dp"
+                            android:layout_height="match_parent"
+                            android:tint="@color/overridePrimary"
+                            android:src="@drawable/ic_keyboard_arrow_down_black_24dp"
+                            tools:ignore="ContentDescription" />
+                </LinearLayout>
 
             </LinearLayout>
 
@@ -193,20 +210,34 @@
                     android:textSize="12sp"
                     tools:text="Fit" />
 
-                <TextView
-                    android:id="@+id/option2ValueView"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:lines="1"
-                    android:textAllCaps="false"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    app:autoSizeTextType="uniform"
-                    app:autoSizeMinTextSize="8sp"
-                    app:autoSizeMaxTextSize="16sp"
-                    app:autoSizeStepGranularity="2sp"
-                    tools:text="22" />
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/option2ValueView"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:lines="1"
+                        android:textAllCaps="false"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        app:autoSizeTextType="uniform"
+                        app:autoSizeMinTextSize="8sp"
+                        app:autoSizeMaxTextSize="16sp"
+                        app:autoSizeStepGranularity="2sp"
+                        android:layout_weight="1"
+                        tools:text="22" />
+
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="match_parent"
+                        android:tint="@color/overridePrimary"
+                        android:src="@drawable/ic_keyboard_arrow_down_black_24dp"
+                        tools:ignore="ContentDescription" />
+                </LinearLayout>
 
             </LinearLayout>
 
@@ -225,28 +256,34 @@
                     android:textSize="12sp"
                     tools:text="Fit" />
 
-                <TextView
-                    android:id="@+id/option3ValueView"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:textAllCaps="false"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    app:autoSizeTextType="uniform"
-                    app:autoSizeMinTextSize="8sp"
-                    app:autoSizeMaxTextSize="16sp"
-                    app:autoSizeStepGranularity="2sp"
-                    tools:text="22" />
+                    android:orientation="horizontal">
 
+                    <TextView
+                        android:id="@+id/option3ValueView"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:textAllCaps="false"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        app:autoSizeTextType="uniform"
+                        app:autoSizeMinTextSize="8sp"
+                        app:autoSizeMaxTextSize="16sp"
+                        app:autoSizeStepGranularity="2sp"
+                        android:layout_weight="1"
+                        tools:text="22" />
+
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="match_parent"
+                        android:tint="@color/overridePrimary"
+                        android:src="@drawable/ic_keyboard_arrow_down_black_24dp"
+                        tools:ignore="ContentDescription" />
+                </LinearLayout>
             </LinearLayout>
-
-
-            <ImageView
-                android:layout_width="30dp"
-                android:layout_height="match_parent"
-                android:src="@drawable/ic_navigate_next_black_24dp"
-                tools:ignore="ContentDescription" />
 
         </LinearLayout>
 
@@ -254,7 +291,8 @@
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:orientation="horizontal"
-            android:padding="@dimen/default_padding">
+            android:paddingTop="@dimen/default_padding"
+            android:paddingBottom="@dimen/default_padding">
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/checkoutButtonView"
@@ -263,7 +301,9 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/checkout_button_title"
-                android:textAllCaps="false" />
+                android:textAllCaps="false"
+                android:background="@drawable/button_background"
+                android:layout_marginStart="@dimen/default_padding"/>
 
             <Space
                 android:layout_width="@dimen/default_padding"
@@ -275,7 +315,8 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:padding="12dp"
-                android:src="@drawable/google_pay_logo" />
+                android:src="@drawable/google_pay_logo"
+                android:layout_marginEnd="@dimen/default_padding"/>
 
         </LinearLayout>
 
