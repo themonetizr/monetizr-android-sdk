@@ -34,5 +34,6 @@
 	<string name="confirm_total_with_shipping">Total: %1$s</string>
 
     <string name="back">Back</string>
+	<string name="cancel">Cancel</string>
     <string name="selected">Selected:</string>
 </resources>

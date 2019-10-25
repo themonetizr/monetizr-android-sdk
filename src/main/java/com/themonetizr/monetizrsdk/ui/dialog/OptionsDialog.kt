@@ -59,6 +59,9 @@ class OptionsDialog : DialogFragment() {
                 dismiss()
             }
         }
+        closeOptionsView.setOnClickListener{
+            dismiss()
+        }
     }
 
     private fun onLevelNavigate(list: List<HierarchyVariant>) {
@@ -86,6 +89,7 @@ class OptionsDialog : DialogFragment() {
     private fun invalidateSelectTitle() {
         if (selected.isEmpty()) {
             selectedView.visibility = View.GONE
+            backView.visibility = View.INVISIBLE
 
             return
         }
@@ -99,6 +103,7 @@ class OptionsDialog : DialogFragment() {
 
         selectedView.visibility = View.VISIBLE
         selectedView.text = builder.toString()
+        backView.visibility = View.VISIBLE
     }
 
     companion object {
