@@ -40,6 +40,8 @@ class HierarchyVariant {
 
 
     companion object {
+        var maxOptionsLevel: Int = 0
+
         private fun buildChilds(level: Int, parent: HierarchyVariant?, parents: HashSet<HierarchyVariant>?, variants: ArrayList<Variant>): ArrayList<HierarchyVariant> {
             val result = ArrayList<HierarchyVariant>()
 
@@ -79,17 +81,18 @@ class HierarchyVariant {
             val result: HashSet<HierarchyVariant> = HashSet()
             if (variants.isEmpty() == false) {
                 val first = variants[0]
-                val levels = getMaxLevel(first)
+                val level = getMaxLevel(first)
+                maxOptionsLevel = level
 
-                if (levels > 0) {
+                if (level > 0) {
                     result.addAll(buildChilds(0, null, null, variants))
                 }
-                if (levels > 1) {
+                if (level > 1) {
                     for (item in result) {
                         item.childs.addAll(buildChilds(1, item, result, variants))
                     }
                 }
-                if (levels > 2) {
+                if (level > 2) {
                     for (item in result) {
                         for (childItem in item.childs) {
                             childItem.childs.addAll(buildChilds(2, childItem, item.childs, variants))

@@ -8,6 +8,7 @@ class Product {
     val description: String
     val descriptionIos: String
     val descriptionHtml: String
+    val maxOptionsLevel: Int
 
     val buttonTitle: String?
     val onlineStoreUrl: String?
@@ -74,6 +75,7 @@ class Product {
         }
 
         this.variantHierarchy = HierarchyVariant.buildStructure(variants)
+        this.maxOptionsLevel = HierarchyVariant.maxOptionsLevel
     }
 
     public fun getFirstVariant(): Variant? {

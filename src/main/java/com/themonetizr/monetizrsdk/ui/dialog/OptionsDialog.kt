@@ -50,6 +50,7 @@ class OptionsDialog : DialogFragment() {
         val layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         listView.layoutManager = layoutManager
         listView.adapter = adapter
+        adapter.setMaxOptionsLevel(product.maxOptionsLevel)
 
         adapter.goTo(hierarchyList)
         backView.setOnClickListener {
