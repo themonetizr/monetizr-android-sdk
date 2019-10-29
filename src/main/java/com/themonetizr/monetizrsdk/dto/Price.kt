@@ -1,8 +1,9 @@
 package com.themonetizr.monetizrsdk.dto
 
 import org.json.JSONObject
+import java.io.Serializable
 
-class Price {
+class Price : Serializable{
     val currencyCode: String
     val amount: Int
     val currency: String

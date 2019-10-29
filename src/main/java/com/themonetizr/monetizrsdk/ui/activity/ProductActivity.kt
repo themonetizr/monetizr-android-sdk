@@ -33,6 +33,7 @@ import com.themonetizr.monetizrsdk.ui.dialog.ShippingRateDialogListener
 import com.themonetizr.monetizrsdk.ui.helpers.ProgressDialogBuilder
 import kotlinx.android.synthetic.main.activity_product.*
 import org.json.JSONObject
+import java.io.Serializable
 
 class ProductActivity : AppCompatActivity(), ShippingRateDialogListener, OptionsDialogListener {
     private var userMadeInteraction: Boolean = false
@@ -40,6 +41,7 @@ class ProductActivity : AppCompatActivity(), ShippingRateDialogListener, Options
     private lateinit var paymentsClient: PaymentsClient
     private val selectedOptions: ArrayList<String> = ArrayList()
     private var progressDialog: AlertDialog? = null
+    private var chosenVariant: Variant? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,12 +62,18 @@ class ProductActivity : AppCompatActivity(), ShippingRateDialogListener, Options
 
         if (product.variants.isEmpty() == false) {
             variantContainerView.isEnabled = true
-            val first = product.getFirstVariant()!!
+            var first = product.getFirstVariant()!!
+
+            // On orientation change chosen variant is being saved so it can be restored
+            if (savedInstanceState?.containsKey(CHOSEN_VARIANT_KEY) != null ) {
+                first = savedInstanceState.getSerializable(CHOSEN_VARIANT_KEY) as Variant
+            }
+            this.chosenVariant = first
             initProductPriceTitle(first)
             initProductVariantsTitle(first)
             initDefaultSelected(first)
         } else {
-            variantContainerView.isEnabled = true
+            variantContainerView.isEnabled = false
         }
 
         productTitleView.text = product.title
@@ -117,6 +125,7 @@ class ProductActivity : AppCompatActivity(), ShippingRateDialogListener, Options
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState?.putStringArrayList(SELECTED_OPTIONS_KEY, selectedOptions)
+        outState?.putSerializable(CHOSEN_VARIANT_KEY, this.chosenVariant as Serializable)
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
@@ -166,6 +175,7 @@ class ProductActivity : AppCompatActivity(), ShippingRateDialogListener, Options
             selectedOptions.add(option.id)
         }
         initProductVariantsValues(selectedOptions)
+        updateProductPriceValues()
     }
 
     override fun onShippingRateSelect(paymentData: String, checkout: JSONObject, shippingRate: ShippingRate) {
@@ -290,8 +300,12 @@ class ProductActivity : AppCompatActivity(), ShippingRateDialogListener, Options
 
     private fun initProductPriceTitle(variant: Variant) {
         productPriceView.text = variant.priceV2.formatString()
-        productDiscountView.text = variant.priceV2.formatString()
-        productDiscountView.paintFlags = productDiscountView.paintFlags or STRIKE_THRU_TEXT_FLAG
+        if (variant.compareAtPriceV2 != null) {
+            productDiscountView.text = variant.compareAtPriceV2?.formatString()
+            productDiscountView.paintFlags = productDiscountView.paintFlags or STRIKE_THRU_TEXT_FLAG
+        } else {
+            productDiscountView.text = ""
+        }
     }
 
     private fun initProductVariantsTitle(variant: Variant) {
@@ -346,6 +360,16 @@ class ProductActivity : AppCompatActivity(), ShippingRateDialogListener, Options
         }
     }
 
+    private fun updateProductPriceValues() {
+        val json = intent.getStringExtra(Parameters.PRODUCT_JSON)!!
+        val selectedVariant = searchSelectedVariant(JSONObject(json))
+        if (selectedVariant != null) {
+            val variant = Variant(selectedVariant)
+            this.chosenVariant = variant
+            initProductPriceTitle(variant)
+        }
+    }
+
     private fun initCheckoutTitle(product: Product) {
         if (product.buttonTitle != null && product.buttonTitle.isNotEmpty()) {
             checkoutButtonView.text = product.buttonTitle
@@ -353,7 +377,7 @@ class ProductActivity : AppCompatActivity(), ShippingRateDialogListener, Options
     }
 
     private fun showOptionDialog(product: String) {
-        val fragment = OptionsDialog.newInstance(product)
+        val fragment = OptionsDialog.newInstance(product, selectedOptions)
         fragment.show(supportFragmentManager, "Option")
     }
 
@@ -440,6 +464,7 @@ class ProductActivity : AppCompatActivity(), ShippingRateDialogListener, Options
         var firstCheckout: Boolean = true
         const val LOAD_PAYMENT_DATA_REQUEST_CODE = 991
         const val SELECTED_OPTIONS_KEY = "SELECTED_OPTIONS_KEY"
+        const val CHOSEN_VARIANT_KEY = "CHOSEN_VARIANT_KEY"
 
         fun start(context: Context, productJson: String, productTag: String) {
             val starter = Intent(context, ProductActivity::class.java)

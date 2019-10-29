@@ -1,14 +1,15 @@
 package com.themonetizr.monetizrsdk.dto
 
 import org.json.JSONObject
+import java.io.Serializable
 
-class Variant {
+class Variant: Serializable {
     private val id: String
     private val product: ProductShort
     val title: String
     val selectedOptions: ArrayList<Option>
     val priceV2: Price
-    private val compareAtPriceV2: Price?
+    val compareAtPriceV2: Price?
     private val image: String
 
     constructor(json: JSONObject) {

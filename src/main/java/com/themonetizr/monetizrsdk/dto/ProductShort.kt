@@ -1,8 +1,9 @@
 package com.themonetizr.monetizrsdk.dto
 
 import org.json.JSONObject
+import java.io.Serializable
 
-class ProductShort {
+class ProductShort: Serializable {
     val title: String
     val description: String
     val descriptionHtml: String

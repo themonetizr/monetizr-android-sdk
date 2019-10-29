@@ -2,8 +2,9 @@ package com.themonetizr.monetizrsdk.dto
 
 import org.json.JSONArray
 import org.json.JSONObject
+import java.io.Serializable
 
-class Option {
+class Option: Serializable {
     val name: String
     val values: ArrayList<String>
     val value: String

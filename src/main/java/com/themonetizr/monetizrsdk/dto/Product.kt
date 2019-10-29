@@ -78,7 +78,7 @@ class Product {
         this.maxOptionsLevel = HierarchyVariant.maxOptionsLevel
     }
 
-    public fun getFirstVariant(): Variant? {
+    fun getFirstVariant(): Variant? {
         return if (variants.size > 0) {
             variants[0]
         } else {

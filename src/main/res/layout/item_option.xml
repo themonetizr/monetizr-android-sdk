@@ -47,6 +47,14 @@
             android:src="@drawable/ic_navigate_next_black_24dp"
             android:tint="@color/overridePrimary"
             tools:ignore="ContentDescription" />
+        <ImageView
+            android:id="@+id/optionSelectedIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_check_black_24dp"
+            android:tint="@color/accentColor"
+            android:visibility="gone"
+            tools:ignore="ContentDescription" />
     </LinearLayout>
 
     <View

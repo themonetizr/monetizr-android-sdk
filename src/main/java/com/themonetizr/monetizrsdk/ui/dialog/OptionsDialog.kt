@@ -16,6 +16,7 @@ import com.themonetizr.monetizrsdk.misc.Parameters
 import com.themonetizr.monetizrsdk.ui.adapter.OptionAdapter
 import kotlinx.android.synthetic.main.dialog_options.*
 import org.json.JSONObject
+import java.io.Serializable
 
 class OptionsDialog : DialogFragment() {
     private val selected: ArrayList<HierarchyVariant> = ArrayList()
@@ -45,12 +46,14 @@ class OptionsDialog : DialogFragment() {
         val json = arguments!!.getString(Parameters.PRODUCT_JSON)
         val product = Product(JSONObject(json))
         val hierarchyList = product.variantHierarchy.toList()
+        val selectedOptions = arguments!!.getSerializable(Parameters.SELECTED_OPTIONS) as ArrayList<String>
 
         val adapter = OptionAdapter(::onItemNavigate, ::onLevelNavigate)
         val layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         listView.layoutManager = layoutManager
         listView.adapter = adapter
         adapter.setMaxOptionsLevel(product.maxOptionsLevel)
+        adapter.setSelectedOptions(selectedOptions)
 
         adapter.goTo(hierarchyList)
         backView.setOnClickListener {
@@ -108,10 +111,11 @@ class OptionsDialog : DialogFragment() {
     }
 
     companion object {
-        fun newInstance(product: String): OptionsDialog {
+        fun newInstance(product: String, selectedOptions: ArrayList<String>): OptionsDialog {
             val args = Bundle()
             val fragment = OptionsDialog()
             args.putString(Parameters.PRODUCT_JSON, product)
+            args.putSerializable(Parameters.SELECTED_OPTIONS, selectedOptions as Serializable)
             fragment.arguments = args
             return fragment
         }
