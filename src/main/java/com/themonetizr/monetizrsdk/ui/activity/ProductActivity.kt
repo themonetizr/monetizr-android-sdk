@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
 import android.graphics.Paint.STRIKE_THRU_TEXT_FLAG
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -251,7 +250,11 @@ class ProductActivity : AppCompatActivity(), ShippingRateDialogListener, Options
 
     private fun showProductView(url: String?) {
         try {
-            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+            val starter = Intent(this@ProductActivity, CheckoutViewActivity::class.java)
+            starter.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+            starter.putExtra(CheckoutViewActivity.WEBSITE_ADDRESS, url)
+            startActivity(starter)
+
         } catch (error: Throwable) {
         }
     }

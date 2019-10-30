@@ -2,6 +2,7 @@
 	<string name="app_name">MonetizrBuySdk</string>
 
 	<string name="title_activity_product">ProductActivity</string>
+	<string name="title_activity_checkout">CheckoutActivity</string>
 	<string name="variant_not_found">Sorry, chosen product variant is not available in store!</string>
 	<string name="error_while_checkout">Sorry, product checkout was not successful</string>
 	<string name="checkout_button_title">Checkout</string>
@@ -33,7 +34,8 @@
 	<string name="confirm_total_without_shipping">Total without shipping: %1$s</string>
 	<string name="confirm_total_with_shipping">Total: %1$s</string>
 
-    <string name="back">Back</string>
+	<string name="back">Back</string>
 	<string name="cancel">Cancel</string>
-    <string name="selected">Selected:</string>
+	<string name="selected">Selected:</string>
+	<string name="title_activity_checkout_view">CheckoutViewActivity</string>
 </resources>

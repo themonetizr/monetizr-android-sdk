@@ -1,22 +1,33 @@
 <resources>
 
-    <style name="MonetizrTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar"/>
+	<style name="MonetizrTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar" />
 
-    <style name="FullscreenTheme" parent="MonetizrTheme">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-        <item name="metaButtonBarStyle">?android:attr/buttonBarStyle</item>
-        <item name="metaButtonBarButtonStyle">?android:attr/buttonBarButtonStyle</item>
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="android:colorBackground">@color/colorBackground</item>
-    </style>
+	<style name="FullscreenTheme" parent="MonetizrTheme">
+		<item name="windowActionBar">false</item>
+		<item name="windowNoTitle">true</item>
+		<item name="metaButtonBarStyle">?android:attr/buttonBarStyle</item>
+		<item name="metaButtonBarButtonStyle">?android:attr/buttonBarButtonStyle</item>
+		<item name="colorPrimary">@color/colorPrimary</item>
+		<item name="android:colorBackground">@color/colorBackground</item>
+	</style>
 
-    <style name="BottomSheet" parent="@style/Widget.Design.BottomSheet.Modal">
-        <item name="android:background">@drawable/dialog_sheet_background</item>
-    </style>
+	<style name="BottomSheet" parent="@style/Widget.Design.BottomSheet.Modal">
+		<item name="android:background">@drawable/dialog_sheet_background</item>
+	</style>
 
-    <style name="BottomSheetDialogTheme" parent="@style/Theme.Design.Light.BottomSheetDialog">
-        <item name="android:windowIsFloating">false</item>
-        <item name="bottomSheetStyle">@style/BottomSheet</item>
-    </style>
+	<style name="BottomSheetDialogTheme" parent="@style/Theme.Design.Light.BottomSheetDialog">
+		<item name="android:windowIsFloating">false</item>
+		<item name="bottomSheetStyle">@style/BottomSheet</item>
+	</style>
+
+	<style name="AppTheme" parent="Theme.MaterialComponents.Light" />
+
+	<style name="AppTheme.NoActionBar">
+		<item name="windowActionBar">false</item>
+		<item name="windowNoTitle">true</item>
+	</style>
+
+	<style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+	<style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>
