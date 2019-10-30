@@ -42,19 +42,16 @@
 
 		<activity
 				android:name=".ui.activity.ProductActivity"
-				android:configChanges="orientation"
 				android:label="@string/title_activity_product"
 				android:theme="@style/FullscreenTheme"
 				android:windowSoftInputMode="adjustResize" />
 		<activity
 				android:name=".ui.activity.ProductViewActivity"
-				android:configChanges="orientation"
 				android:label="@string/title_activity_product"
 				android:theme="@style/FullscreenTheme"
 				android:windowSoftInputMode="adjustResize" />
 		<activity
 				android:name=".ui.activity.CheckoutViewActivity"
-				android:configChanges="orientation"
 				android:label="@string/title_activity_checkout"
 				android:theme="@style/FullscreenTheme"
 				android:windowSoftInputMode="adjustResize" />
