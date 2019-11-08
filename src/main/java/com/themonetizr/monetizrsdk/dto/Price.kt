@@ -2,13 +2,14 @@ package com.themonetizr.monetizrsdk.dto
 
 import org.json.JSONObject
 import java.io.Serializable
+import java.math.BigDecimal
 
 class Price : Serializable{
     val currencyCode: String
-    val amount: Int
+    val amount: Float
     val currency: String
 
-    constructor(currencyCode: String, amount: Int, currency: String) {
+    constructor(currencyCode: String, amount: Float, currency: String) {
         this.currencyCode = currencyCode
         this.amount = amount
         this.currency = currency
@@ -22,9 +23,9 @@ class Price : Serializable{
         }
 
         if (json.has("amount")) {
-            this.amount = json.getInt("amount")
+            this.amount =  BigDecimal.valueOf(json.getDouble("amount")).toFloat()
         } else {
-            this.amount = 0
+            this.amount = 0.00.toFloat()
         }
 
         if (json.has("currency")) {

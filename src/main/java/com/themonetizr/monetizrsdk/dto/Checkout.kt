@@ -19,7 +19,7 @@ class Checkout {
         ) {
             val array = checkOut.getJSONObject("availableShippingRates").getJSONArray("shippingRates")
 
-            for (i in 0..array.length()) {
+            for (i in 0..array.length() -1) {
                 val obj = array.getJSONObject(i)
                 val rate = ShippingRate(obj)
                 this.shippingRates.add(rate)

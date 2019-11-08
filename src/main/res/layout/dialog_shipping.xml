@@ -12,7 +12,6 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="15dp"
-        android:background="@color/colorBackground"
         tools:ignore="UselessParent">
 
         <TextView
@@ -20,7 +19,6 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:text="@string/confirm_dialog"
-            android:textColor="@color/colorPrimary"
             android:textSize="18sp" />
 
         <View
@@ -35,7 +33,6 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:text="@string/confirm_price"
-            android:textColor="@color/colorPrimary"
             android:textSize="16sp" />
 
         <TextView
@@ -44,13 +41,11 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:text="@string/confirm_tax"
-            android:textColor="@color/colorPrimary"
             android:textSize="16sp" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1px"
-            android:background="@color/selectorBackground"
             android:layout_marginBottom="10dp" />
 
         <TextView
@@ -59,13 +54,11 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:text="@string/confirm_total_without_shipping"
-            android:textColor="@color/colorPrimary"
             android:textSize="16sp" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1px"
-            android:background="@color/selectorBackground"
             android:layout_marginBottom="10dp"/>
 
         <TextView
@@ -74,7 +67,6 @@
             android:layout_marginBottom="10dp"
             android:text="@string/confirm_shipping_rates"
             android:textSize="16sp"
-            android:textColor="@color/colorPrimary"
             app:autoSizeTextType="uniform" />
 
         <androidx.recyclerview.widget.RecyclerView
@@ -86,7 +78,6 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1px"
-            android:background="@color/selectorBackground"
             android:layout_marginBottom="10dp" />
 
         <TextView
@@ -95,7 +86,6 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:text="@string/confirm_total_with_shipping"
-            android:textColor="@color/colorPrimary"
             android:textSize="16sp" />
 
         <com.google.android.material.button.MaterialButton
@@ -106,7 +96,6 @@
             android:gravity="center"
             android:paddingStart="@dimen/default_padding"
             android:paddingEnd="@dimen/default_padding"
-            android:textColor="@color/colorPrimary"
             android:text="@string/confirm_button" />
 
     </LinearLayout>

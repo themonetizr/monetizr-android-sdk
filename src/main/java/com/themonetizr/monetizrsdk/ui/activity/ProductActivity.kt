@@ -14,6 +14,7 @@ import com.android.volley.Request
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.wallet.*
 import com.themonetizr.monetizrsdk.ClearedService
+import com.themonetizr.monetizrsdk.MonetizrSdk
 import com.themonetizr.monetizrsdk.MonetizrSdk.Companion.logError
 import com.themonetizr.monetizrsdk.R
 import com.themonetizr.monetizrsdk.api.Telemetrics
@@ -56,6 +57,7 @@ class ProductActivity : AppCompatActivity(), ShippingRateDialogListener, Options
         val product = Product(productJson)
 
         initImageAdapter(product.images)
+        // Show Google Pay if it is available in specified country
         initGooglePayButton()
         initCheckoutTitle(product)
 
@@ -198,6 +200,7 @@ class ProductActivity : AppCompatActivity(), ShippingRateDialogListener, Options
 
         WebApi.getInstance(this).makeRequest(url, Request.Method.POST, body, apiKey, {
             hideProgressDialog()
+            MonetizrSdk.logError("success response for checkoutwith payment" + it.toString())
             finish()
         }, {
             hideProgressDialog()

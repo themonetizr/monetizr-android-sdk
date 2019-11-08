@@ -16,9 +16,11 @@ class CheckoutBody {
             jsonBody.put("language", language)
             jsonBody.put("quantity", 1)
 
-            if (withPayment != null && withPayment.shippingAddress != null) {
-                val it = withPayment.shippingAddress!!
-                val info = ShippingAddressInto(it.name, it.name, it.address1, it.address2, it.locality, it.administrativeArea, it.countryCode, it.postalCode)
+
+            if (withPayment != null) {
+                val paymentJson = JSONObject(withPayment?.toJson())
+                val it = paymentJson.getJSONObject("shippingAddress")
+                val info = ShippingAddressInto(it.getString("name"), it.getString("name"), it.getString("address1"), it.getString("address2"), it.getString("locality"), it.getString("administrativeArea"), it.getString("countryCode"), it.getString("postalCode"))
                 jsonBody.put("shippingAddress", info.getJsonObject())
             }
 

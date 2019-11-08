@@ -13,5 +13,5 @@
 
 	<!-- Drawables ignore primary color and use one from material design -->
 	<color name="overridePrimary">#222222</color>
-
+	<color name="white">#FFF</color>
 </resources>

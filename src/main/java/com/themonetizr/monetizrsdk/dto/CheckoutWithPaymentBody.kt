@@ -22,20 +22,20 @@ class CheckoutWithPaymentBody {
             billingAddress.put("zip", billingAddressData.getString("postalCode"))
 
             val jsonBody = JSONObject()
-            val checkoutId = checkoutInfo.getJSONObject("data").getJSONObject("checkoutCreate").getJSONObject("checkout").getString("id")
+            val checkoutId = checkoutInfo.getString("id")
             val paymentToken = paymentMethodData.getJSONObject("tokenizationData").getString("token")
 
             val totalPrice = if (variantForCheckout != null) {
-                variantForCheckout.getJSONObject("priceV2").getString("amount")
+                checkoutInfo.getJSONObject("totalPriceV2").getString("amount")
             } else {
                 "0"
             }
 
             val paymentAmount = JSONObject()
 
-            if (chosenShippingRate.firstPrice() != null) {
-                paymentAmount.put("amount", totalPrice.toDouble() + chosenShippingRate.firstPrice()!!.amount.toDouble())
-                paymentAmount.put("currencyCode", chosenShippingRate.firstPrice()!!.currencyCode)
+            if (chosenShippingRate.price != null) {
+                paymentAmount.put("amount", totalPrice.toDouble() + chosenShippingRate.price!!.amount.toDouble())
+                paymentAmount.put("currencyCode", chosenShippingRate.price!!.currencyCode)
             }
 
             jsonBody.put("checkoutId", checkoutId)

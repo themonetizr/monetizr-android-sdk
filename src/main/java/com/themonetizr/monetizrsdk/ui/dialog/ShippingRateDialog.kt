@@ -27,7 +27,7 @@ class ShippingRateDialog : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        this.isCancelable = false
+//        this.isCancelable = false
         val paymentData = arguments!!.getString(Parameters.PAYMENT_DATA)!!
         val checkoutJSON = JSONObject(arguments!!.getString(Parameters.CHECKOUT))
         val checkout = Checkout(checkoutJSON)
@@ -43,6 +43,7 @@ class ShippingRateDialog : BottomSheetDialogFragment() {
                 val item = adapter.getSelectedItem()
                 listener?.onShippingRateSelect(paymentData, checkoutJSON, item)
             }
+
             dialog?.dismiss()
         }
     }

@@ -318,6 +318,8 @@
                 android:layout_weight="1"
                 android:padding="12dp"
                 android:src="@drawable/google_pay_logo"
+                android:background="#FFF"
+                android:visibility="gone"
                 android:layout_marginEnd="@dimen/default_padding"/>
 
         </LinearLayout>

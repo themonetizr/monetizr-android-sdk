@@ -3,7 +3,7 @@ package com.themonetizr.monetizrsdk.ui.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.CheckBox
+import android.widget.RadioButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.themonetizr.monetizrsdk.R
@@ -23,7 +23,7 @@ class ShippingRateAdapter(private val items: ArrayList<ShippingRate>) : Recycler
         val item = items[position]
         holder.checkView.isChecked = current == position
         holder.titleView.text = item.title
-        holder.textView.text = item.price[0].formatString()
+//        holder.textView.text = item.price[0].formatString()
     }
 
     override fun getItemCount(): Int {
@@ -35,7 +35,7 @@ class ShippingRateAdapter(private val items: ArrayList<ShippingRate>) : Recycler
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
-        var checkView: CheckBox = itemView.findViewById(R.id.checkboxView)
+        var checkView: RadioButton = itemView.findViewById(R.id.checkboxView)
         var titleView: TextView = itemView.findViewById(R.id.titleView)
         var textView: TextView = itemView.findViewById(R.id.textView)
 
