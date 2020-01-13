@@ -145,7 +145,7 @@ One call will invoke one reward window. Whenever you are ready to show reward wi
 
 
 ```kotlin
-MonetizrSdk.showProductForTag("monetizr-sample-t-shirt")
+MonetizrSdk.showProductForTag("Monetizr Sample T-Shirt")
 
 MonetizrSdk.showProductForTag("30-credits")
 
