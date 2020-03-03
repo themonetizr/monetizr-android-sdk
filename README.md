@@ -1,34 +1,22 @@
-# Monetizr Android SDK library
-
 ## What is Monetizr?
-
- Monetizr is a game reward engine, we drive revenue to your business and enhance the experience of your players!
-   
- Monetizr rewards your users with an opportunity to unlock and buy your own game merchandise (t-shirts, hats, 3d-figurines, decals, and 40+ other products),
- gift cards (Amazon, Apple, etc.), and even brand sponsored rewards (from brands that fit your core audience and goes well 
- with the narrative of the game). How you want to monetize, you decide!
+Monetizr is a turn-key platform for game developers enabling to sell or give-away game gear right inside the game's UI. You can use this SDK in your game to let players purchase products or claim gifts within the game.  All orders made with Monetizr automatically initiates fulfillment and shipping. More info: https://docs.themonetizr.com/docs/get-started.
  
 ## Monetizr Android SDK
+Monetizr Android SDK is a plugin with the built-in functionality of:
+- showing image carousel and fullscreen pictures in offers to end-users;
+- HTML texts for descriptions;
+- allowing end-users to select product variant options;
+- displaying price in real or in-game currency (including discounts);
+- checkout and payment support;
+- Google Pay support (optional).
 
-Monetizr Android SDK is a library project built upon Monetizr RESTful API to allow smoother integration with Monetizr
+Monetizr uses oAuth 2 authentication behind the scenes for all payment and order related processes. The SDK takes care of managing oAuth 2. To use SDK and connect to Monetizr servers, all you need is a single API key. It can be retrieved via Monetizr web [Console][3]. API is a public two-way, it does not expose any useful information, but you should be aware of this.
 
-Monetizr SDK is written using singleton pattern (or anti-pattern). The choice was obvious, it allows easier integration and does not require hardcore set-up.
+Read the Monetizr's [android documentation][2] to find out more.
 
-You can find instructions on building the project in [README.md][1] and in integration documentation [Docs][2].
-
-### Setting up
-
-Monetizr SDK is published using jCenter. You can, of course download/clone repozitory and add it as a module dependecy to your project.
-
-Monetizr is providing a per-client based API key`s. We are using oAuth 2 authentication and simplifying that for our client SDKs.
-API is a public two-way, that does not expose any useful information, but still be aware of this limitation.
-API settings are being provided in-application.
-
-Library can be added to your project in couple of ways.
- 
-**1. First approach (suggested)**
-
-Use Gradle:
+## Installation
+### Option 1 (suggested)
+**Gradle:**
 
 ```gradle
 repositories {
@@ -41,56 +29,39 @@ dependencies {
 }
 ```
 
-Or Maven:
+**Or Maven:**
 
 ```xml
 <dependency>
-	<groupId>io.monetizr.monetizrsdk</groupId>
-	<artifactId>MonetizrSDK</artifactId>
-	<version>1.0.0</version>
-	<type>pom</type>
+    <groupId>io.monetizr.monetizrsdk</groupId>
+    <artifactId>MonetizrSDK</artifactId>
+    <version>1.0.0</version>
+    <type>pom</type>
 </dependency>
 ```
  
-**2. Second approach**
+### Option 2
+ * Open your project in Android Studio;
+ * Download the library using Git, or a zip archive to unzip;
+ * Go to File > Import Module and import the library as a module;
+ * Right-click your app in project view and select "Open Module Settings";
+ * Click the "Dependencies" tab and then the '+' button;
+ * Select "Module Dependency";
+ * Select "Library Project";
+ * Modify the library if necessary.
 
- * Open your project in Android Studio
-
- * Download the library (using Git, or a zip archive to unzip)
-   
- * Go to File > Import Module and import the library as a module
-
- * Right-click your app in project view and select "Open Module Settings"
-
- * Click the "Dependencies" tab and then the '+' button
-
- * Select "Module Dependency"
-
- * Select "Library Project"
-
- * Modify the library if you want to
-
-
-**3. Third approach**
-
- * Open your project in Android Studio
-
- * Download the library (using Git, or a zip archive to unzip)
-
- * Create a folder "subProject" in your project
-
- * Copy and paste the library folder to your subProject folder
-
- * On the root of your project directory create/modify the settings.gradle file. It should contain something like the following:
-
+### Option 3
+ * Open your project in Android Studio;
+ * Download the library using Git, or a zip archive to unzip;
+ * Create a folder "subProject" in your project;
+ * Copy and paste the library folder to your subProject folder;
+ * On the root of your project directory, create/modify the settings.gradle file. It should contain something like the following:
 ```grade
 include 'MyApp', ':monetizrsdk'
 
-```
- * gradle clean & build/close the project and reopen/re-import it.
-
- * Edit your project's build.gradle to add this in the "dependencies" section:
-
+``` 
+ * gradle clean & build/close the project and reopen/re-import it;
+ * Edit your project's build.gradle to add the following in the `dependencies` section:
 ```gradle
 dependencies {
 //...
@@ -98,87 +69,38 @@ dependencies {
 }
 ```
 
-
-### Using library inside application
-
-Application needs to have initial settings:
-
- * API key provided by Monetizr team. Adding the API key: this should be called once, before invoking Monetizr Library for the first time
+## Using the library in your app
+To use the SDK you need an [API key][4]. For testing purposes you can use public test key **4D2E54389EB489966658DDD83E2D1**. It must be called once, before invoking Monetizr library for the first time.
 
 ```kotlin
-MonetizrSdk.apikey = "API key provided from Monetizr team"
+MonetizrSdk.apikey = "4D2E54389EB489966658DDD83E2D1"
 ```
 
- **Default API key: "4D2E54389EB489966658DDD83E2D1"**
+To show a product in an [Offer View][5], you need to call a specific product_tag. Product tags represent a specific product, and they are managed in the web Console. For testing purposes, you can use public test product **Sample shirt**.
 
- * Optional. API debugging. Necessary if you wish to see Logging information, by default it is false
- 
+When you are ready to show an Offer View inside your app, you can invoke Monetizr SDK static method from within your app. One call invokes one Offer View:
+
 ```kotlin
-MonetizrSdk.debuggable = true
+MonetizrSdk.showProductForTag("Sample shirt")
 ```
 
- * Library defines two permissions, access to internet and necessity to check for internet connection
+The library defines two permissions: access to the internet and necessity to check for internet connection.
 
 ```xml
  <uses-permission android:name="android.permission.INTERNET"/>
  <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 ```
+### Optional settings
+**API debugging**. Set to `false` by default. 
 
-* You will need to have your own reward tags, contact Monetizr team to acquire them. 
-They are added for each API key, for example, for default api key Monetizr provides
-
-  * monetizr-sample-t-shirt
- 
-  * 30-credits
- 
-  * product_1
- 
-  * product_2
- 
-  * product_3
- 
-  * 1-credit
-
-
-* To invoke reward window, call Monetizr static method from within you application by providing available reward tag
-One call will invoke one reward window. Whenever you are ready to show reward window inside your application, you can invoke Monetizr sdk to show reward window
-
+SDK methods are calling RESTful API and safely storing provided bits of the data using queued HTTPS requests. If something fails, the methods do not stop the host application and do not print out logs to console. If `debuggable` is set to `true`, then output is provided to Logging information.
 
 ```kotlin
-MonetizrSdk.showProductForTag("Monetizr Sample T-Shirt")
-
-MonetizrSdk.showProductForTag("30-credits")
-
-MonetizrSdk.showProductForTag("product_1")
-
-MonetizrSdk.showProductForTag("product_2")
-
-MonetizrSdk.showProductForTag("product_3")
-
-MonetizrSdk.showProductForTag("1-credit")
-
-```
-
-### Additional available methods, for helping to improve monetization process and in-game analysis
-
-Common functionality: methods are calling RESTful API and safely storing provided bits of the data using queued HTTPS requests.
-If something fails, methods will not make the host application stop and will not print out logs to console.
-If **debuggable** parameter is **true** then output to logging will be provided.
-
- * Gather some basic information about device: android version and name and language settings.
-  Method is being called once, when sdk is being triggered onCreate. If you wish, you can call it from anywhere in application
-
-```kotlin
-    Telemetrics.deviceData()
-```
-
- * Store information about encounter that was used to invoke interaction.
- As this is not automatically possible, manual input is necessary from user
- Please refer to documentation[2] about data types
- 
-```kotlin
-    Telemetrics.encounter("trigger_tag", "completionStatus", "triggerTag","levelName", "difficultyLevelName", "difficultyEstimation")
+MonetizrSdk.debuggable = true
 ```
 
 [1]: https://github.com/themonetizr/monetizr-android-sdk
-[2]: https://docs.themonetizr.com/android/
+[2]: https://docs.themonetizr.com/docs/android
+[3]: https://app.themonetizr.com/
+[4]: https://docs.themonetizr.com/docs/creating-account#section-your-unique-access-token
+[5]: https://docs.themonetizr.com/docs/offer-view
