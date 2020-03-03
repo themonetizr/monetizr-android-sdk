@@ -4,6 +4,7 @@ import android.app.Activity
 import com.google.android.gms.wallet.PaymentsClient
 import com.google.android.gms.wallet.Wallet
 import com.google.android.gms.wallet.WalletObjectsClient
+import com.stripe.android.GooglePayConfig
 import com.themonetizr.monetizrsdk.misc.Constants
 import org.json.JSONArray
 import org.json.JSONException
@@ -147,7 +148,7 @@ object PaymentsUtil {
      */
     private fun cardPaymentMethod(): JSONObject {
         val cardPaymentMethod = baseCardPaymentMethod()
-        cardPaymentMethod.put("tokenizationSpecification", gatewayTokenizationSpecification())
+        cardPaymentMethod.put("tokenizationSpecification", GooglePayConfig("pk_test_OS6QyI1IBsFtonsnFk6rh2wb00mSXyblvu").tokenizationSpecification)
 
         return cardPaymentMethod
     }

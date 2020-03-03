@@ -13,8 +13,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.volley.Request
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.wallet.*
+import com.stripe.android.ApiResultCallback
+import com.stripe.android.Stripe
+import com.stripe.android.model.ConfirmPaymentIntentParams
+import com.stripe.android.model.PaymentMethod
+import com.stripe.android.model.PaymentMethodCreateParams
 import com.themonetizr.monetizrsdk.ClearedService
-import com.themonetizr.monetizrsdk.MonetizrSdk
 import com.themonetizr.monetizrsdk.MonetizrSdk.Companion.logError
 import com.themonetizr.monetizrsdk.R
 import com.themonetizr.monetizrsdk.api.Telemetrics
@@ -26,22 +30,29 @@ import com.themonetizr.monetizrsdk.payment.PaymentsUtil
 import com.themonetizr.monetizrsdk.ui.adapter.ImageGalleryAdapter
 import com.themonetizr.monetizrsdk.ui.adapter.ItemIndicator
 import com.themonetizr.monetizrsdk.ui.adapter.ItemSnapHelper
-import com.themonetizr.monetizrsdk.ui.dialog.OptionsDialog
-import com.themonetizr.monetizrsdk.ui.dialog.OptionsDialogListener
-import com.themonetizr.monetizrsdk.ui.dialog.ShippingRateDialog
-import com.themonetizr.monetizrsdk.ui.dialog.ShippingRateDialogListener
+import com.themonetizr.monetizrsdk.ui.dialog.*
 import com.themonetizr.monetizrsdk.ui.helpers.ProgressDialogBuilder
 import kotlinx.android.synthetic.main.activity_product.*
+import org.json.JSONArray
 import org.json.JSONObject
 import java.io.Serializable
 
-class ProductActivity : AppCompatActivity(), ShippingRateDialogListener, OptionsDialogListener {
+
+
+
+class ProductActivity : AppCompatActivity(), ShippingRateDialogListener, ShippingAddressDialogListener, OptionsDialogListener {
     private var userMadeInteraction: Boolean = false
     private var activityLaunchedStamp: Long = 0
     private lateinit var paymentsClient: PaymentsClient
     private val selectedOptions: ArrayList<String> = ArrayList()
     private var progressDialog: AlertDialog? = null
     private var chosenVariant: Variant? = null
+    private var shippingAddress: ShippingAddress? = null
+    private var tag: String = ""
+    private var productJson: JSONObject = JSONObject()
+    private var product: Product = Product()
+    private var apiKey: String = ""
+    private var apiAddress: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,14 +62,21 @@ class ProductActivity : AppCompatActivity(), ShippingRateDialogListener, Options
         progressDialog = ProgressDialogBuilder.makeProgressDialog(this)
         startService(Intent(baseContext, ClearedService::class.java))
 
-        val tag = intent!!.getStringExtra(Parameters.PRODUCT_TAG)!!
+        tag = intent!!.getStringExtra(Parameters.PRODUCT_TAG)!!
         val json = intent!!.getStringExtra(Parameters.PRODUCT_JSON)!!
-        val productJson = JSONObject(json)
-        val product = Product(productJson)
+        productJson = JSONObject(json)
+        product = Product(productJson)
+        apiKey = ConfigHelper.getConfigValue(this, Parameters.RAW_API_KEY)
+        apiAddress = ConfigHelper.getConfigValue(this, Parameters.RAW_API_ENDPOINT)
 
         initImageAdapter(product.images)
+
         // Show Google Pay if it is available in specified country
-        initGooglePayButton()
+        // Google pay won`t be as option before testing accordingly
+        // @TODO Google Pay
+        // initGooglePayButton()
+
+        // Init checkout
         initCheckoutTitle(product)
 
         if (product.variants.isEmpty() == false) {
@@ -84,7 +102,12 @@ class ProductActivity : AppCompatActivity(), ShippingRateDialogListener, Options
         payButtonView.setOnClickListener { payGooglePlayTap(productJson) }
 
         variantContainerView.setOnClickListener { showOptionDialog(json) }
-        checkoutButtonView.setOnClickListener { checkout(null, tag, productJson) }
+
+        if (product.claimable == true) {
+            checkoutButtonView.setOnClickListener { showShippingAddressDialog() }
+        } else {
+            checkoutButtonView.setOnClickListener { checkout(null) }
+        }
 
         hideStatusBar()
     }
@@ -148,18 +171,19 @@ class ProductActivity : AppCompatActivity(), ShippingRateDialogListener, Options
         if (requestCode == LOAD_PAYMENT_DATA_REQUEST_CODE && resultCode == RESULT_OK) {
             if (data != null) {
                 val paymentData = PaymentData.getFromIntent(data)
+
                 if (paymentData != null) {
                     val tag = intent.getStringExtra(Parameters.PRODUCT_TAG)!!
                     val json = intent.getStringExtra(Parameters.PRODUCT_JSON)!!
                     val productJson = JSONObject(json)
 
-                    checkout(paymentData, tag, productJson)
+                    checkout(paymentData)
                 }
             } else {
                 val tag = intent.getStringExtra(Parameters.PRODUCT_TAG)!!
                 val json = intent.getStringExtra(Parameters.PRODUCT_JSON)!!
                 val productJson = JSONObject(json)
-                checkout(null, tag, productJson)
+                checkout(null)
             }
         }
 
@@ -180,74 +204,136 @@ class ProductActivity : AppCompatActivity(), ShippingRateDialogListener, Options
     }
 
     override fun onShippingRateSelect(paymentData: String, checkout: JSONObject, shippingRate: ShippingRate) {
-        showProgressDialog()
-        val apiKey = ConfigHelper.getConfigValue(this, Parameters.RAW_API_KEY)
-        val apiAddress = ConfigHelper.getConfigValue(this, Parameters.RAW_API_ENDPOINT)
-        val url = apiAddress + "products/checkoutwithpayment"
-        val tag = intent.getStringExtra(Parameters.PRODUCT_TAG)!!
+
+        // Create shipping address if it was not yet present
         val data = PaymentData.fromJson(paymentData)
-        val addressJson = if (data.shippingAddress != null) {
-            val address = data.shippingAddress!!
-            ShippingAddressInto(address.name, address.name, address.address1, address.address2, address.locality, address.administrativeArea, address.countryCode, address.postalCode).getJsonObject()
-        } else {
-            JSONObject()
-        }
-        val json = intent.getStringExtra(Parameters.PRODUCT_JSON)!!
-        val productJson = JSONObject(json)
-        val variant = searchSelectedVariant(productJson)
+//        shippingAddress = if (data.shippingAddress != null) {
+//            val address = data.shippingAddress!!
+//            ShippingAddressInto(address.name, address.name, address.address1, address.address2, address.locality, address.administrativeArea, address.countryCode, address.postalCode).getJsonObject()
+//            JSONObject()
+//        } else {
+//            JSONObject()
+//        }
 
-        val body = CheckoutWithPaymentBody.createBody(paymentData, checkout, tag, variant, addressJson, shippingRate)
+        val body = CheckoutWithPaymentBody.createBody(paymentData, checkout, tag, shippingAddress, shippingRate)
 
-        WebApi.getInstance(this).makeRequest(url, Request.Method.POST, body, apiKey, {
-            hideProgressDialog()
-            MonetizrSdk.logError("success response for checkoutwith payment" + it.toString())
-            finish()
+        updateCheckout(body, paymentData)
+    }
+
+    private fun updateCheckout(requestBody: JSONObject, paymentData: String? = null) {
+        showProgressDialog()
+        val url = apiAddress + "products/updatecheckout"
+
+        WebApi.getInstance(this).makeRequest(url, Request.Method.POST, requestBody, apiKey, { response ->
+
+            if (!response.has("data")) {
+                showUnexpectedExceptions(response)
+            } else {
+                val updateShipping = response.getJSONObject("data").getJSONObject("updateShippingLine")
+                val checkoutErrors = updateShipping.getJSONArray("checkoutUserErrors")
+
+                if (checkoutErrors.length() > 0) {
+                    showDialogMessage(parseCheckoutUserErrors(checkoutErrors), "error")
+                } else {
+                    val checkoutResponse = updateShipping.getJSONObject("checkout")
+
+                    if (product.claimable == true) {
+                        completeCheckoutClaim(checkoutResponse)
+                    } else {
+                        continueWithPayment(checkoutResponse, paymentData)
+                    }
+                }
+            }
         }, {
             hideProgressDialog()
-            logError(it)
+            logError(it, supportFragmentManager)
         })
     }
 
-    //region checkout
+    private fun continueWithPayment(checkout: JSONObject, paymentData: String?) {
+        val paymentBody = CheckoutWithPaymentBody.paymentBody(paymentData, checkout, tag)
+        WebApi.getInstance(this).makeRequest(apiAddress + "products/payment", Request.Method.POST, paymentBody, apiKey, {
+            // This is a charge token request from server
+            val paymentMethodCreateParams = PaymentMethodCreateParams.createFromGooglePay(JSONObject(paymentData))
 
-    private fun checkout(proceedWithPayment: PaymentData? = null, productTag: String, product: JSONObject) {
-        val variant: JSONObject? = searchSelectedVariant(product)
-        val apiKey = ConfigHelper.getConfigValue(this, Parameters.RAW_API_KEY)
-        val apiAddress = ConfigHelper.getConfigValue(this, Parameters.RAW_API_ENDPOINT)
+            // Now use the `paymentMethodCreateParams` object to create a PaymentMethod
+            val stripe = Stripe(this, "pk_test_OS6QyI1IBsFtonsnFk6rh2wb00mSXyblvu");
+            stripe.createPaymentMethod(
+                paymentMethodCreateParams,
+                paymentBody.getString("payment_token"),
+                object: ApiResultCallback<PaymentMethod> {
+                    override fun onSuccess(result: PaymentMethod) {
+                        // Confirm payment with method id and client secret from server
+                        if (result.id != null) {
+                            val methodId = result.id
+                            stripe.confirmPayment(this@ProductActivity,
+                                ConfirmPaymentIntentParams.createWithPaymentMethodId(
+                                    methodId!!,
+                                    it.getString("intent"),
+                                    "https://themonetizr.com"
+                                )
+                            )
+                        }
+                    }
+
+                    override fun onError(e: Exception) {
+                        logError("Stripe exception " + e.toString(), supportFragmentManager)
+                    }
+                }
+            )
+                hideProgressDialog()
+                finish()
+        }, {
+            hideProgressDialog()
+            logError(it, supportFragmentManager)
+        })
+    }
+
+    // Region checkout
+
+    private fun checkout(proceedWithPayment: PaymentData? = null) {
+        val variant: JSONObject? = searchSelectedVariant(productJson)
         val url = apiAddress + "products/checkout"
         val withPayment = proceedWithPayment != null
         if (variant != null) {
             showProgressDialog()
-            val jsonBody = CheckoutBody.createBody(variant, productTag, proceedWithPayment)
-
-            if (firstCheckout) {
-                Telemetrics.firstimpressioncheckout()
-                firstCheckout = false
-            }
+            val jsonBody = CheckoutBody.createBody(variant, tag, shippingAddress)
 
             WebApi.getInstance(this).makeRequest(
                 url, Request.Method.POST, jsonBody, apiKey,
                 { response ->
                     hideProgressDialog()
-                    val checkoutCreate = response.getJSONObject("data").getJSONObject("checkoutCreate")
-                    val checkout = checkoutCreate.getJSONObject("checkout")
 
-                    if (withPayment) {
-                        showShippingDialog(proceedWithPayment!!.toJson(), checkout)
+                    // Process has realy unexpected errors, outside of errors that can create in valid flow
+                    if (!response.has("data")) {
+                        showUnexpectedExceptions(response)
                     } else {
+                        val checkoutCreate = response.getJSONObject("data").getJSONObject("checkoutCreate")
                         val checkoutErrors = checkoutCreate.getJSONArray("checkoutUserErrors")
-                        val checkoutRedirect = checkout.getString("webUrl")
 
-                        if (checkoutErrors.length() <= 0) {
-                            showProductView(checkoutRedirect)
+                        if (checkoutErrors.length() > 0) {
+                            showDialogMessage(parseCheckoutUserErrors(checkoutErrors), "error")
+                        } else {
+                            val checkout = checkoutCreate.getJSONObject("checkout")
+                            if (withPayment) {
+                                showShippingRateDialog(proceedWithPayment!!.toJson(), checkout)
+                            } else {
+                                if (product.claimable == true) {
+                                    // Complete free claiming process
+                                    checkoutClaimProcess(checkout)
+                                } else {
+                                    showProductView(checkout.getString("webUrl"))
+                                }
+                            }
                         }
                     }
                 },
                 {
                     hideProgressDialog()
-                    logError(it)
+                    logError(it, supportFragmentManager)
                 }
             )
+
         }
     }
 
@@ -263,6 +349,55 @@ class ProductActivity : AppCompatActivity(), ShippingRateDialogListener, Options
     }
 
     //endregion
+
+    // region claimable product
+
+    override fun onShippingAddressEntered(address: ShippingAddress) {
+        shippingAddress = address
+        checkout(null)
+    }
+
+    private fun checkoutClaimProcess(checkoutJson: JSONObject) {
+        // Prepare request body, create shipping Address
+        val checkout = Checkout(checkoutJson)
+
+        // Auto select shipping rate with price 0.00, if not available, show error
+        var zeroPriceShippingRate: ShippingRate ?= null
+        for (rate in checkout.shippingRates) {
+            if (rate.price.amount <= 0) {
+                zeroPriceShippingRate = rate
+            }
+        }
+
+        if (zeroPriceShippingRate?.equals(null) == true) {
+            // In this case, there really is not a price with value zero, impossible to continue
+            var message = getText(R.string.free_shipping_impossible).toString()
+            showDialogMessage(message, "error")
+        } else {
+            val requestBody = CheckoutBody.createUpdateBody(checkoutJson, tag, shippingAddress, zeroPriceShippingRate)
+            updateCheckout(requestBody)
+        }
+    }
+
+    private fun completeCheckoutClaim(checkout: JSONObject) {
+        // Make final request to claim product
+        val claimBody = CheckoutBody.createClaimBody(checkout)
+
+        WebApi.getInstance(this).makeRequest(apiAddress + "products/claimorder", Request.Method.POST, claimBody, apiKey, {response ->
+            hideProgressDialog()
+
+            if (response.getString("status") == "error") {
+                logError(response.toString())
+                showDialogMessage(response.getString("message"), "error")
+            } else {
+                showDialogMessage(getText(R.string.product_claimed).toString(), "success")
+            }
+        }, {
+            hideProgressDialog()
+            logError(it, supportFragmentManager)
+        })
+    }
+    // endregion
 
     //region ui
 
@@ -306,7 +441,7 @@ class ProductActivity : AppCompatActivity(), ShippingRateDialogListener, Options
 
     private fun initProductPriceTitle(variant: Variant) {
         productPriceView.text = variant.priceV2.formatString()
-        if (variant.compareAtPriceV2 != null) {
+        if (product.claimable != true && variant.compareAtPriceV2 != null) {
             productDiscountView.text = variant.compareAtPriceV2?.formatString()
             productDiscountView.paintFlags = productDiscountView.paintFlags or STRIKE_THRU_TEXT_FLAG
         } else {
@@ -321,9 +456,11 @@ class ProductActivity : AppCompatActivity(), ShippingRateDialogListener, Options
 
             option1NameView.visibility = View.VISIBLE
             option1ValueView.visibility = View.VISIBLE
+            option1IconView.visibility = View.VISIBLE
         } else {
             option1NameView.visibility = View.GONE
             option1ValueView.visibility = View.GONE
+            option1IconView.visibility = View.GONE
         }
 
         if (variant.selectedOptions.size > 1) {
@@ -332,9 +469,11 @@ class ProductActivity : AppCompatActivity(), ShippingRateDialogListener, Options
 
             option2NameView.visibility = View.VISIBLE
             option2ValueView.visibility = View.VISIBLE
+            option2IconView.visibility = View.VISIBLE
         } else {
             option2NameView.visibility = View.GONE
             option2ValueView.visibility = View.GONE
+            option2IconView.visibility = View.GONE
         }
 
         if (variant.selectedOptions.size > 2) {
@@ -343,9 +482,11 @@ class ProductActivity : AppCompatActivity(), ShippingRateDialogListener, Options
 
             option3NameView.visibility = View.VISIBLE
             option3ValueView.visibility = View.VISIBLE
+            option3IconView.visibility = View.VISIBLE
         } else {
             option3NameView.visibility = View.GONE
             option3ValueView.visibility = View.GONE
+            option3IconView.visibility = View.GONE
         }
     }
 
@@ -395,7 +536,7 @@ class ProductActivity : AppCompatActivity(), ShippingRateDialogListener, Options
 
             val paymentDataRequestJson = PaymentsUtil.getPaymentDataRequest(totalPrice)
             if (paymentDataRequestJson == null) {
-                logError("Can't fetch payment data request")
+                logError("Can't fetch payment data request", supportFragmentManager)
                 return
             }
             val request = PaymentDataRequest.fromJson(paymentDataRequestJson.toString())
@@ -404,7 +545,7 @@ class ProductActivity : AppCompatActivity(), ShippingRateDialogListener, Options
                 AutoResolveHelper.resolveTask(paymentsClient.loadPaymentData(request), this, LOAD_PAYMENT_DATA_REQUEST_CODE)
             }
         } else {
-            logError("Can't fetch payment data request")
+            logError("Can't fetch payment data request", supportFragmentManager)
         }
         payButtonView.isEnabled = true
     }
@@ -417,11 +558,16 @@ class ProductActivity : AppCompatActivity(), ShippingRateDialogListener, Options
         progressDialog?.dismiss()
     }
 
-    private fun showShippingDialog(paymentInfo: String, checkoutInfo: JSONObject) {
+    private fun showShippingRateDialog(paymentInfo: String, checkoutInfo: JSONObject) {
         val shippingDialog = ShippingRateDialog.newInstance(paymentInfo, checkoutInfo)
         shippingDialog.show(supportFragmentManager, ShippingRateDialog.TAG)
     }
 
+
+    private fun showShippingAddressDialog() {
+        val shippingDialog = ShippingAddressDialog.newInstance()
+        shippingDialog.show(supportFragmentManager, ShippingAddressDialog.TAG)
+    }
     //endregion
 
     //region variants
@@ -464,6 +610,30 @@ class ProductActivity : AppCompatActivity(), ShippingRateDialogListener, Options
 
     private fun handleError(statusCode: Int) {
         Log.w("loadPaymentData failed", String.format("Error code: %d", statusCode))
+    }
+
+    private fun showDialogMessage(message: String, type: String) {
+        val dialog = MessageDialog.newInstance(message, type)
+        dialog.show(supportFragmentManager, MessageDialog.TAG)
+    }
+
+    private fun parseCheckoutUserErrors(errors: JSONArray): String {
+        var messages = ""
+        for (error in 0 until errors.length()) {
+            val item = errors.getJSONObject(error)
+            messages += item.getString("message") + "\n"
+        }
+        return messages
+    }
+
+    private fun showUnexpectedExceptions(response: JSONObject) {
+        logError(response.toString())
+        if (response.has("errors")) {
+            val errorObject = response.getJSONArray("errors").getJSONObject(0)
+            showDialogMessage(errorObject.getString("message"), "error")
+        } else {
+            showDialogMessage(getText(R.string.unexpected_exception).toString(), "error")
+        }
     }
 
     companion object {

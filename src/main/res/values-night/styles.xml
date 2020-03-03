@@ -12,11 +12,30 @@
 	</style>
 
 	<style name="BottomSheet" parent="@style/Widget.Design.BottomSheet.Modal">
-<!--		<item name="android:background">@drawable/dialog_sheet_background</item>-->
+		<item name="android:background">@drawable/dialog_sheet_background</item>
 	</style>
 
 	<style name="BottomSheetDialogTheme" parent="@style/Theme.Design.Light.BottomSheetDialog">
 		<item name="android:windowIsFloating">false</item>
 		<item name="bottomSheetStyle">@style/BottomSheet</item>
 	</style>
+
+	<style name="MessageDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+		<item name="android:textColor">@color/colorPrimary</item>
+		<item name="android:textColorPrimary">@color/colorPrimary</item>
+		<item name="colorAccent">@color/accentColor</item>
+		<item name="android:windowIsFloating">true</item>
+		<item name="android:windowIsTranslucent">false</item>
+		<item name="android:windowNoTitle">true</item>
+		<item name="android:windowFullscreen">false</item>
+		<item name="android:windowBackground">@color/messageDialogBackground</item>
+		<item name="android:windowAnimationStyle">@null</item>
+		<item name="android:backgroundDimEnabled">true</item>
+		<item name="buttonBarPositiveButtonStyle">@style/PositiveButtonStyle</item>
+	</style>
+
+	<style name="PositiveButtonStyle" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
+		<item name="android:textColor">#222222</item>
+	</style>
+
 </resources>

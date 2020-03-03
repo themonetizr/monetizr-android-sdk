@@ -10,6 +10,8 @@ public class Parameters {
     public static String CHECKOUT = "CHECKOUT";
     public static String PAYMENT_DATA = "PAYMENT_DATA";
     public static String SELECTED_OPTIONS = "SELECTED_OPTIONS";
+    public static String MESSAGE = "MESSAGE";
+    public static String MESSAGE_TYPE="MESSAGE_TYPE";
 
     public static String RAW_API_KEY = "monetizr_api_key";
     public static String RAW_API_ENDPOINT = "monetizr_api_url";

@@ -11,11 +11,12 @@
 	</style>
 
 	<style name="BottomSheet" parent="@style/Widget.Design.BottomSheet.Modal">
-<!--		<item name="android:background">@drawable/dialog_sheet_background</item>-->
+		<item name="android:background">@drawable/dialog_sheet_background</item>
 	</style>
 
 	<style name="BottomSheetDialogTheme" parent="@style/Theme.Design.Light.BottomSheetDialog">
 		<item name="android:windowIsFloating">false</item>
 		<item name="bottomSheetStyle">@style/BottomSheet</item>
 	</style>
+
 </resources>

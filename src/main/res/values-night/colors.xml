@@ -10,6 +10,7 @@
 	<color name="accentColor">#F5F5F5</color>
 	<color name="selectedOptionBackground">#000000</color>
 	<color name="selectedOptionText">#E5E5E5</color>
+	<color name="messageDialogBackground">#17212B</color>
 
 	<!-- Drawables ignore primary color and use one from material design -->
 	<color name="overridePrimary">#F5F5F5</color>

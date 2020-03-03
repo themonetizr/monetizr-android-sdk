@@ -127,7 +127,7 @@ MonetizrSdk.debuggable = true
 * You will need to have your own reward tags, contact Monetizr team to acquire them. 
 They are added for each API key, for example, for default api key Monetizr provides
 
-  * monetizr-sample-t-shirt
+  * Sample shirt
  
   * 30-credits
  
@@ -145,7 +145,7 @@ One call will invoke one reward window. Whenever you are ready to show reward wi
 
 
 ```kotlin
-MonetizrSdk.showProductForTag("monetizr-sample-t-shirt")
+MonetizrSdk.showProductForTag("Sample shirt")
 
 MonetizrSdk.showProductForTag("30-credits")
 

@@ -29,6 +29,7 @@ class ShippingRateDialog : BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 //        this.isCancelable = false
         val paymentData = arguments!!.getString(Parameters.PAYMENT_DATA)!!
+
         val checkoutJSON = JSONObject(arguments!!.getString(Parameters.CHECKOUT))
         val checkout = Checkout(checkoutJSON)
 

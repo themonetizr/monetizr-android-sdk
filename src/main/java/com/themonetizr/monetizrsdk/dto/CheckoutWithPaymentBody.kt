@@ -5,7 +5,7 @@ import org.json.JSONObject
 class CheckoutWithPaymentBody {
 
     companion object {
-        fun createBody(paymentInformation: String, checkoutInfo: JSONObject, productTag: String, variantForCheckout: JSONObject?, shippingAddress: JSONObject, chosenShippingRate: ShippingRate): JSONObject {
+        fun createBody(paymentInformation: String, checkoutInfo: JSONObject, productTag: String, shippingAddress: ShippingAddress?, chosenShippingRate: ShippingRate): JSONObject {
             val paymentMethodData = JSONObject(paymentInformation).getJSONObject("paymentMethodData")
             val billingAddressData = paymentMethodData.getJSONObject("info").getJSONObject("billingAddress")
             val email = JSONObject(paymentInformation).getString("email")
@@ -23,32 +23,30 @@ class CheckoutWithPaymentBody {
 
             val jsonBody = JSONObject()
             val checkoutId = checkoutInfo.getString("id")
-            val paymentToken = paymentMethodData.getJSONObject("tokenizationData").getString("token")
-
-            val totalPrice = if (variantForCheckout != null) {
-                checkoutInfo.getJSONObject("totalPriceV2").getString("amount")
-            } else {
-                "0"
-            }
-
-            val paymentAmount = JSONObject()
-
-            if (chosenShippingRate.price != null) {
-                paymentAmount.put("amount", totalPrice.toDouble() + chosenShippingRate.price!!.amount.toDouble())
-                paymentAmount.put("currencyCode", chosenShippingRate.price!!.currencyCode)
-            }
 
             jsonBody.put("checkoutId", checkoutId)
             jsonBody.put("product_handle", productTag)
             jsonBody.put("billingAddress", billingAddress)
-            jsonBody.put("idempotencyKey", paymentToken)
-            jsonBody.put("paymentAmount", paymentAmount)
-            jsonBody.put("paymentData", paymentToken)
-            jsonBody.put("test", true)
-            jsonBody.put("type", "google_pay")
-            jsonBody.put("shippingAddress", shippingAddress)
+            jsonBody.put("shippingAddress", shippingAddress?.getJsonObject())
             jsonBody.put("shippingRateHandle", chosenShippingRate.handle)
             jsonBody.put("email", email)
+
+            return jsonBody
+        }
+
+        fun paymentBody(paymentInformation: String?, checkoutInfo: JSONObject, productTag: String): JSONObject {
+            val paymentMethodData = JSONObject(paymentInformation).getJSONObject("paymentMethodData")
+
+            val jsonBody = JSONObject()
+            val checkoutId = checkoutInfo.getString("id")
+            val paymentTokenString = paymentMethodData.getJSONObject("tokenizationData").getString("token")
+            val paymentToken = JSONObject(paymentTokenString).getString("id")
+
+            jsonBody.put("checkoutId", checkoutId)
+            jsonBody.put("product_handle", productTag)
+            jsonBody.put("payment_token", paymentToken)
+            jsonBody.put("type", "google_pay")
+            jsonBody.put("test", true)
 
             return jsonBody
         }

@@ -11,12 +11,32 @@ class Product {
     val maxOptionsLevel: Int
 
     val buttonTitle: String?
+    val claimable: Boolean?
     val onlineStoreUrl: String?
     val availableForSale: Boolean
     val options: ArrayList<Option>
     val images: ArrayList<String>
     val variants: ArrayList<Variant>
     val variantHierarchy: HashSet<HierarchyVariant>
+
+
+    constructor() {
+        id = ""
+        title = ""
+        description = ""
+        descriptionIos = ""
+        descriptionHtml = ""
+        maxOptionsLevel = 0
+
+        buttonTitle = ""
+        claimable =  false
+        onlineStoreUrl = ""
+        availableForSale = false
+        options = ArrayList()
+        images = ArrayList()
+        variants = ArrayList()
+        variantHierarchy = HashSet()
+    }
 
     constructor(json: JSONObject) {
         this.id = json.getString("id")
@@ -35,6 +55,12 @@ class Product {
             this.buttonTitle = json.getString("button_title")
         } else {
             this.buttonTitle = null
+        }
+
+        if (json.has("claimable")) {
+            this.claimable = json.getBoolean("claimable")
+        } else {
+            this.claimable = false
         }
 
         if (json.has("onlineStoreUrl")) {

@@ -172,6 +172,7 @@
                                     tools:text="22" />
 
                             <ImageView
+                                    android:id="@+id/option1IconView"
                                     android:layout_width="30dp"
                                     android:layout_height="match_parent"
                                     android:tint="@color/overridePrimary"
@@ -217,6 +218,7 @@
                                     tools:text="22" />
 
                             <ImageView
+                                    android:id="@+id/option2IconView"
                                     android:layout_width="30dp"
                                     android:layout_height="match_parent"
                                     android:tint="@color/overridePrimary"
@@ -261,6 +263,7 @@
                                     tools:text="22" />
 
                             <ImageView
+                                    android:id="@+id/option3IconView"
                                     android:layout_width="30dp"
                                     android:layout_height="match_parent"
                                     android:tint="@color/overridePrimary"

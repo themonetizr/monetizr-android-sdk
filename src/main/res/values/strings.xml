@@ -10,7 +10,7 @@
 	<string name="product_tag">Product tag</string>
 	<string name="api_key">API key</string>
 	<string name="example_api_key">4D2E54389EB489966658DDD83E2D1</string>
-	<string name="sample_t_shirt">monetizr-sample-t-shirt</string>
+	<string name="sample_t_shirt">Sample shirt</string>
 	<string name="show_product">Show product</string>
 	<string name="close_btn">X</string>
 	<string name="larger_than">></string>
@@ -38,4 +38,14 @@
 	<string name="cancel">Cancel</string>
 	<string name="selected">Selected:</string>
 	<string name="title_activity_checkout_view">CheckoutViewActivity</string>
+	<string name="submit_claimable">Submit</string>
+	<string name="email">Email</string>
+	<string name="email_invalid">Invalid email</string>
+	<string name="required_field">Required field</string>
+	<string name="product_claimed">Product was claimed, you will receive confirmation e-mail with additional information.</string>
+	<string name="message_dialog_close_btn">Close</string>
+	<string name="something_went_wrong">Something went wrong</string>
+	<string name="success_message">Process was successful</string>
+	<string name="unexpected_exception">An unexpected error has occured, please try process again</string>
+	<string name="free_shipping_impossible">Free shipping is not possible, you will need to complete order with payment</string>
 </resources>
