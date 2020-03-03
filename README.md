@@ -90,10 +90,10 @@ The library defines two permissions: access to the internet and necessity to che
  <uses-permission android:name="android.permission.INTERNET"/>
  <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 ```
-### Optional settings
-**API debugging**. Set to `false` by default. 
+## Optional settings
+### API debugging 
 
-SDK methods are calling RESTful API and safely storing provided bits of the data using queued HTTPS requests. If something fails, the methods do not stop the host application and do not print out logs to console. If `debuggable` is set to `true`, then output is provided to Logging information.
+Set to `false` by default. SDK methods are calling RESTful API and safely storing provided bits of the data using queued HTTPS requests. If something fails, the methods do not stop the host application and do not print out logs to console. If `debuggable` is set to `true`, then output is provided to Logging information.
 
 ```kotlin
 MonetizrSdk.debuggable = true
