@@ -70,7 +70,7 @@ dependencies {
 ```
 
 ## Using the library in your app
-To use the SDK you need an [API key][4]. For testing purposes you can use public test key **4D2E54389EB489966658DDD83E2D1**. It must be called once, before invoking Monetizr library for the first time.
+To use the SDK you need an [API key][4]. For testing purposes, you can use public test key **4D2E54389EB489966658DDD83E2D1**. It must be called once, before invoking Monetizr library for the first time.
 
 ```kotlin
 MonetizrSdk.apikey = "4D2E54389EB489966658DDD83E2D1"
