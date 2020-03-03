@@ -12,7 +12,7 @@ Monetizr Android SDK is a plugin with the built-in functionality of:
 
 Monetizr uses oAuth 2 authentication behind the scenes for all payment and order related processes. The SDK takes care of managing oAuth 2. To use SDK and connect to Monetizr servers, all you need is a single API key. It can be retrieved via Monetizr web [Console][3]. API is a public two-way, it does not expose any useful information, but you should be aware of this.
 
-Read the Monetizr's [android documentation][2] to find out more.
+Read the Monetizr's [Android documentation][2] to find out more.
 
 ## Installation
 ### Option 1 (suggested)
