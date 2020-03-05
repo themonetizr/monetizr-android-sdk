@@ -33,10 +33,20 @@ class MonetizrSdk {
 
     companion object {
         var debuggable: Boolean = false
+        var dynamicApiKey: String? = null
+        private var playerId: String? = null
+        private var inGameCurrencyAmount: Double = -0.000001
         private var initialLaunch: Boolean = true
         private var progressDialog: AlertDialog? = null
 
-        fun showProductForTag(productTag: String, dynamicApiKey: String = "") {
+        /**
+         * Show product with specified tag for specific user
+         *
+         * @param  String  productTag                Product tag that is provided to customer
+         * @param  String  player_id                 Player ID (optional parameter in case this is a pre-paid product)
+         * @param  Float   in_game_currency_amount   Currency amount (optional parameter in case this is a pre-paid product)
+         */
+        fun showProductForTag(productTag: String, player_id: String? = null, in_game_currency_amount: Double = -0.000001) {
             try {
                 val context = ApplicationProvider.application as Context
                 val activity = ActivityProvider.currentActivity
@@ -48,15 +58,22 @@ class MonetizrSdk {
 
                 if (isNetworkAvailable(context) == false) {
                     logError("Did not have internet access")
+                    ErrorMessageBuilder.makeDialog(activity, context.getString(R.string.no_network))?.show()
                     return
                 }
 
                 var apiKey = ConfigHelper.getConfigValue(context, Parameters.RAW_API_KEY)
 
                 // Use specified api key if it is passed to method
-                if (dynamicApiKey != "") {
-                    apiKey = dynamicApiKey
+                if (dynamicApiKey?.equals(null) == false) {
+                    apiKey = dynamicApiKey.toString()
                 }
+
+                if (player_id?.equals(null) == false) {
+                    playerId = player_id.toString()
+                    inGameCurrencyAmount = in_game_currency_amount
+                }
+
 
                 val endpoint = ConfigHelper.getConfigValue(context, Parameters.RAW_API_ENDPOINT)
 
@@ -167,6 +184,8 @@ class MonetizrSdk {
             val activity = ActivityProvider.currentActivity as Context
 
             if (product != null) {
+                ProductActivity.playerId = playerId
+                ProductActivity.inGameCurrencyAmount = inGameCurrencyAmount
                 ProductActivity.start(currentActivity, product.toString(), productTag)
             } else {
                 logError("Product not found")

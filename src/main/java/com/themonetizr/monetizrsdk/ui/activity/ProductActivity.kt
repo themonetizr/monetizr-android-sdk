@@ -372,6 +372,8 @@ class ProductActivity : AppCompatActivity(), ShippingRateDialogListener, Shippin
         if (zeroPriceShippingRate?.equals(null) == true) {
             // In this case, there really is not a price with value zero, impossible to continue
             var message = getText(R.string.free_shipping_impossible).toString()
+            checkoutJson.getString("webUrl")
+            message += "\n" + checkoutJson.getString("webUrl")
             showDialogMessage(message, "error")
         } else {
             val requestBody = CheckoutBody.createUpdateBody(checkoutJson, tag, shippingAddress, zeroPriceShippingRate)
@@ -381,7 +383,7 @@ class ProductActivity : AppCompatActivity(), ShippingRateDialogListener, Shippin
 
     private fun completeCheckoutClaim(checkout: JSONObject) {
         // Make final request to claim product
-        val claimBody = CheckoutBody.createClaimBody(checkout)
+        val claimBody = CheckoutBody.createClaimBody(checkout, playerId, inGameCurrencyAmount)
 
         WebApi.getInstance(this).makeRequest(apiAddress + "products/claimorder", Request.Method.POST, claimBody, apiKey, {response ->
             hideProgressDialog()
@@ -565,8 +567,12 @@ class ProductActivity : AppCompatActivity(), ShippingRateDialogListener, Shippin
 
 
     private fun showShippingAddressDialog() {
-        val shippingDialog = ShippingAddressDialog.newInstance()
-        shippingDialog.show(supportFragmentManager, ShippingAddressDialog.TAG)
+        if (playerId == null || playerId == "" || inGameCurrencyAmount < 0 ) {
+            showDialogMessage(getString(R.string.required_values_not_present), "error")
+        } else {
+            val shippingDialog = ShippingAddressDialog.newInstance()
+            shippingDialog.show(supportFragmentManager, ShippingAddressDialog.TAG)
+        }
     }
     //endregion
 
@@ -641,6 +647,8 @@ class ProductActivity : AppCompatActivity(), ShippingRateDialogListener, Shippin
         const val LOAD_PAYMENT_DATA_REQUEST_CODE = 991
         const val SELECTED_OPTIONS_KEY = "SELECTED_OPTIONS_KEY"
         const val CHOSEN_VARIANT_KEY = "CHOSEN_VARIANT_KEY"
+        var playerId: String? = null
+        var inGameCurrencyAmount: Double = -0.000001
 
         fun start(context: Context, productJson: String, productTag: String) {
             val starter = Intent(context, ProductActivity::class.java)

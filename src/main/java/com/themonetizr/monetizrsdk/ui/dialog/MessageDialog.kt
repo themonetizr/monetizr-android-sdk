@@ -3,6 +3,8 @@ package com.themonetizr.monetizrsdk.ui.dialog
 import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
+import android.text.SpannableString
+import android.text.util.Linkify
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import com.themonetizr.monetizrsdk.R
@@ -13,10 +15,12 @@ class MessageDialog: DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val message = arguments!!.getString(Parameters.MESSAGE)!!
+        val messageWithUrls = SpannableString(message)
+        Linkify.addLinks(messageWithUrls, Linkify.ALL)
         val type = arguments!!.getString(Parameters.MESSAGE_TYPE)!!
         return activity?.let {
             val builder = AlertDialog.Builder(it, com.themonetizr.monetizrsdk.R.style.MessageDialogTheme)
-            builder.setMessage(message)
+            builder.setMessage(messageWithUrls)
                 .setPositiveButton(
                     com.themonetizr.monetizrsdk.R.string.message_dialog_close_btn,
                     DialogInterface.OnClickListener { dialog, id ->

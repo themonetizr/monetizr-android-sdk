@@ -46,12 +46,11 @@ class CheckoutBody {
             return jsonBody
         }
 
-        fun createClaimBody(checkoutInfo: JSONObject): JSONObject {
+        fun createClaimBody(checkoutInfo: JSONObject, playerId: String?, inGameCurrencyAmount: Double): JSONObject {
             val jsonBody = JSONObject()
             jsonBody.put("checkoutId", checkoutInfo.getString("id"))
-
-            jsonBody.put("player_id", "Just a player id")
-            jsonBody.put("in_game_currency_amount", 12)
+            jsonBody.put("player_id", playerId)
+            jsonBody.put("in_game_currency_amount", inGameCurrencyAmount)
 
             return jsonBody
         }

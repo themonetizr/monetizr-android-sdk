@@ -27,14 +27,14 @@ object ConfigHelper {
             val result = bundle.getString(name)
             if (result == null) {
                 if (MonetizrSdk.debuggable) {
-                    Log.e(TAG, "Failed get value from manifest meta data ")
+                    Log.e(TAG, "Failed to get value from manifest meta data")
                 }
             } else {
                 return result
             }
         } catch (e: IOException) {
             if (MonetizrSdk.debuggable) {
-                Log.e(TAG, "Failed get value from manifest meta data ")
+                Log.e(TAG, "Failed get value from manifest meta data")
             }
         }
         return ""

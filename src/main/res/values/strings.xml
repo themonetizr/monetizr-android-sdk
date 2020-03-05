@@ -47,5 +47,8 @@
 	<string name="something_went_wrong">Something went wrong</string>
 	<string name="success_message">Process was successful</string>
 	<string name="unexpected_exception">An unexpected error has occured, please try process again</string>
-	<string name="free_shipping_impossible">Free shipping is not possible, you will need to complete order with payment</string>
+	<string name="free_shipping_impossible">Free shipping is not possible, you will need to complete order with payment. Address is displayed below. </string>
+	<string name="visit_online_checkout">Visit online store</string>
+	<string name="no_network">Sorry, you are offline</string>
+	<string name="required_values_not_present">Required settings for claiming were not provided</string>
 </resources>
