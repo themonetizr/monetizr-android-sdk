@@ -11,13 +11,13 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.volley.Request
-import com.google.android.gms.common.api.ApiException
-import com.google.android.gms.wallet.*
-import com.stripe.android.ApiResultCallback
-import com.stripe.android.Stripe
-import com.stripe.android.model.ConfirmPaymentIntentParams
-import com.stripe.android.model.PaymentMethod
-import com.stripe.android.model.PaymentMethodCreateParams
+//import com.google.android.gms.common.api.ApiException
+//import com.google.android.gms.wallet.*
+//import com.stripe.android.ApiResultCallback
+//import com.stripe.android.Stripe
+//import com.stripe.android.model.ConfirmPaymentIntentParams
+//import com.stripe.android.model.PaymentMethod
+//import com.stripe.android.model.PaymentMethodCreateParams
 import com.themonetizr.monetizrsdk.ClearedService
 import com.themonetizr.monetizrsdk.MonetizrSdk.Companion.logError
 import com.themonetizr.monetizrsdk.R
@@ -43,7 +43,7 @@ import java.io.Serializable
 class ProductActivity : AppCompatActivity(), ShippingRateDialogListener, ShippingAddressDialogListener, OptionsDialogListener {
     private var userMadeInteraction: Boolean = false
     private var activityLaunchedStamp: Long = 0
-    private lateinit var paymentsClient: PaymentsClient
+//    private lateinit var paymentsClient: PaymentsClient
     private val selectedOptions: ArrayList<String> = ArrayList()
     private var progressDialog: AlertDialog? = null
     private var chosenVariant: Variant? = null
@@ -58,7 +58,7 @@ class ProductActivity : AppCompatActivity(), ShippingRateDialogListener, Shippin
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_product)
         activityLaunchedStamp = System.currentTimeMillis()
-        paymentsClient = PaymentsUtil.createPaymentsClient(this)
+//        paymentsClient = PaymentsUtil.createPaymentsClient(this)
         progressDialog = ProgressDialogBuilder.makeProgressDialog(this)
         startService(Intent(baseContext, ClearedService::class.java))
 
@@ -168,29 +168,29 @@ class ProductActivity : AppCompatActivity(), ShippingRateDialogListener, Shippin
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (requestCode == LOAD_PAYMENT_DATA_REQUEST_CODE && resultCode == RESULT_OK) {
-            if (data != null) {
-                val paymentData = PaymentData.getFromIntent(data)
-
-                if (paymentData != null) {
-                    val tag = intent.getStringExtra(Parameters.PRODUCT_TAG)!!
-                    val json = intent.getStringExtra(Parameters.PRODUCT_JSON)!!
-                    val productJson = JSONObject(json)
-
-                    checkout(paymentData)
-                }
-            } else {
-                val tag = intent.getStringExtra(Parameters.PRODUCT_TAG)!!
-                val json = intent.getStringExtra(Parameters.PRODUCT_JSON)!!
-                val productJson = JSONObject(json)
-                checkout(null)
-            }
-        }
-
-        if (requestCode == LOAD_PAYMENT_DATA_REQUEST_CODE && resultCode == AutoResolveHelper.RESULT_ERROR) {
-            AutoResolveHelper.getStatusFromIntent(data)?.let { handleError(it.statusCode) }
-        }
-        payButtonView.isEnabled = true
+//        if (requestCode == LOAD_PAYMENT_DATA_REQUEST_CODE && resultCode == RESULT_OK) {
+//            if (data != null) {
+//                val paymentData = PaymentData.getFromIntent(data)
+//
+//                if (paymentData != null) {
+//                    val tag = intent.getStringExtra(Parameters.PRODUCT_TAG)!!
+//                    val json = intent.getStringExtra(Parameters.PRODUCT_JSON)!!
+//                    val productJson = JSONObject(json)
+//
+//                    checkout(paymentData)
+//                }
+//            } else {
+//                val tag = intent.getStringExtra(Parameters.PRODUCT_TAG)!!
+//                val json = intent.getStringExtra(Parameters.PRODUCT_JSON)!!
+//                val productJson = JSONObject(json)
+//                checkout(null)
+//            }
+//        }
+//
+//        if (requestCode == LOAD_PAYMENT_DATA_REQUEST_CODE && resultCode == AutoResolveHelper.RESULT_ERROR) {
+//            AutoResolveHelper.getStatusFromIntent(data)?.let { handleError(it.statusCode) }
+//        }
+//        payButtonView.isEnabled = true
     }
 
     override fun onOptionsSelect(options: ArrayList<HierarchyVariant>) {
@@ -206,7 +206,7 @@ class ProductActivity : AppCompatActivity(), ShippingRateDialogListener, Shippin
     override fun onShippingRateSelect(paymentData: String, checkout: JSONObject, shippingRate: ShippingRate) {
 
         // Create shipping address if it was not yet present
-        val data = PaymentData.fromJson(paymentData)
+//        val data = PaymentData.fromJson(paymentData)
 //        shippingAddress = if (data.shippingAddress != null) {
 //            val address = data.shippingAddress!!
 //            ShippingAddressInto(address.name, address.name, address.address1, address.address2, address.locality, address.administrativeArea, address.countryCode, address.postalCode).getJsonObject()
@@ -251,47 +251,49 @@ class ProductActivity : AppCompatActivity(), ShippingRateDialogListener, Shippin
     }
 
     private fun continueWithPayment(checkout: JSONObject, paymentData: String?) {
-        val paymentBody = CheckoutWithPaymentBody.paymentBody(paymentData, checkout, tag)
-        WebApi.getInstance(this).makeRequest(apiAddress + "products/payment", Request.Method.POST, paymentBody, apiKey, {
-            // This is a charge token request from server
-            val paymentMethodCreateParams = PaymentMethodCreateParams.createFromGooglePay(JSONObject(paymentData))
-
-            // Now use the `paymentMethodCreateParams` object to create a PaymentMethod
-            val stripe = Stripe(this, "pk_test_OS6QyI1IBsFtonsnFk6rh2wb00mSXyblvu");
-            stripe.createPaymentMethod(
-                paymentMethodCreateParams,
-                paymentBody.getString("payment_token"),
-                object: ApiResultCallback<PaymentMethod> {
-                    override fun onSuccess(result: PaymentMethod) {
-                        // Confirm payment with method id and client secret from server
-                        if (result.id != null) {
-                            val methodId = result.id
-                            stripe.confirmPayment(this@ProductActivity,
-                                ConfirmPaymentIntentParams.createWithPaymentMethodId(
-                                    methodId!!,
-                                    it.getString("intent"),
-                                    "https://themonetizr.com"
-                                )
-                            )
-                        }
-                    }
-
-                    override fun onError(e: Exception) {
-                        logError("Stripe exception " + e.toString(), supportFragmentManager)
-                    }
-                }
-            )
-                hideProgressDialog()
-                finish()
-        }, {
-            hideProgressDialog()
-            logError(it, supportFragmentManager)
-        })
+//        val paymentBody = CheckoutWithPaymentBody.paymentBody(paymentData, checkout, tag)
+//        WebApi.getInstance(this).makeRequest(apiAddress + "products/payment", Request.Method.POST, paymentBody, apiKey, {
+//            // This is a charge token request from server
+//            val paymentMethodCreateParams = PaymentMethodCreateParams.createFromGooglePay(JSONObject(paymentData))
+//
+//            // Now use the `paymentMethodCreateParams` object to create a PaymentMethod
+//            val stripe = Stripe(this, "pk_test_OS6QyI1IBsFtonsnFk6rh2wb00mSXyblvu");
+//            stripe.createPaymentMethod(
+//                paymentMethodCreateParams,
+//                paymentBody.getString("payment_token"),
+//                object: ApiResultCallback<PaymentMethod> {
+//                    override fun onSuccess(result: PaymentMethod) {
+//                        // Confirm payment with method id and client secret from server
+//                        if (result.id != null) {
+//                            val methodId = result.id
+//                            stripe.confirmPayment(this@ProductActivity,
+//                                ConfirmPaymentIntentParams.createWithPaymentMethodId(
+//                                    methodId!!,
+//                                    it.getString("intent"),
+//                                    "https://themonetizr.com"
+//                                )
+//                            )
+//                        }
+//                    }
+//
+//                    override fun onError(e: Exception) {
+//                        logError("Stripe exception " + e.toString(), supportFragmentManager)
+//                    }
+//                }
+//            )
+//                hideProgressDialog()
+//                finish()
+//        }, {
+//            hideProgressDialog()
+//            logError(it, supportFragmentManager)
+//        })
     }
 
     // Region checkout
 
-    private fun checkout(proceedWithPayment: PaymentData? = null) {
+// proceedWithPayment: PaymentData? = null
+
+    private fun checkout(proceedWithPayment: String? = null) {
         val variant: JSONObject? = searchSelectedVariant(productJson)
         val url = apiAddress + "products/checkout"
         val withPayment = proceedWithPayment != null
@@ -316,7 +318,7 @@ class ProductActivity : AppCompatActivity(), ShippingRateDialogListener, Shippin
                         } else {
                             val checkout = checkoutCreate.getJSONObject("checkout")
                             if (withPayment) {
-                                showShippingRateDialog(proceedWithPayment!!.toJson(), checkout)
+                                showShippingRateDialog(proceedWithPayment!!, checkout)
                             } else {
                                 if (product.claimable == true) {
                                     // Complete free claiming process
@@ -414,12 +416,12 @@ class ProductActivity : AppCompatActivity(), ShippingRateDialogListener, Shippin
     }
 
     private fun initGooglePayButton() {
-        val isReadyToPayJson = PaymentsUtil.isReadyToPayRequest() ?: return
-        val request = IsReadyToPayRequest.fromJson(isReadyToPayJson.toString()) ?: return
-
-        paymentsClient.isReadyToPay(request).addOnCompleteListener { completedTask ->
-            completedTask.getResult(ApiException::class.java)?.let(::showGooglePayButtonIfAvailable)
-        }
+//        val isReadyToPayJson = PaymentsUtil.isReadyToPayRequest() ?: return
+//        val request = IsReadyToPayRequest.fromJson(isReadyToPayJson.toString()) ?: return
+//
+//        paymentsClient.isReadyToPay(request).addOnCompleteListener { completedTask ->
+//            completedTask.getResult(ApiException::class.java)?.let(::showGooglePayButtonIfAvailable)
+//        }
     }
 
     private fun showGooglePayButtonIfAvailable(available: Boolean) {
@@ -531,25 +533,25 @@ class ProductActivity : AppCompatActivity(), ShippingRateDialogListener, Shippin
     }
 
     private fun payGooglePlayTap(productJson: JSONObject) {
-        payButtonView.isEnabled = false
-        val variantForCheckout: JSONObject? = searchSelectedVariant(productJson)
-        if (variantForCheckout != null) {
-            val totalPrice = variantForCheckout.getJSONObject("priceV2").getString("amount")
-
-            val paymentDataRequestJson = PaymentsUtil.getPaymentDataRequest(totalPrice)
-            if (paymentDataRequestJson == null) {
-                logError("Can't fetch payment data request", supportFragmentManager)
-                return
-            }
-            val request = PaymentDataRequest.fromJson(paymentDataRequestJson.toString())
-
-            if (request != null) {
-                AutoResolveHelper.resolveTask(paymentsClient.loadPaymentData(request), this, LOAD_PAYMENT_DATA_REQUEST_CODE)
-            }
-        } else {
-            logError("Can't fetch payment data request", supportFragmentManager)
-        }
-        payButtonView.isEnabled = true
+//        payButtonView.isEnabled = false
+//        val variantForCheckout: JSONObject? = searchSelectedVariant(productJson)
+//        if (variantForCheckout != null) {
+//            val totalPrice = variantForCheckout.getJSONObject("priceV2").getString("amount")
+//
+//            val paymentDataRequestJson = PaymentsUtil.getPaymentDataRequest(totalPrice)
+//            if (paymentDataRequestJson == null) {
+//                logError("Can't fetch payment data request", supportFragmentManager)
+//                return
+//            }
+//            val request = PaymentDataRequest.fromJson(paymentDataRequestJson.toString())
+//
+//            if (request != null) {
+//                AutoResolveHelper.resolveTask(paymentsClient.loadPaymentData(request), this, LOAD_PAYMENT_DATA_REQUEST_CODE)
+//            }
+//        } else {
+//            logError("Can't fetch payment data request", supportFragmentManager)
+//        }
+//        payButtonView.isEnabled = true
     }
 
     private fun showProgressDialog() {
