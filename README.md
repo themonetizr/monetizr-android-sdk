@@ -27,7 +27,7 @@ repositories {
 }
 
 dependencies {
-  implementation 'com.themonetizr.monetizrsdk:MonetizrSDK:2.0.0'
+  implementation 'io.monetizr.monetizrsdk:MonetizrSDK:2.0.0'
 }
 ```
 
@@ -35,7 +35,7 @@ dependencies {
 
 ```xml
 <dependency>
-    <groupId>com.themonetizr.monetizrsdk</groupId>
+    <groupId>io.monetizr.monetizrsdk</groupId>
     <artifactId>MonetizrSDK</artifactId>
     <version>2.0.0</version>
     <type>pom</type>

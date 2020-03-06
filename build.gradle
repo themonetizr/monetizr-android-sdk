@@ -59,7 +59,7 @@ repositories {
 
 publish {
 
-    def groupProjectID = 'com.themonetizr.monetizrsdk'
+    def groupProjectID = 'io.monetizr.monetizrsdk'
     def artifactProjectID = 'MonetizrSDK'
     def publishVersionID = '2.0.0'
 
