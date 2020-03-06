@@ -58,7 +58,8 @@ dependencies {
  * Create a folder "subProject" in your project;
  * Copy and paste the library folder to your subProject folder;
  * On the root of your project directory, create/modify the settings.gradle file. It should contain something like the following:
-```grade
+ 
+```gradle
 include 'MyApp', ':monetizrsdk'
 
 ``` 
@@ -87,12 +88,18 @@ When you are ready to show an Offer View inside your app, you can invoke Monetiz
 MonetizrSdk.showProductForTag("Sample shirt")
 ```
 
+To display product as locked. This approach will display altered view with locked on top of product images and will disable checkout/claim/purchase option
+
+```kotlin
+MonetizrSdk.showProductForTag("Sample shirt", true)
+```
+
 Monetizr supports giveaway campaigns. In this approach our client has pre-paid products for his players and signed agreement. To learn more, contact <martins@themonetizr.com>
 
 When using giveaway campaigns Monetizr needs additional information to confirm players ability to calim this product. In this approach, two additional parameters are required
 
 ```kotlin
-MonetizrSdk.showProductForTag("Sample shirt", "Player ID", 123.45)
+MonetizrSdk.showProductForTag("Sample shirt", false, "Player ID", 123.45)
 ```
 
 The library defines two permissions: access to the internet and necessity to check for internet connection.

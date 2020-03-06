@@ -36,6 +36,7 @@ class MonetizrSdk {
         var dynamicApiKey: String? = null
         private var playerId: String? = null
         private var inGameCurrencyAmount: Double = -0.000001
+        private var lockedProduct: Boolean = false
         private var initialLaunch: Boolean = true
         private var progressDialog: AlertDialog? = null
 
@@ -43,10 +44,11 @@ class MonetizrSdk {
          * Show product with specified tag for specific user
          *
          * @param  String  productTag                Product tag that is provided to customer
+         * @param  Boolean locked_product            Determines if this product has to be displayed as locked
          * @param  String  player_id                 Player ID (optional parameter in case this is a pre-paid product)
          * @param  Float   in_game_currency_amount   Currency amount (optional parameter in case this is a pre-paid product)
          */
-        fun showProductForTag(productTag: String, player_id: String? = null, in_game_currency_amount: Double = -0.000001) {
+        fun showProductForTag(productTag: String, locked_product: Boolean = false, player_id: String? = null, in_game_currency_amount: Double = -0.000001) {
             try {
                 val context = ApplicationProvider.application as Context
                 val activity = ActivityProvider.currentActivity
@@ -67,6 +69,10 @@ class MonetizrSdk {
                 // Use specified api key if it is passed to method
                 if (dynamicApiKey?.equals(null) == false) {
                     apiKey = dynamicApiKey.toString()
+                }
+
+                if (locked_product == true) {
+                    lockedProduct = true
                 }
 
                 if (player_id?.equals(null) == false) {
@@ -186,6 +192,7 @@ class MonetizrSdk {
             if (product != null) {
                 ProductActivity.playerId = playerId
                 ProductActivity.inGameCurrencyAmount = inGameCurrencyAmount
+                ProductActivity.lockedProduct = lockedProduct
                 ProductActivity.start(currentActivity, product.toString(), productTag)
             } else {
                 logError("Product not found")

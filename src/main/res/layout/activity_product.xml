@@ -36,6 +36,15 @@
                 android:tint="@color/overridePrimary"
                 android:src="@drawable/ic_close_black_24dp"
                 tools:ignore="ContentDescription" />
+
+            <ImageView
+                android:id="@+id/lockedIcon"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_gravity="center"
+                android:visibility="gone"
+                android:src="@drawable/ic_locked"
+                tools:ignore="ContentDescription"/>
         </FrameLayout>
 
         <LinearLayout

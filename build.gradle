@@ -70,5 +70,4 @@ publish {
     publishVersion = publishVersionID
     desc = 'Monetizr Android SDK. Implementation project for Monetizr Android RESTful API client'
     website = 'https://github.com/themonetizr/monetizr-android-sdk'
-
 }

@@ -1,16 +1,5 @@
 package com.themonetizr.monetizrsdk.ui.activity
 
-import android.content.Context
-import android.content.Intent
-import android.content.res.Configuration
-import android.graphics.Paint.STRIKE_THRU_TEXT_FLAG
-import android.os.Bundle
-import android.util.Log
-import android.view.View
-import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.android.volley.Request
 //import com.google.android.gms.common.api.ApiException
 //import com.google.android.gms.wallet.*
 //import com.stripe.android.ApiResultCallback
@@ -18,6 +7,19 @@ import com.android.volley.Request
 //import com.stripe.android.model.ConfirmPaymentIntentParams
 //import com.stripe.android.model.PaymentMethod
 //import com.stripe.android.model.PaymentMethodCreateParams
+import android.content.Context
+import android.content.Intent
+import android.content.res.Configuration
+import android.graphics.Paint.STRIKE_THRU_TEXT_FLAG
+import android.graphics.drawable.ColorDrawable
+import android.os.Bundle
+import android.util.Log
+import android.view.View
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.android.volley.Request
 import com.themonetizr.monetizrsdk.ClearedService
 import com.themonetizr.monetizrsdk.MonetizrSdk.Companion.logError
 import com.themonetizr.monetizrsdk.R
@@ -26,7 +28,6 @@ import com.themonetizr.monetizrsdk.api.WebApi
 import com.themonetizr.monetizrsdk.dto.*
 import com.themonetizr.monetizrsdk.misc.ConfigHelper
 import com.themonetizr.monetizrsdk.misc.Parameters
-import com.themonetizr.monetizrsdk.payment.PaymentsUtil
 import com.themonetizr.monetizrsdk.ui.adapter.ImageGalleryAdapter
 import com.themonetizr.monetizrsdk.ui.adapter.ItemIndicator
 import com.themonetizr.monetizrsdk.ui.adapter.ItemSnapHelper
@@ -103,6 +104,9 @@ class ProductActivity : AppCompatActivity(), ShippingRateDialogListener, Shippin
 
         variantContainerView.setOnClickListener { showOptionDialog(json) }
 
+        if (lockedProduct) {
+            checkoutButtonView.isEnabled = false
+        }
         if (product.claimable == true) {
             checkoutButtonView.setOnClickListener { showShippingAddressDialog() }
         } else {
@@ -436,6 +440,14 @@ class ProductActivity : AppCompatActivity(), ShippingRateDialogListener, Shippin
         val imageGalleryAdapter = ImageGalleryAdapter(this, photos)
         val layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
 
+        if (lockedProduct) {
+            topView.foreground = ColorDrawable(ContextCompat.getColor(this, R.color.imageOverlay))
+            lockedIcon.visibility = View.VISIBLE
+        } else {
+            topView.foreground = null
+            lockedIcon.visibility = View.GONE
+        }
+
         productImagesView.setHasFixedSize(true)
         productImagesView.layoutManager = layoutManager
         ItemSnapHelper().attachToRecyclerView(productImagesView)
@@ -651,6 +663,7 @@ class ProductActivity : AppCompatActivity(), ShippingRateDialogListener, Shippin
         const val CHOSEN_VARIANT_KEY = "CHOSEN_VARIANT_KEY"
         var playerId: String? = null
         var inGameCurrencyAmount: Double = -0.000001
+        var lockedProduct: Boolean = false
 
         fun start(context: Context, productJson: String, productTag: String) {
             val starter = Intent(context, ProductActivity::class.java)
