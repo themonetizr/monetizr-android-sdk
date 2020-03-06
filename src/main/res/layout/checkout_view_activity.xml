@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:orientation="vertical">
+
+	<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:gravity="start"
+			android:orientation="horizontal"
+			android:background="@color/colorBackground"
+			android:padding="@dimen/default_padding"
+			tools:ignore="UseCompoundDrawables">
+
+		<ImageView
+				android:layout_width="wrap_content"
+				android:layout_height="match_parent"
+				android:src="@drawable/ic_navigate_before_black_24dp"
+				android:tint="@color/accentColor"
+				tools:ignore="ContentDescription" />
+
+		<TextView
+				android:id="@+id/backToProduct"
+				android:layout_width="wrap_content"
+				android:layout_height="match_parent"
+				android:gravity="center_vertical"
+				android:text="@string/back"
+				android:textColor="@color/accentColor"
+				android:textSize="18sp" />
+	</LinearLayout>
+	<WebView
+			android:id="@+id/checkout_webview"
+			android:layout_width="match_parent"
+			android:layout_height="0dp"
+			android:layout_weight="1"/>
+</LinearLayout>

@@ -1,27 +1,42 @@
 <resources>
 
-    <style name="MonetizrTheme" parent="Theme.MaterialComponents.Light.NoActionBar"/>
+	<style name="MonetizrTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar" />
 
-    <style name="FullscreenTheme" parent="MonetizrTheme">
-        <item name="android:actionBarStyle">@style/FullscreenActionBarStyle</item>
-        <item name="android:windowActionBarOverlay">false</item>
-        <item name="android:windowBackground">@null</item>
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-        <item name="metaButtonBarStyle">?android:attr/buttonBarStyle</item>
-        <item name="metaButtonBarButtonStyle">?android:attr/buttonBarButtonStyle</item>
-    </style>
+	<style name="FullscreenTheme" parent="MonetizrTheme">
+		<item name="windowActionBar">false</item>
+		<item name="windowNoTitle">true</item>
+		<item name="metaButtonBarStyle">?android:attr/buttonBarStyle</item>
+		<item name="metaButtonBarButtonStyle">?android:attr/buttonBarButtonStyle</item>
+		<item name="colorPrimary">@color/colorPrimary</item>
+		<item name="android:colorBackground">@color/colorBackground</item>
+	</style>
 
-    <style name="FullscreenActionBarStyle" parent="Widget.AppCompat.ActionBar">
-        <item name="android:background">@color/dark_gray</item>
-    </style>
+	<style name="BottomSheet" parent="@style/Widget.Design.BottomSheet.Modal">
+		<item name="android:background">@drawable/dialog_sheet_background</item>
+	</style>
 
-    <style name="BottomSheet" parent="@style/Widget.Design.BottomSheet.Modal">
-        <item name="android:background">@drawable/dialog_sheet_background</item>
-    </style>
+	<style name="BottomSheetDialogTheme" parent="@style/Theme.Design.Light.BottomSheetDialog">
+		<item name="android:windowIsFloating">false</item>
+		<item name="bottomSheetStyle">@style/BottomSheet</item>
+	</style>
 
-    <style name="BottomSheetDialogTheme" parent="@style/Theme.Design.Light.BottomSheetDialog">
-        <item name="android:windowIsFloating">false</item>
-        <item name="bottomSheetStyle">@style/BottomSheet</item>
-    </style>
+	<style name="MessageDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+		<item name="android:textColor">@color/colorPrimary</item>
+		<item name="android:textColorPrimary">@color/colorPrimary</item>
+		<item name="colorAccent">@color/accentColor</item>
+		<item name="android:windowIsFloating">true</item>
+		<item name="android:windowIsTranslucent">false</item>
+		<item name="android:windowNoTitle">true</item>
+		<item name="android:windowFullscreen">false</item>
+		<item name="android:windowBackground">@color/messageDialogBackground</item>
+		<item name="android:windowAnimationStyle">@null</item>
+		<item name="android:backgroundDimEnabled">true</item>
+		<item name="android:backgroundDimAmount">0.5</item>
+		<item name="buttonBarPositiveButtonStyle">@style/PositiveButtonStyle</item>
+	</style>
+
+	<style name="PositiveButtonStyle" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
+		<item name="android:textColor">@color/colorPrimary</item>
+	</style>
+
 </resources>

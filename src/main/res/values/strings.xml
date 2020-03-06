@@ -2,6 +2,7 @@
 	<string name="app_name">MonetizrBuySdk</string>
 
 	<string name="title_activity_product">ProductActivity</string>
+	<string name="title_activity_checkout">CheckoutActivity</string>
 	<string name="variant_not_found">Sorry, chosen product variant is not available in store!</string>
 	<string name="error_while_checkout">Sorry, product checkout was not successful</string>
 	<string name="checkout_button_title">Checkout</string>
@@ -9,7 +10,7 @@
 	<string name="product_tag">Product tag</string>
 	<string name="api_key">API key</string>
 	<string name="example_api_key">4D2E54389EB489966658DDD83E2D1</string>
-	<string name="sample_t_shirt">monetizr-sample-t-shirt</string>
+	<string name="sample_t_shirt">Sample shirt</string>
 	<string name="show_product">Show product</string>
 	<string name="close_btn">X</string>
 	<string name="larger_than">></string>
@@ -33,6 +34,21 @@
 	<string name="confirm_total_without_shipping">Total without shipping: %1$s</string>
 	<string name="confirm_total_with_shipping">Total: %1$s</string>
 
-    <string name="back">Back</string>
-    <string name="selected">Selected:</string>
+	<string name="back">Back</string>
+	<string name="cancel">Cancel</string>
+	<string name="selected">Selected:</string>
+	<string name="title_activity_checkout_view">CheckoutViewActivity</string>
+	<string name="submit_claimable">Submit</string>
+	<string name="email">Email</string>
+	<string name="email_invalid">Invalid email</string>
+	<string name="required_field">Required field</string>
+	<string name="product_claimed">Product was claimed, you will receive confirmation e-mail with additional information.</string>
+	<string name="message_dialog_close_btn">Close</string>
+	<string name="something_went_wrong">Something went wrong</string>
+	<string name="success_message">Process was successful</string>
+	<string name="unexpected_exception">An unexpected error has occured, please try process again</string>
+	<string name="free_shipping_impossible">Free shipping is not possible, you will need to complete order with payment. Address is displayed below. </string>
+	<string name="visit_online_checkout">Visit online store</string>
+	<string name="no_network">Sorry, you are offline</string>
+	<string name="required_values_not_present">Required settings for claiming were not provided</string>
 </resources>

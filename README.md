@@ -7,10 +7,12 @@ Monetizr Android SDK is a plugin with the built-in functionality of:
 - HTML texts for descriptions;
 - allowing end-users to select product variant options;
 - displaying price in real or in-game currency (including discounts);
-- checkout and payment support;
-- Google Pay support (optional).
+- checkout and payment support.
 
-Monetizr uses oAuth 2 authentication behind the scenes for all payment and order related processes. The SDK takes care of managing oAuth 2. To use SDK and connect to Monetizr servers, all you need is a single API key. It can be retrieved via Monetizr web [Console][3]. API is a public two-way, it does not expose any useful information, but you should be aware of this.
+Monetizr uses Stripe adn Google Pay integrations for payments processing. To use SDK and connect to Monetizr servers, all you need is a single API key.
+It can be retrieved via Monetizr web [Console][3].
+The API is an unauthenticated public API - no username or password is required. 
+Only an access token is required. You can use Monetizr's public test token or create your own [Console][3]. The API does not expose any data that can be potentially harmful or can be considered as personal data.
 
 Read the Monetizr's [Android documentation][2] to find out more.
 
@@ -25,7 +27,7 @@ repositories {
 }
 
 dependencies {
-  implementation 'io.monetizr.monetizrsdk:MonetizrSDK:1.0.0'
+  implementation 'com.themonetizr.monetizrsdk:MonetizrSDK:2.0.0'
 }
 ```
 
@@ -33,9 +35,9 @@ dependencies {
 
 ```xml
 <dependency>
-    <groupId>io.monetizr.monetizrsdk</groupId>
+    <groupId>com.themonetizr.monetizrsdk</groupId>
     <artifactId>MonetizrSDK</artifactId>
-    <version>1.0.0</version>
+    <version>2.0.0</version>
     <type>pom</type>
 </dependency>
 ```
@@ -70,10 +72,11 @@ dependencies {
 ```
 
 ## Using the library in your app
-To use the SDK you need an [API key][4]. For testing purposes, you can use public test key **4D2E54389EB489966658DDD83E2D1**. It must be called once, before invoking Monetizr library for the first time.
+To use the SDK you need an [API key][4]. For testing purposes, you can use public test key **4D2E54389EB489966658DDD83E2D1**.
+API access key must be included in manifest.xml file
 
-```kotlin
-MonetizrSdk.apikey = "4D2E54389EB489966658DDD83E2D1"
+```xml
+<meta-data android:name="monetizr_api_key" android:value="4D2E54389EB489966658DDD83E2D1"/>
 ```
 
 To show a product in an [Offer View][5], you need to call a specific product_tag. Product tags represent a specific product, and they are managed in the web Console. For testing purposes, you can use public test product **Sample shirt**.
@@ -82,6 +85,14 @@ When you are ready to show an Offer View inside your app, you can invoke Monetiz
 
 ```kotlin
 MonetizrSdk.showProductForTag("Sample shirt")
+```
+
+Monetizr supports giveaway campaigns. In this approach our client has pre-paid products for his players and signed agreement. To learn more, contact <martins@themonetizr.com>
+
+When using giveaway campaigns Monetizr needs additional information to confirm players ability to calim this product. In this approach, two additional parameters are required
+
+```kotlin
+MonetizrSdk.showProductForTag("Sample shirt", "Player ID", 123.45)
 ```
 
 The library defines two permissions: access to the internet and necessity to check for internet connection.

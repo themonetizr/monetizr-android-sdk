@@ -1,41 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          xmlns:tools="http://schemas.android.com/tools" package="io.monetizr.monetizrsdk" >
+<manifest
+		xmlns:android="http://schemas.android.com/apk/res/android"
+		xmlns:tools="http://schemas.android.com/tools"
+		package="com.themonetizr.monetizrsdk">
 
-	<uses-permission android:name="android.permission.INTERNET"/>
-	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+	<uses-permission android:name="android.permission.INTERNET" />
+	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
 	<application>
-		<meta-data android:name="android.max_aspect" android:value="2.1" />
-		<meta-data android:name="android.notch_support" android:value="true"/>
-
+		<meta-data
+				android:name="android.max_aspect"
+				android:value="2.1" />
+		<meta-data
+				android:name="android.notch_support"
+				android:value="true" />
 		<meta-data
 				android:name="com.google.android.gms.wallet.api.enabled"
-				android:value="true"/>
-		<meta-data
-				android:name="com.google.android.gms.version"
-				android:value="@integer/google_play_services_version"/>
-		<service android:name="io.monetizr.monetizrsdk.ClearedService" android:stopWithTask="false" />
+				android:value="true" />
+
+		<meta-data android:name="monetizr_api_url" android:value="https://api3.themonetizr.com/api/"/>
+
+		<service
+				android:name=".ClearedService"
+				android:stopWithTask="false" />
+
 		<provider
 				android:name=".provider.AppContextProvider"
 				android:authorities="${applicationId}.monetizrsdk.applicationprovider"
 				android:directBootAware="true"
 				android:exported="false"
-				android:initOrder="900" tools:targetApi="n"/>
+				android:initOrder="900"
+				tools:targetApi="n" />
 		<provider
 				android:name=".provider.LastActivityProvider"
 				android:authorities="${applicationId}.monetizrsdk.lastactivityprovider"
 				android:directBootAware="true"
 				android:exported="false"
-				android:initOrder="900" tools:targetApi="n"/>
+				android:initOrder="900"
+				tools:targetApi="n" />
 
 		<activity
 				android:name=".ui.activity.ProductActivity"
-				android:configChanges="orientation"
 				android:label="@string/title_activity_product"
-				android:windowSoftInputMode="adjustResize"
-				android:theme="@style/FullscreenTheme">
-		</activity>
+				android:theme="@style/FullscreenTheme"
+				android:windowSoftInputMode="adjustResize" />
+		<activity
+				android:name=".ui.activity.ProductViewActivity"
+				android:label="@string/title_activity_product"
+				android:theme="@style/FullscreenTheme"
+				android:windowSoftInputMode="adjustResize" />
+		<activity
+				android:name=".ui.activity.CheckoutViewActivity"
+				android:label="@string/title_activity_checkout"
+				android:theme="@style/FullscreenTheme"
+				android:windowSoftInputMode="adjustResize" />
 	</application>
 
 </manifest>

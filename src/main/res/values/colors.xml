@@ -1,12 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<color name="colorPrimary">#4285f4</color>
-	<color name="colorPrimaryDark">#007aff</color>
-	<color name="colorAccent">#D81B60</color>
+	<color name="colorPrimary">#222222</color>
+	<color name="colorBackground">#F1F1F1</color>
 
-	<color name="white">#FFFFFF</color>
-	<color name="transparent">#00FFFFFF</color>
-	<color name="transparent62">#9E000000</color>
-	<color name="grey">#6d6d6d</color>
-	<color name="dark_gray">#231f20</color>
+	<color name="selectorBackground">#E5E5E5</color>
+	<color name="seperatorBackground">#999999</color>
+	<color name="pressedButton">#80E5E5E5</color>
+	<color name="focusedButton">#80E5E5E5</color>
+	<color name="accentColor">#222222</color>
+	<color name="selectedOptionBackground">#000000</color>
+	<color name="selectedOptionText">#E5E5E5</color>
+	<color name="messageDialogBackground">#F1F1F1</color>
+
+	<!-- Drawables ignore primary color and use one from material design -->
+	<color name="overridePrimary">#222222</color>
+	<color name="white">#FFF</color>
+
 </resources>

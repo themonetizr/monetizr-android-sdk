@@ -1,4 +1,4 @@
-package io.monetizr.monetizrsdk;
+package com.themonetizr.monetizrsdk;
 
 import android.content.Context;
 import androidx.test.InstrumentationRegistry;

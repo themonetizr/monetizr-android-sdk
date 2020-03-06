@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+		xmlns:app="http://schemas.android.com/apk/res-auto"
+		xmlns:tools="http://schemas.android.com/tools"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="vertical"
+		app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+
+	<TextView
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="3dp"
+		android:layout_marginTop="4dp"
+		android:textSize="18sp"
+		android:focusableInTouchMode="false"
+		android:paddingStart="8dp"
+		android:paddingEnd="8dp"
+		android:text="@string/email"
+		android:textColor="@color/colorPrimary" />
+
+	<EditText
+		android:id="@+id/shipping_address_email"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:ems="10"
+		android:textColor="@color/colorPrimary"
+		android:paddingStart="15dp"
+		android:paddingEnd="15dp"
+		android:inputType="textEmailAddress" />
+
+	<LinearLayout
+		android:id="@+id/addresswidget"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:orientation="vertical">
+	</LinearLayout>
+
+	<androidx.appcompat.widget.AppCompatButton
+		android:id="@+id/confirm_address"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:text="@string/submit_claimable"
+		android:textAllCaps="false"
+		android:background="@drawable/button_background"
+		android:textColor="@color/colorPrimary"
+		/>
+
+</LinearLayout>

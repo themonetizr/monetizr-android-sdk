@@ -3,16 +3,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/transparent"
     android:clickable="true"
     android:focusable="true"
-    android:orientation="vertical"
-    tools:background="@color/colorAccent">
+    android:orientation="vertical">
 
     <LinearLayout
         android:animateLayoutChanges="true"
-        android:layout_width="280dp"
-        android:layout_height="340dp"
+        android:layout_width="wrap_content"
+        android:clipToPadding="false"
+        android:layout_height="280dp"
         android:layout_gravity="center"
         android:background="@drawable/dialog_background"
         android:orientation="vertical">
@@ -21,38 +20,56 @@
             android:layout_width="match_parent"
             android:layout_height="40dp">
 
-            <TextView
-                android:id="@+id/titleView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:textColor="@color/white"
-                android:textSize="14sp"
-                tools:text="Select size" />
-
             <LinearLayout
-                android:id="@+id/backView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginStart="5dp"
-                android:gravity="start"
-                android:orientation="horizontal"
-                tools:ignore="UseCompoundDrawables">
+                android:orientation="horizontal">
 
-                <ImageView
+                <LinearLayout
+                    android:id="@+id/backView"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:src="@drawable/ic_navigate_before_black_24dp"
-                    android:tint="@color/colorAccent"
-                    tools:ignore="ContentDescription" />
+                    android:gravity="start"
+                    android:visibility="invisible"
+                    android:orientation="horizontal"
+                    tools:ignore="UseCompoundDrawables">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/ic_navigate_before_black_24dp"
+                        android:tint="@color/accentColor"
+                        tools:ignore="ContentDescription" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="@string/back"
+                        android:textColor="@color/accentColor"
+                        android:textSize="14sp" />
+                </LinearLayout>
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:id="@+id/titleView"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:text="@string/back"
-                    android:textColor="@color/colorAccent"
-                    android:textSize="16sp" />
+                    android:gravity="center"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/overridePrimary"
+                    tools:text="Select size" />
+
+                <TextView
+                        android:id="@+id/closeOptionsView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:textColor="@color/accentColor"
+                        android:gravity="end|center_vertical"
+                        android:text="@string/cancel"
+                        android:paddingEnd="@dimen/default_padding"
+                        android:textSize="14sp"/>
             </LinearLayout>
 
         </FrameLayout>
@@ -62,13 +79,16 @@
             android:lines="1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/dark_gray"
-            android:padding="8dp"
-            android:textColor="@color/grey"
             android:textSize="14sp"
             android:text="@string/selected"
             android:visibility="gone"
-            tools:text="sdfsd sdf" />
+            android:paddingStart="@dimen/dialog_padding"
+            android:paddingEnd="@dimen/dialog_padding"
+            android:paddingTop="@dimen/default_padding"
+            android:paddingBottom="@dimen/default_padding"
+            android:background="@color/selectedOptionBackground"
+            android:textColor="@color/selectedOptionText"
+            tools:text="" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/listView"
