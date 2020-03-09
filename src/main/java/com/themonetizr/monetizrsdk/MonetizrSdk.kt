@@ -71,9 +71,7 @@ class MonetizrSdk {
                     apiKey = dynamicApiKey.toString()
                 }
 
-                if (locked_product == true) {
-                    lockedProduct = true
-                }
+                lockedProduct = locked_product
 
                 if (player_id?.equals(null) == false) {
                     playerId = player_id.toString()
@@ -193,6 +191,7 @@ class MonetizrSdk {
                 ProductActivity.playerId = playerId
                 ProductActivity.inGameCurrencyAmount = inGameCurrencyAmount
                 ProductActivity.lockedProduct = lockedProduct
+                logError("the value here is: " + lockedProduct.toString())
                 ProductActivity.start(currentActivity, product.toString(), productTag)
             } else {
                 logError("Product not found")
