@@ -15,7 +15,7 @@ class ScaledImageView(context: Context, attrs: AttributeSet) : AppCompatImageVie
             // ceil not round - avoid thin vertical gaps along the left/right edges
             val width = View.MeasureSpec.getSize(widthMeasureSpec)
             val height =
-                Math.ceil((width * d!!.getIntrinsicHeight().toFloat() / d!!.getIntrinsicWidth()).toDouble())
+                Math.ceil((width * d.intrinsicHeight.toFloat() / d!!.intrinsicWidth).toDouble())
                     .toInt()
             this.setMeasuredDimension(width, height)
         } else {

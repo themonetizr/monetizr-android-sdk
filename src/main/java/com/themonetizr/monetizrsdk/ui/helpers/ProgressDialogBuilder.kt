@@ -10,7 +10,7 @@ import androidx.appcompat.app.AlertDialog
 public class ProgressDialogBuilder {
 
     companion object {
-        public fun makeProgressDialog(context: Context): AlertDialog? {
+        fun makeProgressDialog(context: Context): AlertDialog? {
 
             val holderLayout = RelativeLayout(context)
             val params = RelativeLayout.LayoutParams(100, 100)
@@ -28,7 +28,7 @@ public class ProgressDialogBuilder {
             alertBuilder.setView(holderLayout)
 
             val progressDialog = alertBuilder.create()
-            progressDialog!!.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            progressDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
             return progressDialog
         }

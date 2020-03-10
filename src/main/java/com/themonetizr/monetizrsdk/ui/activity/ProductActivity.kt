@@ -389,7 +389,7 @@ class ProductActivity : AppCompatActivity(), ShippingRateDialogListener, Shippin
 
     private fun completeCheckoutClaim(checkout: JSONObject) {
         // Make final request to claim product
-        val claimBody = CheckoutBody.createClaimBody(checkout, playerId, inGameCurrencyAmount)
+        val claimBody = CheckoutBody.createClaimBody(checkout, playerId)
 
         WebApi.getInstance(this).makeRequest(apiAddress + "products/claimorder", Request.Method.POST, claimBody, apiKey, {response ->
             hideProgressDialog()
@@ -581,7 +581,7 @@ class ProductActivity : AppCompatActivity(), ShippingRateDialogListener, Shippin
 
 
     private fun showShippingAddressDialog() {
-        if (playerId == null || playerId == "" || inGameCurrencyAmount < 0 ) {
+        if (playerId == null || playerId == "" ) {
             showDialogMessage(getString(R.string.required_values_not_present), "error")
         } else {
             val shippingDialog = ShippingAddressDialog.newInstance()
@@ -662,7 +662,6 @@ class ProductActivity : AppCompatActivity(), ShippingRateDialogListener, Shippin
         const val SELECTED_OPTIONS_KEY = "SELECTED_OPTIONS_KEY"
         const val CHOSEN_VARIANT_KEY = "CHOSEN_VARIANT_KEY"
         var playerId: String? = null
-        var inGameCurrencyAmount: Double = -0.000001
         var lockedProduct: Boolean = false
 
         fun start(context: Context, productJson: String, productTag: String) {

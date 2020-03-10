@@ -78,7 +78,6 @@ class ShippingAddressDialog : BottomSheetDialogFragment() {
 
             // Dimiss dialog and submit claiming request
             if (!hasErrors) {
-                val address = constructShippingAddress(addressData)
 
                 // Save address when first time entered
                 val editor:SharedPreferences.Editor = sharedPreferences.edit()
@@ -92,7 +91,7 @@ class ShippingAddressDialog : BottomSheetDialogFragment() {
                 editor.apply()
                 editor.commit()
 
-                listener?.onShippingAddressEntered(address)
+                listener?.onShippingAddressEntered(constructShippingAddress(addressData))
                 dialog?.dismiss()
             }
         }

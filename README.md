@@ -27,7 +27,7 @@ repositories {
 }
 
 dependencies {
-  implementation 'io.monetizr.monetizrsdk:MonetizrSDK:2.0.1'
+  implementation 'io.monetizr.monetizrsdk:MonetizrSDK:2.0.4'
 }
 ```
 
@@ -37,7 +37,7 @@ dependencies {
 <dependency>
     <groupId>io.monetizr.monetizrsdk</groupId>
     <artifactId>MonetizrSDK</artifactId>
-    <version>2.0.1</version>
+    <version>2.0.4</version>
     <type>pom</type>
 </dependency>
 ```
@@ -88,7 +88,7 @@ When you are ready to show an Offer View inside your app, you can invoke Monetiz
 MonetizrSdk.showProductForTag("Sample shirt")
 ```
 
-To display product as locked. This approach will display altered view with locked on top of product images and will disable checkout/claim/purchase option
+To display product as locked pass additional parameter. Altered view with locked symbol on top of product will be displayed and checkout/claim/purchase button will be disabled
 
 ```kotlin
 MonetizrSdk.showProductForTag("Sample shirt", true)
@@ -96,10 +96,10 @@ MonetizrSdk.showProductForTag("Sample shirt", true)
 
 Monetizr supports giveaway campaigns. In this approach our client has pre-paid products for his players and signed agreement. To learn more, contact <martins@themonetizr.com>
 
-When using giveaway campaigns Monetizr needs additional information to confirm players ability to calim this product. In this approach, two additional parameters are required
+When using giveaway campaigns Monetizr needs additional information to confirm players ability to claim this product. In this approach, two additional parameters are required
 
 ```kotlin
-MonetizrSdk.showProductForTag("Sample shirt", false, "Player ID", 123.45)
+MonetizrSdk.showProductForTag("Sample shirt", false, "Player ID")
 ```
 
 The library defines two permissions: access to the internet and necessity to check for internet connection.

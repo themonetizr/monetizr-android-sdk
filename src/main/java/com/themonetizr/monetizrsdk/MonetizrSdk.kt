@@ -5,11 +5,11 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
-import android.preference.PreferenceManager
 import android.util.DisplayMetrics
 import android.util.Log
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.FragmentManager
+import androidx.preference.PreferenceManager
 import com.android.volley.Request
 import com.android.volley.VolleyError
 import com.themonetizr.monetizrsdk.api.Telemetrics
@@ -35,7 +35,6 @@ class MonetizrSdk {
         var debuggable: Boolean = false
         var dynamicApiKey: String? = null
         private var playerId: String? = null
-        private var inGameCurrencyAmount: Double = -0.000001
         private var lockedProduct: Boolean = false
         private var initialLaunch: Boolean = true
         private var progressDialog: AlertDialog? = null
@@ -46,9 +45,8 @@ class MonetizrSdk {
          * @param  String  productTag                Product tag that is provided to customer
          * @param  Boolean locked_product            Determines if this product has to be displayed as locked
          * @param  String  player_id                 Player ID (optional parameter in case this is a pre-paid product)
-         * @param  Float   in_game_currency_amount   Currency amount (optional parameter in case this is a pre-paid product)
          */
-        fun showProductForTag(productTag: String, locked_product: Boolean = false, player_id: String? = null, in_game_currency_amount: Double = -0.000001) {
+        fun showProductForTag(productTag: String, locked_product: Boolean = false, player_id: String? = null) {
             try {
                 val context = ApplicationProvider.application as Context
                 val activity = ActivityProvider.currentActivity
@@ -75,7 +73,6 @@ class MonetizrSdk {
 
                 if (player_id?.equals(null) == false) {
                     playerId = player_id.toString()
-                    inGameCurrencyAmount = in_game_currency_amount
                 }
 
 
@@ -162,7 +159,7 @@ class MonetizrSdk {
             display.getRealMetrics(realMetrics)
             val realWidth = realMetrics.widthPixels
             val language = Locale.getDefault().displayLanguage
-            val url = endpoint + "products/tag/" + productTag + "?size=" + realWidth + "&language=" + language
+            val url = endpoint + "products/" + productTag + "?size=" + realWidth + "&locale=" + language
 
             WebApi.getInstance(activity).makeRequest(url, Request.Method.GET, null, apiKey, { onProductSuccess(it, productTag) }, ::onProductFail)
         }
@@ -183,15 +180,14 @@ class MonetizrSdk {
 
         private fun showProductActivity(productInfo: JSONObject, productTag: String) {
             val currentActivity = ActivityProvider.currentActivity ?: return
-            val product = productInfo.getJSONObject("data")?.getJSONObject("productByHandle")
+            val data = productInfo.getJSONObject("data")
 
             val activity = ActivityProvider.currentActivity as Context
 
-            if (product != null) {
+            if (data.has("productByHandle") && !data.isNull("productByHandle")) {
+                val product = data?.getJSONObject("productByHandle")
                 ProductActivity.playerId = playerId
-                ProductActivity.inGameCurrencyAmount = inGameCurrencyAmount
                 ProductActivity.lockedProduct = lockedProduct
-                logError("the value here is: " + lockedProduct.toString())
                 ProductActivity.start(currentActivity, product.toString(), productTag)
             } else {
                 logError("Product not found")
