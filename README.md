@@ -74,29 +74,29 @@ dependencies {
 
 ## Using the library in your app
 To use the SDK you need an [API key][4]. For testing purposes, you can use public test key `4D2E54389EB489966658DDD83E2D1`.
-API access key must be included in manifest.xml file
+API access key must be included in manifest.xml file.
 
 ```xml
 <meta-data android:name="monetizr_api_key" android:value="4D2E54389EB489966658DDD83E2D1"/>
 ```
 
-To show a product in an [Offer View][5], you need to call a specific product_tag. Product tags represent a specific product, and they are managed in the web Console. For testing purposes, you can use public test product `Sample shirt`.
+To show a product in an [Offer View][5], you need to call product_tag. Product tags represent a specific product, and they are managed in the web Monetizr Console. For testing purposes, you can use public test product `Sample shirt`.
 
-When you are ready to show an Offer View inside your app, you can invoke Monetizr SDK static method from within your app. One call invokes one Offer View:
+When you are ready to show an Offer View inside your app, you can invoke Monetizr SDK static method from within your app. One call invokes one Offer View.
 
 ```kotlin
 MonetizrSdk.showProductForTag("Sample shirt")
 ```
 
-To display product as locked pass additional parameter. Altered view with locked symbol on top of product will be displayed and checkout/claim/purchase button will be disabled
+To display product as "locked" you need pass additional parameter after product tag. Locked parameter can be `true` or `false` (default). Doing so will alter product image view with locked symbol on top of product and checkout/claim/purchase button will be disabled.
 
 ```kotlin
 MonetizrSdk.showProductForTag("Sample shirt", true)
 ```
 
-Monetizr supports giveaway campaigns. In this approach our client has pre-paid products for his players and signed agreement. To learn more, contact <martins@themonetizr.com>
+Monetizr supports giveaway campaigns for clients who pre-pay products instead of players. Giveaway campaigns currenctly require manual approval and a signed agreement. To learn more, contact <martins@themonetizr.com>.
 
-When using giveaway campaigns Monetizr needs additional information to confirm players ability to claim this product. In this approach, two additional parameters are required
+When using giveaway campaigns you will need to pass additional information to confirm players ability to claim this product. In this approach, two additional parameters are required - status of "locked" and a player ID. The later will be used to confirm with your servers whether the player who initiates Offer View can retrieve product for free.
 
 ```kotlin
 MonetizrSdk.showProductForTag("Sample shirt", false, "Player ID")
