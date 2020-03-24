@@ -17,10 +17,16 @@ import org.json.JSONObject
 
 
 class ShippingAddressDialog : BottomSheetDialogFragment() {
+    private val sharedPrefFile = "shipping_address_preference"
+    private var listener: ShippingAddressDialogListener? = null
+
     override fun getTheme(): Int = R.style.BottomSheetDialogTheme
     override fun onCreateDialog(savedInstanceState: Bundle?): BottomSheetDialog = BottomSheetDialog(requireContext(), theme)
-    private var listener: ShippingAddressDialogListener? = null
-    private val sharedPrefFile = "shipping_address_preference"
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        retainInstance = true
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.dialog_address, container, false)
@@ -28,12 +34,12 @@ class ShippingAddressDialog : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         val sharedPreferences: SharedPreferences = activity!!.getSharedPreferences(sharedPrefFile,Context.MODE_PRIVATE)
 
         // Set saved values
         val email = sharedPreferences.getString("email","")
         shipping_address_email.setText(email)
+
         val builder = AddressData.Builder()
         builder.setCountry(sharedPreferences.getString("country",""))
         builder.setRecipient(sharedPreferences.getString("recipient",""))
@@ -44,10 +50,11 @@ class ShippingAddressDialog : BottomSheetDialogFragment() {
         builder.setAddressLines(sharedPreferences.getStringSet("addresslines", emptyAddressLine)?.toMutableList())
         val address = builder.build()
 
-
         val defaultFormOptions = FormOptions()
+        defaultFormOptions.setHidden(AddressField.ORGANIZATION)
         val cacheManager = SimpleClientCacheManager()
         val addressWidget = AddressWidget(activity, addresswidget, defaultFormOptions, cacheManager, address)
+
 
         // Validate address
         confirm_address.setOnClickListener {
@@ -95,6 +102,7 @@ class ShippingAddressDialog : BottomSheetDialogFragment() {
                 dialog?.dismiss()
             }
         }
+        listener?.onShippingAddresDialogRendered()
     }
 
     private fun constructShippingAddress(addressData: AddressData): ShippingAddress {
@@ -118,15 +126,8 @@ class ShippingAddressDialog : BottomSheetDialogFragment() {
         addressBody.put("zip", addressData.postalCode)
         addressBody.put("province", addressData.administrativeArea)
         addressBody.put("email", shipping_address_email.text)
-
-        val addressLines = addressData.addressLines
-
-        // Address lines
-        var iterator = 1
-        for (address in addressLines) {
-            addressBody.put("address" + iterator, address)
-            iterator++
-        }
+        addressBody.put("address1", addressData.addressLine1)
+        addressBody.put("address2", addressData.addressLine2)
 
         return ShippingAddress(addressBody)
     }

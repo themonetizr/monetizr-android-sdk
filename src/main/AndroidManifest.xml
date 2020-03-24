@@ -14,9 +14,6 @@
 		<meta-data
 				android:name="android.notch_support"
 				android:value="true" />
-		<meta-data
-				android:name="com.google.android.gms.wallet.api.enabled"
-				android:value="true" />
 
 		<meta-data android:name="monetizr_api_url" android:value="https://api3.themonetizr.com/api/"/>
 

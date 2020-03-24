@@ -70,6 +70,10 @@
                     android:lines="1"
                     android:textSize="18sp"
                     android:textStyle="bold"
+                    app:autoSizeTextType="uniform"
+                    app:autoSizeMinTextSize="14sp"
+                    app:autoSizeMaxTextSize="24sp"
+                    app:autoSizeStepGranularity="2sp"
                     tools:text="" />
 
                 <LinearLayout
@@ -87,6 +91,10 @@
                         android:lines="1"
                         android:textSize="20sp"
                         android:textStyle="bold"
+                        app:autoSizeTextType="uniform"
+                        app:autoSizeMinTextSize="14sp"
+                        app:autoSizeMaxTextSize="24sp"
+                        app:autoSizeStepGranularity="2sp"
                         tools:text="" />
 
                     <TextView

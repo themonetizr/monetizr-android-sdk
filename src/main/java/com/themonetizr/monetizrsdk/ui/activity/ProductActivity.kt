@@ -363,6 +363,10 @@ class ProductActivity : AppCompatActivity(), ShippingRateDialogListener, Shippin
         checkout(null)
     }
 
+    override fun onShippingAddresDialogRendered() {
+        hideProgressDialog()
+    }
+
     private fun checkoutClaimProcess(checkoutJson: JSONObject) {
         // Prepare request body, create shipping Address
         val checkout = Checkout(checkoutJson)
@@ -393,7 +397,6 @@ class ProductActivity : AppCompatActivity(), ShippingRateDialogListener, Shippin
 
         WebApi.getInstance(this).makeRequest(apiAddress + "products/claimorder", Request.Method.POST, claimBody, apiKey, {response ->
             hideProgressDialog()
-
             if (response.getString("status") == "error") {
                 logError(response.toString())
                 showDialogMessage(response.getString("message"), "error")
@@ -581,6 +584,7 @@ class ProductActivity : AppCompatActivity(), ShippingRateDialogListener, Shippin
 
 
     private fun showShippingAddressDialog() {
+        showProgressDialog()
         if (playerId == null || playerId == "" ) {
             showDialogMessage(getString(R.string.required_values_not_present), "error")
         } else {

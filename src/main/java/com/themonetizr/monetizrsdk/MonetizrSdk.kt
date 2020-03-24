@@ -198,21 +198,21 @@ class MonetizrSdk {
 
         fun logError(error: Throwable) {
             if (debuggable) {
-                Log.i("MonetizrSDK", "has en error:  $error")
+                Log.i("MonetizrSDK", "has an error:  $error")
                 error.printStackTrace()
             }
         }
 
         fun logError(error: String) {
             if (debuggable) {
-                Log.i("MonetizrSDK", "has en error:  $error")
+                Log.i("MonetizrSDK", "has an error:  $error")
             }
         }
 
         fun logError(error: String, fragmentManager: FragmentManager) {
             if (debuggable) {
-                Log.i("MonetizrSDK", "has en error:  $error")
-                val message = MessageDialog.newInstance("has en error:  $error", "success")
+                Log.i("MonetizrSDK", "has an error:  $error")
+                val message = MessageDialog.newInstance("has an error:  $error", "success")
                 message.show(fragmentManager, MessageDialog.TAG)
             }
         }

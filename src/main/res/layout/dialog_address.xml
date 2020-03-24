@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 		xmlns:app="http://schemas.android.com/apk/res-auto"
-		xmlns:tools="http://schemas.android.com/tools"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:orientation="vertical"
 		app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
+	<androidx.core.widget.NestedScrollView
+			android:layout_width="match_parent"
+			android:layout_height="match_parent">
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:orientation="vertical">
 
 	<TextView
 		android:layout_width="match_parent"
@@ -28,7 +34,8 @@
 		android:textColor="@color/colorPrimary"
 		android:paddingStart="15dp"
 		android:paddingEnd="15dp"
-		android:inputType="textEmailAddress" />
+		android:inputType="textEmailAddress"
+		android:backgroundTint="@color/colorPrimary"/>
 
 	<LinearLayout
 		android:id="@+id/addresswidget"
@@ -45,6 +52,10 @@
 		android:textAllCaps="false"
 		android:background="@drawable/button_background"
 		android:textColor="@color/colorPrimary"
+		android:layout_marginBottom="20dp"
+		android:layout_marginTop="20dp"
 		/>
+	</LinearLayout>
+	</androidx.core.widget.NestedScrollView>
 
 </LinearLayout>
