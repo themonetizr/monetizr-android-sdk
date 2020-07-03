@@ -18,8 +18,11 @@ import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.volley.Request
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.iid.FirebaseInstanceId
 import com.themonetizr.monetizrsdk.ClearedService
 import com.themonetizr.monetizrsdk.MonetizrSdk.Companion.logError
 import com.themonetizr.monetizrsdk.R
@@ -37,9 +40,6 @@ import kotlinx.android.synthetic.main.activity_product.*
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.Serializable
-
-
-
 
 class ProductActivity : AppCompatActivity(), ShippingRateDialogListener, ShippingAddressDialogListener, OptionsDialogListener {
     private var userMadeInteraction: Boolean = false
@@ -71,6 +71,8 @@ class ProductActivity : AppCompatActivity(), ShippingRateDialogListener, Shippin
         apiAddress = ConfigHelper.getConfigValue(this, Parameters.RAW_API_ENDPOINT)
 
         initImageAdapter(product.images)
+        retrieveFirbaseToken()
+        setManager(supportFragmentManager)
 
         // Show Google Pay if it is available in specified country
         // Google pay won`t be as option before testing accordingly
@@ -410,6 +412,21 @@ class ProductActivity : AppCompatActivity(), ShippingRateDialogListener, Shippin
     }
     // endregion
 
+    // region firebase token
+    private fun retrieveFirbaseToken() {
+        FirebaseInstanceId.getInstance().instanceId
+            .addOnCompleteListener(OnCompleteListener { task ->
+                if (!task.isSuccessful) {
+                    return@OnCompleteListener
+                }
+
+                // Get new Instance ID token
+                val token = task.result?.token
+                Log.i("MonetizrSDK", "token:" + token)
+            })
+    }
+    // endregion
+
     //region ui
 
     private fun hideStatusBar() {
@@ -667,6 +684,7 @@ class ProductActivity : AppCompatActivity(), ShippingRateDialogListener, Shippin
         const val CHOSEN_VARIANT_KEY = "CHOSEN_VARIANT_KEY"
         var playerId: String? = null
         var lockedProduct: Boolean = false
+        var fragmentManager: FragmentManager? = null
 
         fun start(context: Context, productJson: String, productTag: String) {
             val starter = Intent(context, ProductActivity::class.java)
@@ -674,6 +692,14 @@ class ProductActivity : AppCompatActivity(), ShippingRateDialogListener, Shippin
             starter.putExtra(Parameters.PRODUCT_JSON, productJson)
             starter.putExtra(Parameters.PRODUCT_TAG, productTag)
             context.startActivity(starter)
+        }
+
+        fun setManager(manager: FragmentManager) {
+            this.fragmentManager = manager
+        }
+
+        fun getManager(): FragmentManager?{
+            return this.fragmentManager
         }
     }
 }

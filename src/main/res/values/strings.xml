@@ -45,7 +45,8 @@
 	<string name="product_claimed">Product was claimed, you will receive confirmation e-mail with additional information.</string>
 	<string name="message_dialog_close_btn">Close</string>
 	<string name="something_went_wrong">Something went wrong</string>
-	<string name="success_message">Process was successful</string>
+	<string name="success_message">Purchase completed</string>
+	<string name="purchase_successful">Order is on its way</string>
 	<string name="unexpected_exception">An unexpected error has occured, please try process again</string>
 	<string name="free_shipping_impossible">Free shipping is not possible, you will need to complete order with payment. Address is displayed below. </string>
 	<string name="visit_online_checkout">Visit online store</string>

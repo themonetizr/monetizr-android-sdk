@@ -14,6 +14,7 @@ import com.android.volley.Request
 import com.android.volley.VolleyError
 import com.themonetizr.monetizrsdk.api.Telemetrics
 import com.themonetizr.monetizrsdk.api.WebApi
+import com.themonetizr.monetizrsdk.dto.PurchaseCallbackData
 import com.themonetizr.monetizrsdk.misc.ConfigHelper
 import com.themonetizr.monetizrsdk.misc.Parameters
 import com.themonetizr.monetizrsdk.provider.ActivityProvider
@@ -28,12 +29,13 @@ import java.io.UnsupportedEncodingException
 import java.util.*
 
 
-
 class MonetizrSdk {
 
     companion object {
         var debuggable: Boolean = false
         var dynamicApiKey: String? = null
+        var purchaseCallback = PurchaseCallback()
+
         private var playerId: String? = null
         private var lockedProduct: Boolean = false
         private var initialLaunch: Boolean = true
@@ -278,6 +280,27 @@ class MonetizrSdk {
             progressDialog?.dismiss()
             progressDialog = null
         }
-    }
 
+        class PurchaseCallback {
+            interface PurchaseCallbackListener {
+                // When purchase callback received
+                fun onPurchase(data: PurchaseCallbackData?)
+            }
+            private var listener: PurchaseCallbackListener? = null
+
+            fun PurchaseCallback() {
+                listener = null
+            }
+
+            fun setPurchaseCallbackListener(listener: PurchaseCallbackListener?) {
+                this.listener = listener!!
+            }
+
+            fun firePurchaseCallback(data: PurchaseCallbackData) {
+                if (listener != null) {
+                    listener?.onPurchase(data)
+                }
+            }
+        }
+    }
 }

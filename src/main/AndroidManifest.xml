@@ -21,6 +21,13 @@
 				android:name=".ClearedService"
 				android:stopWithTask="false" />
 
+		<service
+				android:name=".MonetizrMessagingService">
+			<intent-filter>
+				<action android:name="com.google.firebase.MESSAGING_EVENT" />
+			</intent-filter>
+		</service>
+
 		<provider
 				android:name=".provider.AppContextProvider"
 				android:authorities="${applicationId}.monetizrsdk.applicationprovider"
